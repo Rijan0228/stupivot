@@ -1,592 +1,647 @@
-<!-- =========================
-     STUDY HUB
-========================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
-<section class="section study-section" id="study">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <div class="section-heading">
+    <meta
+        name="description"
+        content="StuPivot - A futuristic academic workspace for Class 11 and 12 students."
+    >
 
-        <span class="section-label">STUDY HUB</span>
+    <title>StuPivot — Study Hub</title>
 
-        <h2>Your academic workspace.</h2>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-        <p>
-            Choose your class, faculty, subject, and then open
-            notes, questions or exam preparation.
-        </p>
+<body>
 
-    </div>
+    <!-- =========================================
+         STUDY HUB
+    ========================================== -->
+
+    <main>
+
+        <section class="study-section" id="study">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    STUPIVOT
+                </span>
+
+                <h1>
+                    Your academic workspace.
+                </h1>
+
+                <p>
+                    Choose your class, faculty and subject.
+                    Then access notes, questions and exam preparation.
+                </p>
+
+            </div>
 
 
-    <div class="study-flow" id="studyFlow">
+            <div class="study-flow">
 
-        <!-- STEP 01 — CLASS -->
 
-        <div class="study-step active" id="studyStepClass">
+                <!-- =====================================
+                     STEP 01 — CLASS
+                ====================================== -->
 
-            <div class="study-step-heading">
+                <section
+                    class="study-step active"
+                    id="studyStepClass"
+                >
 
-                <div>
-                    <span class="study-step-number">01</span>
+                    <div class="step-heading">
 
-                    <div>
-                        <span class="section-label">START HERE</span>
+                        <span class="step-number">
+                            01
+                        </span>
 
-                        <h3>Choose your class</h3>
+                        <div>
+                            <span class="section-label">
+                                START HERE
+                            </span>
 
-                        <p>
-                            Select the NEB level you are studying.
-                        </p>
+                            <h2>
+                                Choose your class
+                            </h2>
+
+                            <p>
+                                Select the NEB level you are studying.
+                            </p>
+                        </div>
+
                     </div>
-                </div>
-
-            </div>
 
 
-            <div class="study-choice-grid class-choice-grid">
+                    <div class="choice-grid class-grid">
 
-                <button
-                    type="button"
-                    class="study-choice-card class-choice"
-                    data-class="11">
+                        <button
+                            type="button"
+                            class="choice-card class-choice"
+                            data-class="11"
+                        >
 
-                    <span class="choice-card-top">
-                        <span class="choice-index">01</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
+                            <div class="card-top">
+                                <span>01</span>
+                                <b>↗</b>
+                            </div>
 
-                    <span class="choice-icon">11</span>
+                            <div class="card-icon">
+                                XI
+                            </div>
 
-                    <strong>Class 11</strong>
+                            <h3>
+                                Class 11
+                            </h3>
 
-                    <small>
-                        Grade XI · NEB resources, subjects and preparation
-                    </small>
+                            <p>
+                                Grade XI · Notes, questions and
+                                examination preparation.
+                            </p>
 
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card class-choice"
-                    data-class="12">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">02</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">12</span>
-
-                    <strong>Class 12</strong>
-
-                    <small>
-                        Grade XII · NEB resources, subjects and preparation
-                    </small>
-
-                </button>
-
-            </div>
-
-        </div>
+                        </button>
 
 
-        <!-- STEP 02 — FACULTY -->
+                        <button
+                            type="button"
+                            class="choice-card class-choice"
+                            data-class="12"
+                        >
 
-        <div class="study-step hidden" id="studyStepFaculty">
+                            <div class="card-top">
+                                <span>02</span>
+                                <b>↗</b>
+                            </div>
 
-            <div class="study-step-heading">
+                            <div class="card-icon">
+                                XII
+                            </div>
 
-                <button
-                    type="button"
-                    class="study-back-button"
-                    data-study-back="class">
-                    ← Class
-                </button>
+                            <h3>
+                                Class 12
+                            </h3>
 
-                <div>
+                            <p>
+                                Grade XII · Notes, questions and
+                                examination preparation.
+                            </p>
 
-                    <span class="study-step-number">02</span>
+                        </button>
 
-                    <div>
+                    </div>
 
-                        <span class="section-label">YOUR CLASS</span>
+                </section>
 
-                        <h3 id="studyFacultyTitle">
+
+
+                <!-- =====================================
+                     STEP 02 — FACULTY
+                ====================================== -->
+
+                <section
+                    class="study-step hidden"
+                    id="studyStepFaculty"
+                >
+
+                    <div class="step-heading">
+
+                        <button
+                            type="button"
+                            class="back-button"
+                            data-back="class"
+                        >
+                            ← Class
+                        </button>
+
+                        <span class="step-number">
+                            02
+                        </span>
+
+                        <div>
+                            <span class="section-label">
+                                YOUR CLASS
+                            </span>
+
+                            <h2 id="facultyTitle">
+                                Choose faculty
+                            </h2>
+
+                            <p>
+                                Select your faculty or study area.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="choice-grid faculty-grid"
+                        id="facultyGrid"
+                    >
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="science"
+                        >
+                            <div class="card-top">
+                                <span>01</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                SCI
+                            </div>
+
+                            <h3>
+                                Science
+                            </h3>
+
+                            <p>
+                                Physics, Chemistry, Biology,
+                                Mathematics and Computer Science.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="management"
+                        >
+                            <div class="card-top">
+                                <span>02</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                MGT
+                            </div>
+
+                            <h3>
+                                Management
+                            </h3>
+
+                            <p>
+                                Accounting, Economics, Business Studies,
+                                Finance and related subjects.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="humanities"
+                        >
+                            <div class="card-top">
+                                <span>03</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                HUM
+                            </div>
+
+                            <h3>
+                                Humanities
+                            </h3>
+
+                            <p>
+                                Sociology, History, Geography,
+                                Political Science and related subjects.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="education"
+                        >
+                            <div class="card-top">
+                                <span>04</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                EDU
+                            </div>
+
+                            <h3>
+                                Education
+                            </h3>
+
+                            <p>
+                                Education, Psychology, Sociology
+                                and education-related subjects.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="computer"
+                        >
+                            <div class="card-top">
+                                <span>05</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                CS
+                            </div>
+
+                            <h3>
+                                Computer Science
+                            </h3>
+
+                            <p>
+                                Computing, programming,
+                                mathematics and technology.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="law"
+                        >
+                            <div class="card-top">
+                                <span>06</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                LAW
+                            </div>
+
+                            <h3>
+                                Law
+                            </h3>
+
+                            <p>
+                                Legal studies, constitutional concepts
+                                and related subjects.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="hotel"
+                        >
+                            <div class="card-top">
+                                <span>07</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                HM
+                            </div>
+
+                            <h3>
+                                Hotel Management
+                            </h3>
+
+                            <p>
+                                Hospitality, tourism, management
+                                and related subjects.
+                            </p>
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="choice-card faculty-choice"
+                            data-faculty="agriculture"
+                        >
+                            <div class="card-top">
+                                <span>08</span>
+                                <b>↗</b>
+                            </div>
+
+                            <div class="card-icon">
+                                AGR
+                            </div>
+
+                            <h3>
+                                Agriculture
+                            </h3>
+
+                            <p>
+                                Agriculture, environment and
+                                biological study.
+                            </p>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =====================================
+                     STEP 03 — SUBJECT
+                ====================================== -->
+
+                <section
+                    class="study-step hidden"
+                    id="studyStepSubject"
+                >
+
+                    <div class="step-heading">
+
+                        <button
+                            type="button"
+                            class="back-button"
+                            data-back="faculty"
+                        >
+                            ← Faculty
+                        </button>
+
+                        <span class="step-number">
+                            03
+                        </span>
+
+                        <div>
+                            <span class="section-label">
+                                SELECT SUBJECT
+                            </span>
+
+                            <h2 id="subjectTitle">
+                                Choose a subject
+                            </h2>
+
+                            <p id="subjectDescription">
+                                Select a subject to continue.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="path" id="subjectPath">
+                        <span id="pathClass">Class 11</span>
+                        <span>›</span>
+                        <span id="pathFaculty">Science</span>
+                    </div>
+
+
+                    <div
+                        class="choice-grid subject-grid"
+                        id="subjectGrid"
+                    >
+                    </div>
+
+                </section>
+
+
+
+                <!-- =====================================
+                     STEP 04 — RESOURCE
+                ====================================== -->
+
+                <section
+                    class="study-step hidden"
+                    id="studyStepResource"
+                >
+
+                    <div class="step-heading">
+
+                        <button
+                            type="button"
+                            class="back-button"
+                            data-back="subject"
+                        >
+                            ← Subject
+                        </button>
+
+                        <span class="step-number">
+                            04
+                        </span>
+
+                        <div>
+                            <span class="section-label">
+                                STUDY RESOURCE
+                            </span>
+
+                            <h2 id="resourceTitle">
+                                Study resources
+                            </h2>
+
+                            <p id="resourceDescription">
+                                Choose what you want to study.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="path resource-path">
+
+                        <span id="resourceClass">
                             Class 11
-                        </h3>
+                        </span>
 
-                        <p>
-                            Choose your faculty or study area.
-                        </p>
+                        <span>›</span>
+
+                        <span id="resourceFaculty">
+                            Science
+                        </span>
+
+                        <span>›</span>
+
+                        <strong id="resourceSubject">
+                            Subject
+                        </strong>
 
                     </div>
+
+
+                    <div class="resource-grid">
+
+
+                        <button
+                            type="button"
+                            class="resource-card"
+                            data-resource="notes"
+                        >
+
+                            <span class="resource-number">
+                                01
+                            </span>
+
+                            <span class="resource-icon">
+                                N
+                            </span>
+
+                            <h3>
+                                Notes
+                            </h3>
+
+                            <p>
+                                Chapter notes, concepts and
+                                revision material.
+                            </p>
+
+                            <span class="resource-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="resource-card"
+                            data-resource="questions"
+                        >
+
+                            <span class="resource-number">
+                                02
+                            </span>
+
+                            <span class="resource-icon">
+                                Q
+                            </span>
+
+                            <h3>
+                                Questions
+                            </h3>
+
+                            <p>
+                                MCQs, short-answer and
+                                long-answer practice.
+                            </p>
+
+                            <span class="resource-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="resource-card"
+                            data-resource="exam"
+                        >
+
+                            <span class="resource-number">
+                                03
+                            </span>
+
+                            <span class="resource-icon">
+                                E
+                            </span>
+
+                            <h3>
+                                Exam Preparation
+                            </h3>
+
+                            <p>
+                                Important topics, revision
+                                and exam practice.
+                            </p>
+
+                            <span class="resource-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="resource-content hidden"
+                        id="resourceContent"
+                    >
+                    </div>
+
+                </section>
+
+
+
+                <!-- =====================================
+                     NOTE
+                ====================================== -->
+
+                <div class="study-note">
+
+                    <span>i</span>
+
+                    <p>
+                        Subject combinations and curriculum
+                        requirements may vary by institution.
+                    </p>
 
                 </div>
 
             </div>
 
+        </section>
 
-            <div
-                class="study-choice-grid faculty-choice-grid"
-                id="studyFacultyGrid">
+    </main>
 
 
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="science">
+    <!-- IMPORTANT:
+         JavaScript is loaded AFTER the HTML.
+    -->
 
-                    <span class="choice-card-top">
-                        <span class="choice-index">01</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
+    <script src="script.js"></script>
 
-                    <span class="choice-icon">SCI</span>
-
-                    <strong>Science</strong>
-
-                    <small>
-                        Physics, Chemistry, Biology, Mathematics and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="management">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">02</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">MGT</span>
-
-                    <strong>Management</strong>
-
-                    <small>
-                        Accounting, Business Studies, Economics, Finance and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="humanities">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">03</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">HUM</span>
-
-                    <strong>Humanities & Social Studies</strong>
-
-                    <small>
-                        Sociology, History, Geography, Political Science and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="education">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">04</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">EDU</span>
-
-                    <strong>Education</strong>
-
-                    <small>
-                        Education, Psychology and education-related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="computer">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">05</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">CS</span>
-
-                    <strong>Computer Science</strong>
-
-                    <small>
-                        Computer Science and computing-focused study
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="law">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">06</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">LAW</span>
-
-                    <strong>Law</strong>
-
-                    <small>
-                        Legal studies and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="hotel">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">07</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">HM</span>
-
-                    <strong>Hotel Management</strong>
-
-                    <small>
-                        Hospitality and hotel-management focused subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="agriculture">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">08</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">AGR</span>
-
-                    <strong>Agriculture</strong>
-
-                    <small>
-                        Agriculture, environment and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="arts">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">09</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">ART</span>
-
-                    <strong>Fine Arts & Performing Arts</strong>
-
-                    <small>
-                        Art, dance and related subjects
-                    </small>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="study-choice-card faculty-choice"
-                    data-faculty="traditional">
-
-                    <span class="choice-card-top">
-                        <span class="choice-index">10</span>
-                        <span class="choice-arrow">↗</span>
-                    </span>
-
-                    <span class="choice-icon">TRD</span>
-
-                    <strong>Traditional Education</strong>
-
-                    <small>
-                        Sanskrit, Vedic, Gurukul and related study
-                    </small>
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- STEP 03 — SUBJECT -->
-
-        <div class="study-step hidden" id="studyStepSubject">
-
-            <div class="study-step-heading">
-
-                <button
-                    type="button"
-                    class="study-back-button"
-                    data-study-back="faculty">
-                    ← Faculty
-                </button>
-
-                <div>
-
-                    <span class="study-step-number">03</span>
-
-                    <div>
-
-                        <span class="section-label">SELECTED AREA</span>
-
-                        <h3 id="studySubjectTitle">
-                            Choose a subject
-                        </h3>
-
-                        <p id="studySubjectDescription">
-                            Select the subject you want to study.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="study-selected-path"
-                id="studySelectedPath">
-
-                <span id="studyPathClass">
-                    Class 11
-                </span>
-
-                <span>›</span>
-
-                <span id="studyPathFaculty">
-                    Science
-                </span>
-
-            </div>
-
-
-            <div
-                class="study-choice-grid subject-choice-grid"
-                id="studySubjectGrid">
-
-            </div>
-
-        </div>
-
-
-        <!-- STEP 04 — RESOURCE -->
-
-        <div class="study-step hidden" id="studyStepResource">
-
-            <div class="study-step-heading">
-
-                <button
-                    type="button"
-                    class="study-back-button"
-                    data-study-back="subject">
-                    ← Subject
-                </button>
-
-                <div>
-
-                    <span class="study-step-number">04</span>
-
-                    <div>
-
-                        <span class="section-label">YOUR SUBJECT</span>
-
-                        <h3 id="studyResourceTitle">
-                            Study resources
-                        </h3>
-
-                        <p id="studyResourceDescription">
-                            Choose what you want to open.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="study-selected-path resource-path">
-
-                <span id="studyResourcePathClass">
-                    Class 11
-                </span>
-
-                <span>›</span>
-
-                <span id="studyResourcePathFaculty">
-                    Science
-                </span>
-
-                <span>›</span>
-
-                <strong id="studyResourcePathSubject">
-                    Subject
-                </strong>
-
-            </div>
-
-
-            <div class="resource-choice-grid">
-
-
-                <button
-                    type="button"
-                    class="resource-choice-card"
-                    data-resource="notes">
-
-                    <span class="resource-card-number">
-                        01
-                    </span>
-
-                    <span class="resource-card-icon">
-                        N
-                    </span>
-
-                    <span>
-
-                        <strong>
-                            Notes
-                        </strong>
-
-                        <small>
-                            Chapter notes, concepts and revision material
-                        </small>
-
-                    </span>
-
-                    <span class="resource-card-arrow">
-                        →
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="resource-choice-card"
-                    data-resource="questions">
-
-                    <span class="resource-card-number">
-                        02
-                    </span>
-
-                    <span class="resource-card-icon">
-                        Q
-                    </span>
-
-                    <span>
-
-                        <strong>
-                            Questions
-                        </strong>
-
-                        <small>
-                            Practice, short-answer and model questions
-                        </small>
-
-                    </span>
-
-                    <span class="resource-card-arrow">
-                        →
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="resource-choice-card"
-                    data-resource="exam">
-
-                    <span class="resource-card-number">
-                        03
-                    </span>
-
-                    <span class="resource-card-icon">
-                        E
-                    </span>
-
-                    <span>
-
-                        <strong>
-                            Exam Preparation
-                        </strong>
-
-                        <small>
-                            Revision plans, important areas and exam practice
-                        </small>
-
-                    </span>
-
-                    <span class="resource-card-arrow">
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <div
-                class="study-resource-content hidden"
-                id="studyResourceContent">
-            </div>
-
-        </div>
-
-
-        <div class="study-note">
-
-            <span class="study-note-icon">
-                i
-            </span>
-
-            <p>
-                Subject combinations can vary by institution and
-                approved NEB curriculum group.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
+</body>
+</html>
