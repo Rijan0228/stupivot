@@ -1,898 +1,1201 @@
 /* =========================================================
-   STUPIVOT — STUDY HUB JAVASCRIPT
-   Class → Faculty → Subject → Resource
+   STUPIVOT — STUDY HUB CSS
+   Dark futuristic academic interface
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+* {
+    box-sizing: border-box;
+}
 
-    const classStep = document.getElementById("studyStepClass");
-    const facultyStep = document.getElementById("studyStepFaculty");
-    const subjectStep = document.getElementById("studyStepSubject");
-    const resourceStep = document.getElementById("studyStepResource");
+html {
+    scroll-behavior: smooth;
+}
 
-    const facultyTitle = document.getElementById("studyFacultyTitle");
+body {
+    margin: 0;
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(58, 192, 200, 0.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(120, 70, 255, 0.08),
+            transparent 30%
+        ),
+        #050914;
 
-    const subjectTitle = document.getElementById("studySubjectTitle");
-    const subjectDescription =
-        document.getElementById("studySubjectDescription");
+    color: #ffffff;
 
-    const subjectGrid =
-        document.getElementById("studySubjectGrid");
-
-    const pathClass =
-        document.getElementById("studyPathClass");
-
-    const pathFaculty =
-        document.getElementById("studyPathFaculty");
-
-    const resourceTitle =
-        document.getElementById("studyResourceTitle");
-
-    const resourceDescription =
-        document.getElementById("studyResourceDescription");
-
-    const resourcePathClass =
-        document.getElementById("studyResourcePathClass");
-
-    const resourcePathFaculty =
-        document.getElementById("studyResourcePathFaculty");
-
-    const resourcePathSubject =
-        document.getElementById("studyResourcePathSubject");
-
-    const resourceContent =
-        document.getElementById("studyResourceContent");
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
 
 
-    if (
-        !classStep ||
-        !facultyStep ||
-        !subjectStep ||
-        !resourceStep ||
-        !subjectGrid
-    ) {
-        return;
+/* =========================================================
+   SECTION
+========================================================= */
+
+.study-section {
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 80px 20px;
+
+    position: relative;
+}
+
+
+.study-section::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.section-heading {
+    position: relative;
+
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto 55px;
+
+    text-align: center;
+}
+
+
+.section-label {
+    display: inline-block;
+
+    color: #3ac0c8;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+}
+
+
+.section-heading h1 {
+    margin: 12px 0;
+
+    color: #f7f9ff;
+
+    font-size:
+        clamp(
+            2rem,
+            5vw,
+            3.7rem
+        );
+
+    line-height: 1.05;
+}
+
+
+.section-heading p {
+    max-width: 680px;
+
+    margin: 0 auto;
+
+    color:
+        rgba(
+            220,
+            225,
+            240,
+            0.65
+        );
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FLOW
+========================================================= */
+
+.study-flow {
+    position: relative;
+
+    width: 100%;
+    max-width: 1180px;
+
+    margin: auto;
+}
+
+
+/* =========================================================
+   STEPS
+========================================================= */
+
+.study-step {
+    animation:
+        stepIn 0.4s ease;
+}
+
+
+.study-step.hidden {
+    display: none !important;
+}
+
+
+@keyframes stepIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            scale(0.98);
     }
 
+    to {
+        opacity: 1;
 
-    /* =====================================================
-       CURRENT SELECTION
-    ===================================================== */
-
-    let selectedClass = "";
-    let selectedFaculty = "";
-    let selectedSubject = "";
-
-
-    /* =====================================================
-       NEB SUBJECT DATA
-
-       These are organized for StuPivot's browsing system.
-       Subject combinations can vary by institution.
-    ===================================================== */
-
-    const subjects = {
-
-        science: {
-
-            name: "Science",
-
-            description:
-                "Science-focused subjects available through the NEB subject structure.",
-
-            common: [
-                {
-                    name: "Physics",
-                    code: "1011",
-                    description: "Physics concepts, numerical problems and practical study."
-                },
-                {
-                    name: "Chemistry",
-                    code: "2011",
-                    description: "Chemical principles, reactions and practical study."
-                },
-                {
-                    name: "Biology",
-                    code: "3011",
-                    description: "Biological concepts, systems and practical study."
-                },
-                {
-                    name: "Mathematics",
-                    code: "4011",
-                    description: "Mathematics, problem solving and numerical practice."
-                },
-                {
-                    name: "Applied Mathematics",
-                    code: "4031",
-                    description: "Applied mathematical concepts and problem solving."
-                },
-                {
-                    name: "Computer Science",
-                    code: "4271",
-                    description: "Programming, computer systems and information technology."
-                }
-            ]
-        },
-
-
-        management: {
-
-            name: "Management",
-
-            description:
-                "Business and management-oriented subjects.",
-
-            common: [
-                {
-                    name: "Accounting",
-                    description: "Accounting concepts, journal, ledger and financial statements."
-                },
-                {
-                    name: "Economics",
-                    code: "3031",
-                    description: "Microeconomics, macroeconomics and economic analysis."
-                },
-                {
-                    name: "Business Mathematics",
-                    code: "4051",
-                    description: "Mathematical techniques used in business and finance."
-                },
-                {
-                    name: "Finance",
-                    code: "4171",
-                    description: "Financial concepts, institutions and financial management."
-                },
-                {
-                    name: "Marketing",
-                    code: "3071",
-                    description: "Marketing concepts, markets and promotional activities."
-                },
-                {
-                    name: "Business Studies",
-                    description: "Business organization, management and entrepreneurship."
-                },
-                {
-                    name: "Computer Science",
-                    code: "4271",
-                    description: "Computer concepts and programming where offered."
-                }
-            ]
-        },
-
-
-        humanities: {
-
-            name: "Humanities & Social Studies",
-
-            description:
-                "Humanities and social-science-oriented subjects.",
-
-            common: [
-                {
-                    name: "Sociology",
-                    description: "Society, culture, social institutions and social change."
-                },
-                {
-                    name: "History",
-                    description: "Historical events, civilizations and historical analysis."
-                },
-                {
-                    name: "Geography",
-                    description: "Physical and human geography."
-                },
-                {
-                    name: "Political Science",
-                    description: "Government, politics and political systems."
-                },
-                {
-                    name: "Economics",
-                    code: "3031",
-                    description: "Economic concepts and analysis."
-                },
-                {
-                    name: "Mass Communication",
-                    description: "Communication, media and journalism-related study."
-                },
-                {
-                    name: "Rural Development",
-                    description: "Rural society, development and related issues."
-                }
-            ]
-        },
-
-
-        education: {
-
-            name: "Education",
-
-            description:
-                "Education-focused subjects and related study.",
-
-            common: [
-                {
-                    name: "Education and Development",
-                    description: "Education systems, development and society."
-                },
-                {
-                    name: "Instructional Pedagogy",
-                    description: "Teaching-learning processes and instructional methods."
-                },
-                {
-                    name: "Psychology",
-                    description: "Human behaviour, learning and psychological concepts."
-                },
-                {
-                    name: "Sociology",
-                    description: "Society, culture and social relationships."
-                },
-                {
-                    name: "Rural Development",
-                    description: "Community and rural development concepts."
-                },
-                {
-                    name: "Economics",
-                    code: "3031",
-                    description: "Economic concepts and applications."
-                }
-            ]
-        },
-
-
-        computer: {
-
-            name: "Computer Science & Technology",
-
-            description:
-                "Computing-focused subjects and related mathematical study.",
-
-            common: [
-                {
-                    name: "Computer Science",
-                    code: "4271",
-                    description: "Programming, databases, networking and computer systems."
-                },
-                {
-                    name: "Mathematics",
-                    code: "4011",
-                    description: "Mathematical concepts and problem solving."
-                },
-                {
-                    name: "Applied Mathematics",
-                    code: "4031",
-                    description: "Applied mathematical problem solving."
-                },
-                {
-                    name: "Business Mathematics",
-                    code: "4051",
-                    description: "Business-oriented mathematical techniques."
-                },
-                {
-                    name: "Physics",
-                    code: "1011",
-                    description: "Physics concepts and numerical problem solving."
-                }
-            ]
-        },
-
-
-        law: {
-
-            name: "Law",
-
-            description:
-                "Law-related subjects available in the NEB subject structure.",
-
-            common: [
-                {
-                    name: "General Law",
-                    code: "4151",
-                    description: "Fundamental concepts of law and legal systems."
-                },
-                {
-                    name: "Constitutional Law",
-                    code: "3171",
-                    description: "Constitutional principles and legal structures."
-                },
-                {
-                    name: "Human Rights",
-                    code: "4071",
-                    description: "Human rights, freedoms and legal principles."
-                },
-                {
-                    name: "Political Science",
-                    description: "Government and political systems."
-                },
-                {
-                    name: "Economics",
-                    code: "3031",
-                    description: "Economic concepts and analysis."
-                }
-            ]
-        },
-
-
-        hotel: {
-
-            name: "Hotel & Hospitality",
-
-            description:
-                "Hospitality and hotel-management-oriented subjects.",
-
-            common: [
-                {
-                    name: "Hotel Management",
-                    code: "4391",
-                    description: "Hotel operations and hospitality management."
-                },
-                {
-                    name: "Tourism and Mountaineering Studies",
-                    code: "3051",
-                    description: "Tourism, travel and mountaineering studies."
-                },
-                {
-                    name: "Marketing",
-                    code: "3071",
-                    description: "Marketing principles and applications."
-                },
-                {
-                    name: "Economics",
-                    code: "3031",
-                    description: "Economic concepts and applications."
-                },
-                {
-                    name: "Finance",
-                    code: "4171",
-                    description: "Financial concepts and management."
-                },
-                {
-                    name: "Computer Science",
-                    code: "4271",
-                    description: "Computing and programming where offered."
-                }
-            ]
-        },
-
-
-        agriculture: {
-
-            name: "Agriculture & Environment",
-
-            description:
-                "Agriculture, environment and related technical subjects.",
-
-            common: [
-                {
-                    name: "Environment Science",
-                    code: "4131",
-                    description: "Environment, ecosystems and environmental issues."
-                },
-                {
-                    name: "Agriculture",
-                    description: "Agricultural science and production-related study."
-                },
-                {
-                    name: "Horticulture",
-                    description: "Plant cultivation and horticultural practices."
-                },
-                {
-                    name: "Food Technology",
-                    description: "Food science, processing and preservation."
-                },
-                {
-                    name: "Biology",
-                    code: "3011",
-                    description: "Biological concepts and practical study."
-                },
-                {
-                    name: "Chemistry",
-                    code: "2011",
-                    description: "Chemical principles and practical study."
-                }
-            ]
-        },
-
-
-        arts: {
-
-            name: "Fine Arts & Performing Arts",
-
-            description:
-                "Visual and performing arts subjects.",
-
-            common: [
-                {
-                    name: "Applied Arts",
-                    code: "3611",
-                    description: "Applied visual-art concepts and practice."
-                },
-                {
-                    name: "Sculpture",
-                    code: "4231",
-                    description: "Sculpture theory and practical work."
-                },
-                {
-                    name: "Singing",
-                    code: "4251",
-                    description: "Vocal music theory and practical work."
-                },
-                {
-                    name: "Painting",
-                    description: "Painting theory and practical artistic work."
-                },
-                {
-                    name: "Dance",
-                    description: "Dance theory and practical performance."
-                }
-            ]
-        },
-
-
-        traditional: {
-
-            name: "Traditional Education",
-
-            description:
-                "Traditional and language-oriented study areas.",
-
-            common: [
-                {
-                    name: "Sanskrit",
-                    description: "Sanskrit language and literature."
-                },
-                {
-                    name: "Sanskrit Grammar",
-                    code: "5101",
-                    description: "Sanskrit grammar and language study."
-                },
-                {
-                    name: "Vedic Studies",
-                    description: "Vedic and traditional studies."
-                },
-                {
-                    name: "Buddhist Studies",
-                    code: "4211",
-                    description: "Buddhist philosophy, literature and traditions."
-                }
-            ]
-        }
-
-    };
-
-
-    /* =====================================================
-       GENERAL SUBJECTS
-    ===================================================== */
-
-    const generalSubjects = [
-        {
-            name: "Nepali",
-            description: "Nepali language and literature."
-        },
-        {
-            name: "English",
-            description: "English language, literature and communication."
-        },
-        {
-            name: "Social Studies",
-            description: "Social studies, life skills and related topics."
-        }
-    ];
-
-
-    /* =====================================================
-       STEP DISPLAY
-    ===================================================== */
-
-    function showStep(step) {
-
-        [
-            classStep,
-            facultyStep,
-            subjectStep,
-            resourceStep
-        ].forEach(element => {
-
-            if (!element) return;
-
-            element.classList.add("hidden");
-            element.classList.remove("active");
-
-        });
-
-        step.classList.remove("hidden");
-        step.classList.add("active");
-
-        step.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   STEP HEADING
+========================================================= */
+
+.step-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    margin-bottom: 28px;
+}
+
+
+.step-heading > div {
+    flex: 1;
+}
+
+
+.step-number {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(
+            58,
+            192,
+            200,
+            0.35
+        );
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(58,192,200,0.14),
+            rgba(120,70,255,0.12)
+        );
+
+    color: #3ac0c8;
+
+    font-size: 0.78rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 30px
+        rgba(
+            58,
+            192,
+            200,
+            0.07
+        );
+}
+
+
+.step-heading h2 {
+    margin: 5px 0 7px;
+
+    color: #f7f9ff;
+
+    font-size: 1.55rem;
+}
+
+
+.step-heading p {
+    margin: 0;
+
+    color:
+        rgba(
+            220,
+            225,
+            240,
+            0.62
+        );
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-button {
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.1
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    color: #aebbd0;
+
+    border-radius: 12px;
+
+    padding: 10px 15px;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-size: 0.84rem;
+
+    transition:
+        0.25s ease;
+}
+
+
+.back-button:hover {
+    color: #ffffff;
+
+    border-color:
+        rgba(
+            58,
+            192,
+            200,
+            0.45
+        );
+
+    background:
+        rgba(
+            58,
+            192,
+            200,
+            0.08
+        );
+
+    transform:
+        translateX(-4px);
+}
+
+
+/* =========================================================
+   CHOICE GRID
+========================================================= */
+
+.choice-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   CHOICE CARD
+========================================================= */
+
+.choice-card {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 24px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,28,48,0.94),
+            rgba(7,11,22,0.98)
+        );
+
+    color: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.choice-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    left: -120px;
+    top: -140px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            58,
+            192,
+            200,
+            0.11
+        );
+
+    filter: blur(20px);
+
+    opacity: 0;
+
+    transition:
+        opacity 0.3s ease;
+}
+
+
+.choice-card:hover {
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(
+            58,
+            192,
+            200,
+            0.45
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(
+            0,
+            0,
+            0,
+            0.4
+        ),
+        0 0 35px
+        rgba(
+            58,
+            192,
+            200,
+            0.08
+        );
+}
+
+
+.choice-card:hover::before {
+    opacity: 1;
+}
+
+
+.card-top {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+
+.card-top span {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
+
+    font-size: 0.7rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.1em;
+}
+
+
+.card-top b {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+
+    border-radius: 50%;
+
+    color: #8290a7;
+
+    font-size: 1rem;
+
+    transition:
+        0.25s ease;
+}
+
+
+.choice-card:hover .card-top b {
+    color: #3ac0c8;
+
+    transform:
+        translate(
+            3px,
+            -3px
+        );
+}
+
+
+.card-icon {
+    position: relative;
+
+    z-index: 2;
+
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 16px;
+
+    border:
+        1px solid
+        rgba(
+            58,
+            192,
+            200,
+            0.2
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(58,192,200,0.16),
+            rgba(120,70,255,0.16)
+        );
+
+    color: #55dce3;
+
+    font-size: 0.72rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.05em;
+}
+
+
+.choice-card h3 {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 8px;
+
+    color: #f7f9ff;
+
+    font-size: 1.12rem;
+}
+
+
+.choice-card p {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    color:
+        rgba(
+            210,
+            218,
+            235,
+            0.62
+        );
+
+    font-size: 0.84rem;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   SUBJECT GRID
+========================================================= */
+
+.subject-grid {
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+}
+
+
+.subject-grid .choice-card {
+    min-height: 170px;
+}
+
+
+/* =========================================================
+   PATH
+========================================================= */
+
+.path {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    margin:
+        0 0 25px;
+
+    padding:
+        10px 15px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    color: #9caac0;
+
+    font-size: 0.8rem;
+}
+
+
+.path strong {
+    color: #3ac0c8;
+}
+
+
+/* =========================================================
+   RESOURCE GRID
+========================================================= */
+
+.resource-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+.resource-card {
+    position: relative;
+
+    min-height: 220px;
+
+    padding: 25px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(19,28,48,0.95),
+            rgba(7,11,22,0.99)
+        );
+
+    color: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        0.25s ease;
+}
+
+
+.resource-card:hover {
+    transform:
+        translateY(-7px);
+
+    border-color:
+        rgba(
+            120,
+            70,
+            255,
+            0.45
+        );
+
+    box-shadow:
+        0 20px 55px
+        rgba(
+            0,
+            0,
+            0,
+            0.42
+        );
+}
+
+
+.resource-number {
+    display: block;
+
+    margin-bottom: 18px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
+
+    font-size: 0.7rem;
+
+    font-weight: 900;
+}
+
+
+.resource-icon {
+    width: 56px;
+    height: 56px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 15px;
+
+    border:
+        1px solid
+        rgba(
+            58,
+            192,
+            200,
+            0.2
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(58,192,200,0.16),
+            rgba(120,70,255,0.15)
+        );
+
+    color: #55dce3;
+
+    font-size: 1.05rem;
+
+    font-weight: 900;
+}
+
+
+.resource-card h3 {
+    margin:
+        0 0 7px;
+
+    color: #f7f9ff;
+
+    font-size: 1.1rem;
+}
+
+
+.resource-card p {
+    margin: 0;
+
+    max-width: 300px;
+
+    color:
+        rgba(
+            210,
+            218,
+            235,
+            0.62
+        );
+
+    line-height: 1.6;
+}
+
+
+.resource-arrow {
+    position: absolute;
+
+    top: 22px;
+    right: 22px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
+
+    font-size: 1.2rem;
+
+    transition:
+        0.25s ease;
+}
+
+
+.resource-card:hover .resource-arrow {
+    color: #3ac0c8;
+
+    transform:
+        translate(
+            4px,
+            -4px
+        );
+}
+
+
+/* =========================================================
+   RESOURCE CONTENT
+========================================================= */
+
+.resource-content {
+    margin-top: 25px;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(
+            58,
+            192,
+            200,
+            0.17
+        );
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,22,38,0.96),
+            rgba(5,10,20,0.99)
+        );
+
+    animation:
+        contentIn 0.35s ease;
+}
+
+
+.resource-content.hidden {
+    display: none !important;
+}
+
+
+@keyframes contentIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(15px);
     }
 
-
-    /* =====================================================
-       CLASS SELECTION
-    ===================================================== */
-
-    document
-        .querySelectorAll(".class-choice")
-        .forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                selectedClass =
-                    button.dataset.class;
-
-                facultyTitle.textContent =
-                    `Class ${selectedClass}`;
-
-                showStep(facultyStep);
-
-            });
-
-        });
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+}
 
 
-    /* =====================================================
-       FACULTY SELECTION
-    ===================================================== */
+.resource-content h3 {
+    margin:
+        8px 0 10px;
 
-    document
-        .querySelectorAll(".faculty-choice")
-        .forEach(button => {
+    color: #ffffff;
 
-            button.addEventListener("click", () => {
-
-                selectedFaculty =
-                    button.dataset.faculty;
-
-                const data =
-                    subjects[selectedFaculty];
-
-                if (!data) return;
-
-                pathClass.textContent =
-                    `Class ${selectedClass}`;
-
-                pathFaculty.textContent =
-                    data.name;
-
-                subjectTitle.textContent =
-                    `${data.name} subjects`;
-
-                subjectDescription.textContent =
-                    data.description;
-
-                renderSubjects(data.common);
-
-                showStep(subjectStep);
-
-            });
-
-        });
+    font-size: 1.5rem;
+}
 
 
-    /* =====================================================
-       SUBJECT RENDERING
-    ===================================================== */
+.resource-content h4 {
+    margin:
+        25px 0 10px;
 
-    function renderSubjects(list) {
+    color: #55dce3;
 
-        subjectGrid.innerHTML = "";
-
-        const allSubjects = [
-            ...generalSubjects,
-            ...list
-        ];
-
-        const uniqueSubjects = [];
-
-        const names = new Set();
-
-        allSubjects.forEach(subject => {
-
-            if (!names.has(subject.name)) {
-
-                names.add(subject.name);
-                uniqueSubjects.push(subject);
-
-            }
-
-        });
+    font-size: 1.05rem;
+}
 
 
-        uniqueSubjects.forEach((subject, index) => {
+.resource-content p,
+.resource-content li {
+    color:
+        rgba(
+            220,
+            225,
+            240,
+            0.75
+        );
 
-            const button =
-                document.createElement("button");
-
-            button.type = "button";
-
-            button.className =
-                "study-choice-card subject-choice-card";
-
-            button.dataset.subject =
-                subject.name;
-
-
-            button.innerHTML = `
-
-                <span class="choice-card-top">
-
-                    <span class="choice-index">
-                        ${String(index + 1).padStart(2, "0")}
-                    </span>
-
-                    <span class="choice-arrow">
-                        ↗
-                    </span>
-
-                </span>
-
-                <span class="choice-icon">
-                    ${getSubjectCode(subject.name)}
-                </span>
-
-                <strong>
-                    ${escapeHTML(subject.name)}
-                </strong>
-
-                <small>
-                    ${escapeHTML(subject.description || "")}
-                </small>
-
-            `;
+    line-height: 1.75;
+}
 
 
-            button.addEventListener(
-                "click",
-                () => selectSubject(subject)
+.resource-content ul,
+.resource-content ol {
+    padding-left: 22px;
+}
+
+
+.resource-content li {
+    margin-bottom: 8px;
+}
+
+
+.resource-badge {
+    display: inline-block;
+
+    padding:
+        6px 10px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(
+            58,
+            192,
+            200,
+            0.1
+        );
+
+    color: #3ac0c8;
+
+    font-size: 0.7rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+}
+
+
+/* =========================================================
+   QUESTION BOXES
+========================================================= */
+
+.question-box {
+    margin:
+        12px 0;
+
+    padding:
+        16px 18px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    border-radius: 14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+}
+
+
+.question-box strong {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   STUDY NOTE
+========================================================= */
+
+.study-note {
+    display: flex;
+
+    gap: 12px;
+
+    align-items: flex-start;
+
+    margin-top: 28px;
+
+    padding:
+        15px 17px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    border-radius: 15px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+}
+
+
+.study-note > span {
+    width: 25px;
+    height: 25px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            58,
+            192,
+            200,
+            0.12
+        );
+
+    color: #3ac0c8;
+
+    font-weight: 900;
+}
+
+
+.study-note p {
+    margin: 2px 0 0;
+
+    color:
+        rgba(
+            210,
+            218,
+            235,
+            0.55
+        );
+
+    font-size: 0.77rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .subject-grid,
+    .resource-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
             );
+    }
+
+}
 
 
-            subjectGrid.appendChild(button);
+@media (max-width: 650px) {
 
-        });
-
+    .study-section {
+        padding:
+            55px 15px;
     }
 
 
-    /* =====================================================
-       SUBJECT SELECTION
-    ===================================================== */
-
-    function selectSubject(subject) {
-
-        selectedSubject =
-            subject.name;
-
-        const faculty =
-            subjects[selectedFaculty];
-
-        resourceTitle.textContent =
-            subject.name;
-
-        resourceDescription.textContent =
-            `Choose a resource for ${subject.name}.`;
-
-        resourcePathClass.textContent =
-            `Class ${selectedClass}`;
-
-        resourcePathFaculty.textContent =
-            faculty
-                ? faculty.name
-                : selectedFaculty;
-
-        resourcePathSubject.textContent =
-            selectedSubject;
-
-        resourceContent.classList.add("hidden");
-        resourceContent.innerHTML = "";
-
-        showStep(resourceStep);
-
+    .section-heading {
+        margin-bottom: 40px;
     }
 
 
-    /* =====================================================
-       RESOURCE SELECTION
-    ===================================================== */
-
-    document
-        .querySelectorAll(".resource-choice-card")
-        .forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                const resource =
-                    button.dataset.resource;
-
-                openResource(resource);
-
-            });
-
-        });
-
-
-    function openResource(resource) {
-
-        resourceContent.classList.remove("hidden");
-
-        let title = "";
-        let text = "";
-
-        if (resource === "notes") {
-
-            title = "Notes";
-
-            text =
-                `Notes for ${selectedSubject} — Class ${selectedClass}.`;
-
-        }
-
-        if (resource === "questions") {
-
-            title = "Questions";
-
-            text =
-                `Practice questions for ${selectedSubject} — Class ${selectedClass}.`;
-
-        }
-
-        if (resource === "exam") {
-
-            title = "Exam Preparation";
-
-            text =
-                `Exam preparation for ${selectedSubject} — Class ${selectedClass}.`;
-
-        }
-
-
-        resourceContent.innerHTML = `
-
-            <div class="study-content-header">
-
-                <span class="section-label">
-                    ${escapeHTML(title)}
-                </span>
-
-                <h3>
-                    ${escapeHTML(selectedSubject)}
-                </h3>
-
-                <p>
-                    ${escapeHTML(text)}
-                </p>
-
-            </div>
-
-            <div class="study-content-placeholder">
-
-                <strong>
-                    ${escapeHTML(title)} content area
-                </strong>
-
-                <p>
-                    This area is ready for the actual
-                    NEB chapter material, questions and
-                    exam resources to be connected.
-                </p>
-
-            </div>
-
-        `;
-
-        resourceContent.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
-        });
-
+    .step-heading {
+        flex-wrap: wrap;
     }
 
 
-    /* =====================================================
-       BACK BUTTONS
-    ===================================================== */
-
-    document
-        .querySelectorAll("[data-study-back]")
-        .forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                const target =
-                    button.dataset.studyBack;
-
-                if (target === "class") {
-
-                    showStep(classStep);
-
-                    return;
-
-                }
-
-                if (target === "faculty") {
-
-                    showStep(facultyStep);
-
-                    return;
-
-                }
-
-                if (target === "subject") {
-
-                    showStep(subjectStep);
-
-                }
-
-            });
-
-        });
-
-
-    /* =====================================================
-       SUBJECT CODE / SHORT LABEL
-    ===================================================== */
-
-    function getSubjectCode(name) {
-
-        const codes = {
-
-            "Computer Science": "CS",
-            "Mathematics": "MATH",
-            "Applied Mathematics": "AM",
-            "Business Mathematics": "BM",
-            "Physics": "PHY",
-            "Chemistry": "CHEM",
-            "Biology": "BIO",
-            "Accounting": "ACC",
-            "Economics": "ECO",
-            "Finance": "FIN",
-            "Marketing": "MKT",
-            "Business Studies": "BUS",
-            "Sociology": "SOC",
-            "History": "HIS",
-            "Geography": "GEO",
-            "Political Science": "POL",
-            "Nepali": "NEP",
-            "English": "ENG",
-            "Social Studies": "SS",
-            "General Law": "LAW",
-            "Constitutional Law": "LAW",
-            "Human Rights": "HR",
-            "Hotel Management": "HM",
-            "Environment Science": "ENV",
-            "Agriculture": "AGR",
-            "Horticulture": "HORT",
-            "Food Technology": "FOOD",
-            "Sculpture": "ART",
-            "Singing": "MUS",
-            "Painting": "ART",
-            "Dance": "DANCE",
-            "Sanskrit": "SAN",
-            "Sanskrit Grammar": "SAN",
-            "Vedic Studies": "VED",
-            "Buddhist Studies": "BUD"
-        };
-
-        return codes[name] || "SUB";
-
+    .choice-grid,
+    .subject-grid,
+    .resource-grid {
+        grid-template-columns: 1fr;
     }
 
 
-    /* =====================================================
-       SAFE HTML
-    ===================================================== */
+    .choice-card {
+        min-height: 165px;
 
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
+        padding: 21px;
     }
 
-});
+
+    .resource-card {
+        min-height: 190px;
+    }
+
+
+    .path {
+        border-radius: 14px;
+
+        line-height: 1.6;
+    }
+
+
+    .resource-content {
+        padding: 21px;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+}
