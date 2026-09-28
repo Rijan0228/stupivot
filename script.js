@@ -1,1201 +1,1261 @@
 /* =========================================================
-   STUPIVOT — STUDY HUB CSS
-   Dark futuristic academic interface
+   STUPIVOT — STUDY HUB JAVASCRIPT
+   CLASS → FACULTY → SUBJECT → RESOURCE
 ========================================================= */
 
-* {
-    box-sizing: border-box;
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-html {
-    scroll-behavior: smooth;
-}
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
-body {
-    margin: 0;
-    background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(58, 192, 200, 0.08),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 85% 80%,
-            rgba(120, 70, 255, 0.08),
-            transparent 30%
-        ),
-        #050914;
+    const classStep =
+        document.getElementById("studyStepClass");
 
-    color: #ffffff;
+    const facultyStep =
+        document.getElementById("studyStepFaculty");
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-}
+    const subjectStep =
+        document.getElementById("studyStepSubject");
+
+    const resourceStep =
+        document.getElementById("studyStepResource");
 
 
-/* =========================================================
-   SECTION
-========================================================= */
+    const facultyTitle =
+        document.getElementById("facultyTitle");
 
-.study-section {
-    width: 100%;
-    min-height: 100vh;
+    const subjectTitle =
+        document.getElementById("subjectTitle");
 
-    padding: 80px 20px;
+    const subjectDescription =
+        document.getElementById("subjectDescription");
 
-    position: relative;
-}
+    const subjectGrid =
+        document.getElementById("subjectGrid");
 
 
-.study-section::before {
-    content: "";
+    const pathClass =
+        document.getElementById("pathClass");
 
-    position: absolute;
+    const pathFaculty =
+        document.getElementById("pathFaculty");
 
-    inset: 0;
 
-    pointer-events: none;
+    const resourceTitle =
+        document.getElementById("resourceTitle");
 
-    background-image:
-        linear-gradient(
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,0.025) 1px,
-            transparent 1px
+    const resourceDescription =
+        document.getElementById("resourceDescription");
+
+
+    const resourceClass =
+        document.getElementById("resourceClass");
+
+    const resourceFaculty =
+        document.getElementById("resourceFaculty");
+
+    const resourceSubject =
+        document.getElementById("resourceSubject");
+
+
+    const resourceContent =
+        document.getElementById("resourceContent");
+
+
+    /* =====================================================
+       SAFETY CHECK
+    ===================================================== */
+
+    if (
+        !classStep ||
+        !facultyStep ||
+        !subjectStep ||
+        !resourceStep ||
+        !subjectGrid ||
+        !resourceContent
+    ) {
+
+        console.error(
+            "StuPivot Study Hub: Required HTML elements are missing."
         );
 
-    background-size: 45px 45px;
-
-    mask-image:
-        linear-gradient(
-            to bottom,
-            black,
-            transparent
-        );
-}
-
-
-/* =========================================================
-   SECTION HEADING
-========================================================= */
-
-.section-heading {
-    position: relative;
-
-    width: 100%;
-    max-width: 1180px;
-
-    margin: 0 auto 55px;
-
-    text-align: center;
-}
-
-
-.section-label {
-    display: inline-block;
-
-    color: #3ac0c8;
-
-    font-size: 0.72rem;
-    font-weight: 800;
-
-    letter-spacing: 0.16em;
-}
-
-
-.section-heading h1 {
-    margin: 12px 0;
-
-    color: #f7f9ff;
-
-    font-size:
-        clamp(
-            2rem,
-            5vw,
-            3.7rem
-        );
-
-    line-height: 1.05;
-}
-
-
-.section-heading p {
-    max-width: 680px;
-
-    margin: 0 auto;
-
-    color:
-        rgba(
-            220,
-            225,
-            240,
-            0.65
-        );
-
-    line-height: 1.7;
-}
-
-
-/* =========================================================
-   FLOW
-========================================================= */
-
-.study-flow {
-    position: relative;
-
-    width: 100%;
-    max-width: 1180px;
-
-    margin: auto;
-}
-
-
-/* =========================================================
-   STEPS
-========================================================= */
-
-.study-step {
-    animation:
-        stepIn 0.4s ease;
-}
-
-
-.study-step.hidden {
-    display: none !important;
-}
-
-
-@keyframes stepIn {
-
-    from {
-        opacity: 0;
-
-        transform:
-            translateY(25px)
-            scale(0.98);
+        return;
     }
 
-    to {
-        opacity: 1;
 
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
+    /* =====================================================
+       CURRENT SELECTION
+    ===================================================== */
 
+    let selectedClass = "";
+    let selectedFaculty = "";
+    let selectedSubject = "";
+
+
+    /* =====================================================
+       SUBJECT DATA
+    ===================================================== */
+
+    const facultyData = {
+
+        science: {
+
+            name: "Science",
+
+            description:
+                "Science subjects with concepts, numerical problems and practical study.",
 
-/* =========================================================
-   STEP HEADING
-========================================================= */
+            subjects: [
 
-.step-heading {
-    display: flex;
+                {
+                    name: "Physics",
+                    code: "PHY",
+                    description:
+                        "Mechanics, heat, waves, electricity and numerical problems."
+                },
 
-    align-items: flex-start;
+                {
+                    name: "Chemistry",
+                    code: "CHEM",
+                    description:
+                        "Chemical principles, reactions, matter and practical study."
+                },
 
-    gap: 18px;
+                {
+                    name: "Biology",
+                    code: "BIO",
+                    description:
+                        "Living organisms, cells, systems and biological processes."
+                },
 
-    margin-bottom: 28px;
-}
+                {
+                    name: "Mathematics",
+                    code: "MATH",
+                    description:
+                        "Algebra, geometry, calculus and mathematical problem solving."
+                },
 
+                {
+                    name: "Computer Science",
+                    code: "CS",
+                    description:
+                        "Programming, computer systems, databases and information technology."
+                }
+
+            ]
+
+        },
+
+
+        management: {
+
+            name: "Management",
+
+            description:
+                "Business, finance, economics and management-oriented subjects.",
 
-.step-heading > div {
-    flex: 1;
-}
+            subjects: [
 
+                {
+                    name: "Accounting",
+                    code: "ACC",
+                    description:
+                        "Journal, ledger, financial statements and accounting principles."
+                },
 
-.step-number {
-    width: 48px;
-    height: 48px;
+                {
+                    name: "Economics",
+                    code: "ECO",
+                    description:
+                        "Microeconomics, macroeconomics and economic analysis."
+                },
 
-    flex-shrink: 0;
+                {
+                    name: "Business Studies",
+                    code: "BUS",
+                    description:
+                        "Business organization, management and entrepreneurship."
+                },
 
-    display: grid;
+                {
+                    name: "Finance",
+                    code: "FIN",
+                    description:
+                        "Financial concepts, institutions and financial management."
+                },
+
+                {
+                    name: "Business Mathematics",
+                    code: "BM",
+                    description:
+                        "Mathematical techniques used in business and finance."
+                },
+
+                {
+                    name: "Computer Science",
+                    code: "CS",
+                    description:
+                        "Programming, computer systems and technology."
+                }
 
-    place-items: center;
+            ]
 
-    border:
-        1px solid
-        rgba(
-            58,
-            192,
-            200,
-            0.35
-        );
+        },
 
-    border-radius: 14px;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(58,192,200,0.14),
-            rgba(120,70,255,0.12)
-        );
+        humanities: {
 
-    color: #3ac0c8;
+            name: "Humanities & Social Studies",
 
-    font-size: 0.78rem;
-    font-weight: 900;
+            description:
+                "Humanities and social-science-oriented subjects.",
 
-    box-shadow:
-        0 0 30px
-        rgba(
-            58,
-            192,
-            200,
-            0.07
-        );
-}
+            subjects: [
 
+                {
+                    name: "Sociology",
+                    code: "SOC",
+                    description:
+                        "Society, culture, institutions and social change."
+                },
 
-.step-heading h2 {
-    margin: 5px 0 7px;
+                {
+                    name: "History",
+                    code: "HIS",
+                    description:
+                        "Historical events, civilizations and historical analysis."
+                },
 
-    color: #f7f9ff;
+                {
+                    name: "Geography",
+                    code: "GEO",
+                    description:
+                        "Physical geography, human geography and environment."
+                },
+
+                {
+                    name: "Political Science",
+                    code: "POL",
+                    description:
+                        "Government, politics and political systems."
+                },
 
-    font-size: 1.55rem;
-}
+                {
+                    name: "Economics",
+                    code: "ECO",
+                    description:
+                        "Economic concepts and analysis."
+                }
 
+            ]
 
-.step-heading p {
-    margin: 0;
+        },
 
-    color:
-        rgba(
-            220,
-            225,
-            240,
-            0.62
-        );
 
-    line-height: 1.6;
-}
+        education: {
 
+            name: "Education",
 
-/* =========================================================
-   BACK BUTTON
-========================================================= */
+            description:
+                "Education-focused subjects and related study areas.",
 
-.back-button {
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.1
-        );
+            subjects: [
 
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.035
-        );
+                {
+                    name: "Education",
+                    code: "EDU",
+                    description:
+                        "Education systems, learning and educational development."
+                },
 
-    color: #aebbd0;
+                {
+                    name: "Psychology",
+                    code: "PSY",
+                    description:
+                        "Human behaviour, learning and psychological concepts."
+                },
 
-    border-radius: 12px;
+                {
+                    name: "Sociology",
+                    code: "SOC",
+                    description:
+                        "Society, culture and social relationships."
+                },
 
-    padding: 10px 15px;
+                {
+                    name: "Economics",
+                    code: "ECO",
+                    description:
+                        "Economic concepts and applications."
+                }
 
-    cursor: pointer;
+            ]
 
-    font: inherit;
+        },
 
-    font-size: 0.84rem;
 
-    transition:
-        0.25s ease;
-}
+        computer: {
 
+            name: "Computer Science & Technology",
 
-.back-button:hover {
-    color: #ffffff;
+            description:
+                "Computing-focused subjects and supporting mathematical study.",
 
-    border-color:
-        rgba(
-            58,
-            192,
-            200,
-            0.45
-        );
+            subjects: [
 
-    background:
-        rgba(
-            58,
-            192,
-            200,
-            0.08
-        );
+                {
+                    name: "Computer Science",
+                    code: "CS",
+                    description:
+                        "Programming, computer systems, databases and networking."
+                },
 
-    transform:
-        translateX(-4px);
-}
+                {
+                    name: "Mathematics",
+                    code: "MATH",
+                    description:
+                        "Mathematical concepts and problem solving."
+                },
 
+                {
+                    name: "Applied Mathematics",
+                    code: "AM",
+                    description:
+                        "Applied mathematical concepts and problem solving."
+                },
+
+                {
+                    name: "Physics",
+                    code: "PHY",
+                    description:
+                        "Physics concepts and numerical problem solving."
+                }
 
-/* =========================================================
-   CHOICE GRID
-========================================================= */
+            ]
 
-.choice-grid {
-    display: grid;
+        },
 
-    grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
 
-    gap: 18px;
-}
+        law: {
 
+            name: "Law",
 
-/* =========================================================
-   CHOICE CARD
-========================================================= */
+            description:
+                "Law-related subjects and legal study.",
 
-.choice-card {
-    position: relative;
+            subjects: [
 
-    min-height: 190px;
+                {
+                    name: "General Law",
+                    code: "LAW",
+                    description:
+                        "Fundamental concepts of law and legal systems."
+                },
 
-    padding: 24px;
+                {
+                    name: "Constitutional Law",
+                    code: "CL",
+                    description:
+                        "Constitutional principles and legal structures."
+                },
 
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.09
-        );
+                {
+                    name: "Human Rights",
+                    code: "HR",
+                    description:
+                        "Human rights, freedoms and legal principles."
+                },
 
-    border-radius: 22px;
+                {
+                    name: "Political Science",
+                    code: "POL",
+                    description:
+                        "Government and political systems."
+                }
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20,28,48,0.94),
-            rgba(7,11,22,0.98)
-        );
+            ]
 
-    color: white;
+        },
 
-    text-align: left;
 
-    cursor: pointer;
+        hotel: {
 
-    overflow: hidden;
+            name: "Hotel & Hospitality",
 
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
+            description:
+                "Hospitality, tourism and hotel-management subjects.",
 
+            subjects: [
 
-.choice-card::before {
-    content: "";
+                {
+                    name: "Hotel Management",
+                    code: "HM",
+                    description:
+                        "Hotel operations and hospitality management."
+                },
 
-    position: absolute;
+                {
+                    name: "Tourism",
+                    code: "TOUR",
+                    description:
+                        "Tourism, travel and hospitality concepts."
+                },
 
-    width: 260px;
-    height: 260px;
+                {
+                    name: "Marketing",
+                    code: "MKT",
+                    description:
+                        "Marketing principles and applications."
+                },
 
-    left: -120px;
-    top: -140px;
+                {
+                    name: "Finance",
+                    code: "FIN",
+                    description:
+                        "Financial concepts and management."
+                },
 
-    border-radius: 50%;
+                {
+                    name: "Computer Science",
+                    code: "CS",
+                    description:
+                        "Computing and programming where offered."
+                }
 
-    background:
-        rgba(
-            58,
-            192,
-            200,
-            0.11
-        );
+            ]
 
-    filter: blur(20px);
+        },
 
-    opacity: 0;
 
-    transition:
-        opacity 0.3s ease;
-}
+        agriculture: {
 
+            name: "Agriculture & Environment",
 
-.choice-card:hover {
-    transform:
-        translateY(-6px);
+            description:
+                "Agriculture, environment and related science subjects.",
 
-    border-color:
-        rgba(
-            58,
-            192,
-            200,
-            0.45
-        );
+            subjects: [
 
-    box-shadow:
-        0 20px 55px
-        rgba(
-            0,
-            0,
-            0,
-            0.4
-        ),
-        0 0 35px
-        rgba(
-            58,
-            192,
-            200,
-            0.08
-        );
-}
+                {
+                    name: "Agriculture",
+                    code: "AGR",
+                    description:
+                        "Agricultural science and production-related study."
+                },
 
+                {
+                    name: "Environmental Science",
+                    code: "ENV",
+                    description:
+                        "Environment, ecosystems and environmental issues."
+                },
 
-.choice-card:hover::before {
-    opacity: 1;
-}
+                {
+                    name: "Biology",
+                    code: "BIO",
+                    description:
+                        "Biological concepts and practical study."
+                },
 
+                {
+                    name: "Chemistry",
+                    code: "CHEM",
+                    description:
+                        "Chemical principles and practical study."
+                }
 
-.card-top {
-    position: relative;
+            ]
 
-    z-index: 2;
+        }
 
-    display: flex;
+    };
 
-    justify-content:
-        space-between;
 
-    align-items: center;
+    /* =====================================================
+       GENERAL SUBJECTS
+    ===================================================== */
 
-    margin-bottom: 18px;
-}
+    const generalSubjects = [
 
+        {
+            name: "Nepali",
+            code: "NEP",
+            description:
+                "Nepali language and literature."
+        },
 
-.card-top span {
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+        {
+            name: "English",
+            code: "ENG",
+            description:
+                "English language, literature and communication."
+        },
 
-    font-size: 0.7rem;
+        {
+            name: "Social Studies",
+            code: "SS",
+            description:
+                "Social studies, life skills and related topics."
+        }
 
-    font-weight: 900;
+    ];
 
-    letter-spacing: 0.1em;
-}
 
+    /* =====================================================
+       SHOW STEP
+    ===================================================== */
 
-.card-top b {
-    width: 34px;
-    height: 34px;
+    function showStep(step) {
 
-    display: grid;
+        const steps = [
+            classStep,
+            facultyStep,
+            subjectStep,
+            resourceStep
+        ];
 
-    place-items: center;
+        steps.forEach(item => {
 
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.09
-        );
+            item.classList.add("hidden");
 
-    border-radius: 50%;
+            item.classList.remove("active");
 
-    color: #8290a7;
+        });
 
-    font-size: 1rem;
 
-    transition:
-        0.25s ease;
-}
+        step.classList.remove("hidden");
 
+        step.classList.add("active");
 
-.choice-card:hover .card-top b {
-    color: #3ac0c8;
 
-    transform:
-        translate(
-            3px,
-            -3px
-        );
-}
+        window.setTimeout(() => {
 
+            step.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-.card-icon {
-    position: relative;
+        }, 50);
 
-    z-index: 2;
-
-    width: 58px;
-    height: 58px;
-
-    display: grid;
-
-    place-items: center;
-
-    margin-bottom: 17px;
-
-    border-radius: 16px;
-
-    border:
-        1px solid
-        rgba(
-            58,
-            192,
-            200,
-            0.2
-        );
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(58,192,200,0.16),
-            rgba(120,70,255,0.16)
-        );
-
-    color: #55dce3;
-
-    font-size: 0.72rem;
-
-    font-weight: 900;
-
-    letter-spacing: 0.05em;
-}
-
-
-.choice-card h3 {
-    position: relative;
-
-    z-index: 2;
-
-    margin: 0 0 8px;
-
-    color: #f7f9ff;
-
-    font-size: 1.12rem;
-}
-
-
-.choice-card p {
-    position: relative;
-
-    z-index: 2;
-
-    margin: 0;
-
-    color:
-        rgba(
-            210,
-            218,
-            235,
-            0.62
-        );
-
-    font-size: 0.84rem;
-
-    line-height: 1.65;
-}
-
-
-/* =========================================================
-   SUBJECT GRID
-========================================================= */
-
-.subject-grid {
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-}
-
-
-.subject-grid .choice-card {
-    min-height: 170px;
-}
-
-
-/* =========================================================
-   PATH
-========================================================= */
-
-.path {
-    display: flex;
-
-    align-items: center;
-
-    flex-wrap: wrap;
-
-    gap: 9px;
-
-    width: fit-content;
-
-    max-width: 100%;
-
-    margin:
-        0 0 25px;
-
-    padding:
-        10px 15px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.08
-        );
-
-    border-radius: 999px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.035
-        );
-
-    color: #9caac0;
-
-    font-size: 0.8rem;
-}
-
-
-.path strong {
-    color: #3ac0c8;
-}
-
-
-/* =========================================================
-   RESOURCE GRID
-========================================================= */
-
-.resource-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-
-    gap: 18px;
-}
-
-
-.resource-card {
-    position: relative;
-
-    min-height: 220px;
-
-    padding: 25px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.09
-        );
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(19,28,48,0.95),
-            rgba(7,11,22,0.99)
-        );
-
-    color: white;
-
-    text-align: left;
-
-    cursor: pointer;
-
-    overflow: hidden;
-
-    transition:
-        0.25s ease;
-}
-
-
-.resource-card:hover {
-    transform:
-        translateY(-7px);
-
-    border-color:
-        rgba(
-            120,
-            70,
-            255,
-            0.45
-        );
-
-    box-shadow:
-        0 20px 55px
-        rgba(
-            0,
-            0,
-            0,
-            0.42
-        );
-}
-
-
-.resource-number {
-    display: block;
-
-    margin-bottom: 18px;
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
-
-    font-size: 0.7rem;
-
-    font-weight: 900;
-}
-
-
-.resource-icon {
-    width: 56px;
-    height: 56px;
-
-    display: grid;
-
-    place-items: center;
-
-    margin-bottom: 18px;
-
-    border-radius: 15px;
-
-    border:
-        1px solid
-        rgba(
-            58,
-            192,
-            200,
-            0.2
-        );
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(58,192,200,0.16),
-            rgba(120,70,255,0.15)
-        );
-
-    color: #55dce3;
-
-    font-size: 1.05rem;
-
-    font-weight: 900;
-}
-
-
-.resource-card h3 {
-    margin:
-        0 0 7px;
-
-    color: #f7f9ff;
-
-    font-size: 1.1rem;
-}
-
-
-.resource-card p {
-    margin: 0;
-
-    max-width: 300px;
-
-    color:
-        rgba(
-            210,
-            218,
-            235,
-            0.62
-        );
-
-    line-height: 1.6;
-}
-
-
-.resource-arrow {
-    position: absolute;
-
-    top: 22px;
-    right: 22px;
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.4
-        );
-
-    font-size: 1.2rem;
-
-    transition:
-        0.25s ease;
-}
-
-
-.resource-card:hover .resource-arrow {
-    color: #3ac0c8;
-
-    transform:
-        translate(
-            4px,
-            -4px
-        );
-}
-
-
-/* =========================================================
-   RESOURCE CONTENT
-========================================================= */
-
-.resource-content {
-    margin-top: 25px;
-
-    padding: 30px;
-
-    border:
-        1px solid
-        rgba(
-            58,
-            192,
-            200,
-            0.17
-        );
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(12,22,38,0.96),
-            rgba(5,10,20,0.99)
-        );
-
-    animation:
-        contentIn 0.35s ease;
-}
-
-
-.resource-content.hidden {
-    display: none !important;
-}
-
-
-@keyframes contentIn {
-
-    from {
-        opacity: 0;
-        transform:
-            translateY(15px);
     }
 
-    to {
-        opacity: 1;
-        transform:
-            translateY(0);
+
+    /* =====================================================
+       CLASS SELECTION
+    ===================================================== */
+
+    document
+        .querySelectorAll(".class-choice")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                selectedClass =
+                    button.dataset.class;
+
+                facultyTitle.textContent =
+                    `Class ${selectedClass}`;
+
+                showStep(facultyStep);
+
+            });
+
+        });
+
+
+    /* =====================================================
+       FACULTY SELECTION
+    ===================================================== */
+
+    document
+        .querySelectorAll(".faculty-choice")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                selectedFaculty =
+                    button.dataset.faculty;
+
+
+                const faculty =
+                    facultyData[selectedFaculty];
+
+
+                if (!faculty) {
+
+                    console.error(
+                        "Faculty data not found:",
+                        selectedFaculty
+                    );
+
+                    return;
+                }
+
+
+                pathClass.textContent =
+                    `Class ${selectedClass}`;
+
+
+                pathFaculty.textContent =
+                    faculty.name;
+
+
+                subjectTitle.textContent =
+                    `${faculty.name} subjects`;
+
+
+                subjectDescription.textContent =
+                    faculty.description;
+
+
+                renderSubjects(
+                    faculty.subjects
+                );
+
+
+                showStep(subjectStep);
+
+            });
+
+        });
+
+
+    /* =====================================================
+       RENDER SUBJECTS
+    ===================================================== */
+
+    function renderSubjects(subjects) {
+
+        subjectGrid.innerHTML = "";
+
+
+        const combinedSubjects = [
+            ...generalSubjects,
+            ...subjects
+        ];
+
+
+        const uniqueSubjects = [];
+
+        const usedNames =
+            new Set();
+
+
+        combinedSubjects.forEach(subject => {
+
+            if (
+                !usedNames.has(
+                    subject.name
+                )
+            ) {
+
+                usedNames.add(
+                    subject.name
+                );
+
+                uniqueSubjects.push(
+                    subject
+                );
+
+            }
+
+        });
+
+
+        uniqueSubjects.forEach(
+            (subject, index) => {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.type = "button";
+
+                button.className =
+                    "choice-card";
+
+
+                button.dataset.subject =
+                    subject.name;
+
+
+                button.innerHTML = `
+
+                    <div class="card-top">
+
+                        <span>
+                            ${String(index + 1).padStart(2, "0")}
+                        </span>
+
+                        <b>
+                            ↗
+                        </b>
+
+                    </div>
+
+                    <div class="card-icon">
+                        ${escapeHTML(subject.code)}
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(subject.name)}
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(subject.description)}
+                    </p>
+
+                `;
+
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        selectSubject(
+                            subject
+                        );
+
+                    }
+                );
+
+
+                subjectGrid.appendChild(
+                    button
+                );
+
+            }
+        );
+
     }
-}
 
 
-.resource-content h3 {
-    margin:
-        8px 0 10px;
+    /* =====================================================
+       SUBJECT SELECTION
+    ===================================================== */
 
-    color: #ffffff;
+    function selectSubject(subject) {
 
-    font-size: 1.5rem;
-}
-
-
-.resource-content h4 {
-    margin:
-        25px 0 10px;
-
-    color: #55dce3;
-
-    font-size: 1.05rem;
-}
+        selectedSubject =
+            subject.name;
 
 
-.resource-content p,
-.resource-content li {
-    color:
-        rgba(
-            220,
-            225,
-            240,
-            0.75
+        const faculty =
+            facultyData[
+                selectedFaculty
+            ];
+
+
+        resourceTitle.textContent =
+            selectedSubject;
+
+
+        resourceDescription.textContent =
+            `Choose a study resource for ${selectedSubject}.`;
+
+
+        resourceClass.textContent =
+            `Class ${selectedClass}`;
+
+
+        resourceFaculty.textContent =
+            faculty
+                ? faculty.name
+                : selectedFaculty;
+
+
+        resourceSubject.textContent =
+            selectedSubject;
+
+
+        resourceContent.classList.add(
+            "hidden"
         );
 
-    line-height: 1.75;
-}
+
+        resourceContent.innerHTML = "";
 
 
-.resource-content ul,
-.resource-content ol {
-    padding-left: 22px;
-}
+        showStep(resourceStep);
+
+    }
 
 
-.resource-content li {
-    margin-bottom: 8px;
-}
+    /* =====================================================
+       RESOURCE BUTTONS
+    ===================================================== */
+
+    document
+        .querySelectorAll(".resource-card")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const resource =
+                        button.dataset.resource;
 
 
-.resource-badge {
-    display: inline-block;
+                    openResource(
+                        resource
+                    );
 
-    padding:
-        6px 10px;
-
-    border-radius: 999px;
-
-    background:
-        rgba(
-            58,
-            192,
-            200,
-            0.1
-        );
-
-    color: #3ac0c8;
-
-    font-size: 0.7rem;
-
-    font-weight: 900;
-
-    letter-spacing: 0.08em;
-}
-
-
-/* =========================================================
-   QUESTION BOXES
-========================================================= */
-
-.question-box {
-    margin:
-        12px 0;
-
-    padding:
-        16px 18px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
-
-    border-radius: 14px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.025
-        );
-}
-
-
-.question-box strong {
-    color: #ffffff;
-}
-
-
-/* =========================================================
-   STUDY NOTE
-========================================================= */
-
-.study-note {
-    display: flex;
-
-    gap: 12px;
-
-    align-items: flex-start;
-
-    margin-top: 28px;
-
-    padding:
-        15px 17px;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
-
-    border-radius: 15px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.025
-        );
-}
-
-
-.study-note > span {
-    width: 25px;
-    height: 25px;
-
-    flex-shrink: 0;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 50%;
-
-    background:
-        rgba(
-            58,
-            192,
-            200,
-            0.12
-        );
-
-    color: #3ac0c8;
-
-    font-weight: 900;
-}
-
-
-.study-note p {
-    margin: 2px 0 0;
-
-    color:
-        rgba(
-            210,
-            218,
-            235,
-            0.55
-        );
-
-    font-size: 0.77rem;
-
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width: 950px) {
-
-    .subject-grid,
-    .resource-grid {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
+                }
             );
+
+        });
+
+
+    /* =====================================================
+       OPEN RESOURCE
+    ===================================================== */
+
+    function openResource(resource) {
+
+        let html = "";
+
+
+        if (resource === "notes") {
+
+            html =
+                createNotes();
+
+        }
+
+
+        if (resource === "questions") {
+
+            html =
+                createQuestions();
+
+        }
+
+
+        if (resource === "exam") {
+
+            html =
+                createExamPreparation();
+
+        }
+
+
+        if (!html) {
+
+            return;
+
+        }
+
+
+        resourceContent.innerHTML =
+            html;
+
+
+        resourceContent.classList.remove(
+            "hidden"
+        );
+
+
+        resourceContent.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
     }
 
-}
+
+    /* =====================================================
+       NOTES
+    ===================================================== */
+
+    function createNotes() {
+
+        return `
+
+            <span class="resource-badge">
+                NOTES
+            </span>
+
+            <h3>
+                ${escapeHTML(selectedSubject)}
+            </h3>
+
+            <p>
+                Class ${escapeHTML(selectedClass)}
+                · ${escapeHTML(
+                    facultyData[selectedFaculty]?.name ||
+                    selectedFaculty
+                )}
+            </p>
 
 
-@media (max-width: 650px) {
+            <h4>
+                Chapter Notes
+            </h4>
 
-    .study-section {
-        padding:
-            55px 15px;
+            <ul>
+
+                <li>
+                    Introduction and basic concepts
+                </li>
+
+                <li>
+                    Important definitions and terminology
+                </li>
+
+                <li>
+                    Main concepts and explanations
+                </li>
+
+                <li>
+                    Examples and applications
+                </li>
+
+                <li>
+                    Important points for revision
+                </li>
+
+            </ul>
+
+
+            <h4>
+                Quick Revision
+            </h4>
+
+            <p>
+                Use this section for important concepts,
+                formulas, definitions and points that need
+                to be remembered before an examination.
+            </p>
+
+        `;
+
     }
 
 
-    .section-heading {
-        margin-bottom: 40px;
+    /* =====================================================
+       QUESTIONS
+    ===================================================== */
+
+    function createQuestions() {
+
+        return `
+
+            <span class="resource-badge">
+                QUESTIONS
+            </span>
+
+            <h3>
+                ${escapeHTML(selectedSubject)}
+                Practice Questions
+            </h3>
+
+            <p>
+                Class ${escapeHTML(selectedClass)}
+                · Practice material
+            </p>
+
+
+            <h4>
+                Multiple Choice Questions
+            </h4>
+
+
+            <div class="question-box">
+
+                <strong>
+                    1. Which statement best describes
+                    ${escapeHTML(selectedSubject)}?
+                </strong>
+
+                <p>
+                    A. A basic concept of the subject
+                </p>
+
+                <p>
+                    B. An unrelated concept
+                </p>
+
+                <p>
+                    C. A non-academic activity
+                </p>
+
+                <p>
+                    D. None of the above
+                </p>
+
+            </div>
+
+
+            <div class="question-box">
+
+                <strong>
+                    2. Write two important concepts
+                    you have learned in this subject.
+                </strong>
+
+            </div>
+
+
+            <h4>
+                Short-Answer Questions
+            </h4>
+
+
+            <ol>
+
+                <li>
+                    Define an important term from the chapter.
+                </li>
+
+                <li>
+                    Explain the main concept in your own words.
+                </li>
+
+                <li>
+                    Write two applications or examples.
+                </li>
+
+            </ol>
+
+
+            <h4>
+                Long-Answer Practice
+            </h4>
+
+            <ol>
+
+                <li>
+                    Explain the major concepts of the chapter
+                    with suitable examples.
+                </li>
+
+                <li>
+                    Compare two important concepts studied
+                    in the subject.
+                </li>
+
+            </ol>
+
+        `;
+
     }
 
 
-    .step-heading {
-        flex-wrap: wrap;
+    /* =====================================================
+       EXAM PREPARATION
+    ===================================================== */
+
+    function createExamPreparation() {
+
+        return `
+
+            <span class="resource-badge">
+                EXAM PREPARATION
+            </span>
+
+            <h3>
+                ${escapeHTML(selectedSubject)}
+                Exam Preparation
+            </h3>
+
+            <p>
+                Class ${escapeHTML(selectedClass)}
+                · Revision workspace
+            </p>
+
+
+            <h4>
+                Before the Exam
+            </h4>
+
+            <ul>
+
+                <li>
+                    Review all chapter notes.
+                </li>
+
+                <li>
+                    Memorize important definitions,
+                    formulas and key concepts.
+                </li>
+
+                <li>
+                    Practice short-answer questions.
+                </li>
+
+                <li>
+                    Practice long-answer questions.
+                </li>
+
+                <li>
+                    Solve model and previous-style questions.
+                </li>
+
+            </ul>
+
+
+            <h4>
+                Important Revision Areas
+            </h4>
+
+            <ol>
+
+                <li>
+                    Basic concepts and definitions
+                </li>
+
+                <li>
+                    Important theories and principles
+                </li>
+
+                <li>
+                    Examples and applications
+                </li>
+
+                <li>
+                    Numerical or practical problems where applicable
+                </li>
+
+                <li>
+                    Frequently asked question patterns
+                </li>
+
+            </ol>
+
+
+            <h4>
+                Final Revision Checklist
+            </h4>
+
+            <ul>
+
+                <li>
+                    ✓ Notes completed
+                </li>
+
+                <li>
+                    ✓ Questions practiced
+                </li>
+
+                <li>
+                    ✓ Difficult topics revised
+                </li>
+
+                <li>
+                    ✓ Model questions solved
+                </li>
+
+                <li>
+                    ✓ Final revision completed
+                </li>
+
+            </ul>
+
+        `;
+
     }
 
 
-    .choice-grid,
-    .subject-grid,
-    .resource-grid {
-        grid-template-columns: 1fr;
+    /* =====================================================
+       BACK BUTTONS
+    ===================================================== */
+
+    document
+        .querySelectorAll("[data-back]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const target =
+                        button.dataset.back;
+
+
+                    if (
+                        target === "class"
+                    ) {
+
+                        showStep(
+                            classStep
+                        );
+
+                    }
+
+
+                    else if (
+                        target === "faculty"
+                    ) {
+
+                        showStep(
+                            facultyStep
+                        );
+
+                    }
+
+
+                    else if (
+                        target === "subject"
+                    ) {
+
+                        showStep(
+                            subjectStep
+                        );
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
     }
 
 
-    .choice-card {
-        min-height: 165px;
+    /* =====================================================
+       START
+    ===================================================== */
 
-        padding: 21px;
-    }
+    console.log(
+        "StuPivot Study Hub loaded successfully."
+    );
 
-
-    .resource-card {
-        min-height: 190px;
-    }
-
-
-    .path {
-        border-radius: 14px;
-
-        line-height: 1.6;
-    }
-
-
-    .resource-content {
-        padding: 21px;
-    }
-
-}
-
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-
-}
+});
