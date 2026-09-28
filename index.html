@@ -3,645 +3,2012 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="StuPivot - A futuristic academic workspace for Class 11 and 12 students."
-    >
+    <title>StuPivot - Student Tools, Study Hub & Coding Resources</title>
 
-    <title>StuPivot — Study Hub</title>
+    <meta name="description"
+          content="StuPivot is a free student toolkit with NEB GPA, CGPA, percentage, attendance, date, BS AD conversion, coding resources, study materials and useful online tools.">
+
+    <meta name="keywords"
+          content="StuPivot, student tools, NEB GPA calculator, CGPA calculator, percentage calculator, Class 11, Class 12, Class 10, C programming, study resources, BS AD converter">
+
+    <meta name="author" content="Rijan Shrestha">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="https://Rijan0228.github.io/stupviot/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="StuPivot - Student Toolkit">
+    <meta property="og:description"
+          content="Free student calculators, study resources, coding guides and useful online tools.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://Rijan0228.github.io/stupviot/">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =========================================
-         STUDY HUB
-    ========================================== -->
+<!-- =========================
+     BACKGROUND EFFECTS
+========================= -->
 
-    <main>
+<div class="background-effects">
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-purple"></div>
+    <div class="glow glow-cyan"></div>
+    <div class="grid-background"></div>
+</div>
 
-        <section class="study-section" id="study">
 
-            <div class="section-heading">
+<!-- =========================
+     NAVIGATION
+========================= -->
 
-                <span class="section-label">
-                    STUPIVOT
-                </span>
+<header class="site-header">
 
-                <h1>
-                    Your academic workspace.
-                </h1>
+    <nav class="navbar">
+
+        <a href="#home" class="logo">
+            <span class="logo-mark">S</span>
+            <span class="logo-text">StuPivot</span>
+        </a>
+
+        <div class="nav-links" id="navLinks">
+
+            <a href="#home">Home</a>
+            <a href="#calculators">Calculators</a>
+            <a href="#study">Study Hub</a>
+            <a href="#coding">Coding Hub</a>
+            <a href="#tools">Online Tools</a>
+            <a href="#articles">Articles</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+
+        </div>
+
+        <div class="nav-actions">
+
+            <button
+                type="button"
+                class="icon-button"
+                id="themeToggle"
+                aria-label="Toggle theme">
+                ◐
+            </button>
+
+            <button
+                type="button"
+                class="icon-button"
+                id="searchOpen"
+                aria-label="Open search">
+                ⌕
+            </button>
+
+            <button
+                type="button"
+                class="menu-button"
+                id="menuBtn"
+                aria-label="Open menu">
+                ☰
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero section" id="home">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            <span class="status-dot"></span>
+            Built for students
+        </div>
+
+        <h1>
+            Your Study.
+            <span>Your Tools.</span>
+            <strong>Your Pivot.</strong>
+        </h1>
+
+        <p>
+            StuPivot brings useful student calculators, study resources,
+            coding guides and everyday academic tools together in one
+            simple and free platform.
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="#calculators" class="primary-button">
+                Explore Tools
+            </a>
+
+            <a href="#study" class="secondary-button">
+                Study Hub
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="hero-visual">
+
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+
+        <div class="hero-card">
+
+            <div class="hero-card-top">
+                <span>StuPivot</span>
+                <span class="live-dot"></span>
+            </div>
+
+            <div class="hero-card-icon">
+                SP
+            </div>
+
+            <h3>
+                Learn • Calculate • Build
+            </h3>
+
+            <p>
+                One platform for everyday student needs.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     QUICK ACCESS
+========================= -->
+
+<section class="quick-access section">
+
+    <div class="section-heading">
+        <span class="section-label">QUICK ACCESS</span>
+        <h2>Start with what you need</h2>
+    </div>
+
+    <div class="quick-grid">
+
+        <button class="quick-card" data-scroll="calculators">
+            <span class="quick-icon">∑</span>
+            <span>
+                <strong>Calculators</strong>
+                <small>GPA, marks, attendance & more</small>
+            </span>
+        </button>
+
+        <button class="quick-card" data-scroll="study">
+            <span class="quick-icon">⌘</span>
+            <span>
+                <strong>Study Hub</strong>
+                <small>Class 11 & Class 12 resources</small>
+            </span>
+        </button>
+
+        <button class="quick-card" data-scroll="coding">
+            <span class="quick-icon">&lt;/&gt;</span>
+            <span>
+                <strong>Coding Hub</strong>
+                <small>Learn programming step by step</small>
+            </span>
+        </button>
+
+        <button class="quick-card" data-scroll="tools">
+            <span class="quick-icon">✦</span>
+            <span>
+                <strong>Online Tools</strong>
+                <small>Useful everyday student utilities</small>
+            </span>
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CALCULATORS
+========================= -->
+
+<section class="section" id="calculators">
+
+    <div class="section-heading">
+
+        <span class="section-label">CALCULATORS</span>
+
+        <h2>
+            Calculate smarter.
+        </h2>
+
+        <p>
+            Simple academic and everyday calculators designed for students.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-grid">
+
+        <!-- GPA -->
+
+        <article class="feature-card calculator-card featured-card">
+
+            <div class="card-icon">GPA</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">NEB</span>
+
+                <h3>GPA Calculator</h3>
 
                 <p>
-                    Choose your class, faculty and subject.
-                    Then access notes, questions and exam preparation.
+                    Calculate GPA for Class 10, Class 11 and Class 12
+                    using the appropriate academic structure.
                 </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="gpa">
+                    Open Calculator →
+                </button>
 
             </div>
 
+        </article>
 
-            <div class="study-flow">
 
+        <!-- CGPA -->
 
-                <!-- =====================================
-                     STEP 01 — CLASS
-                ====================================== -->
+        <article class="feature-card calculator-card">
 
-                <section
-                    class="study-step active"
-                    id="studyStepClass"
-                >
+            <div class="card-icon">CG</div>
 
-                    <div class="step-heading">
+            <div class="card-content">
 
-                        <span class="step-number">
-                            01
-                        </span>
+                <span class="card-tag">ACADEMIC</span>
 
-                        <div>
-                            <span class="section-label">
-                                START HERE
-                            </span>
+                <h3>CGPA Calculator</h3>
 
-                            <h2>
-                                Choose your class
-                            </h2>
+                <p>
+                    Calculate CGPA using equal or credit-weighted
+                    grade points.
+                </p>
 
-                            <p>
-                                Select the NEB level you are studying.
-                            </p>
-                        </div>
+                <button
+                    class="open-tool card-button"
+                    data-tool="cgpa">
+                    Open Calculator →
+                </button>
 
-                    </div>
+            </div>
 
+        </article>
 
-                    <div class="choice-grid class-grid">
 
-                        <button
-                            type="button"
-                            class="choice-card class-choice"
-                            data-class="11"
-                        >
+        <!-- Percentage -->
 
-                            <div class="card-top">
-                                <span>01</span>
-                                <b>↗</b>
-                            </div>
+        <article class="feature-card calculator-card">
 
-                            <div class="card-icon">
-                                XI
-                            </div>
+            <div class="card-icon">%</div>
 
-                            <h3>
-                                Class 11
-                            </h3>
+            <div class="card-content">
 
-                            <p>
-                                Grade XI · Notes, questions and
-                                examination preparation.
-                            </p>
+                <span class="card-tag">MARKS</span>
 
-                        </button>
+                <h3>Percentage Calculator</h3>
 
+                <p>
+                    Enter obtained and total marks to calculate
+                    your percentage.
+                </p>
 
-                        <button
-                            type="button"
-                            class="choice-card class-choice"
-                            data-class="12"
-                        >
+                <button
+                    class="open-tool card-button"
+                    data-tool="percentage">
+                    Open Calculator →
+                </button>
 
-                            <div class="card-top">
-                                <span>02</span>
-                                <b>↗</b>
-                            </div>
+            </div>
 
-                            <div class="card-icon">
-                                XII
-                            </div>
+        </article>
 
-                            <h3>
-                                Class 12
-                            </h3>
 
-                            <p>
-                                Grade XII · Notes, questions and
-                                examination preparation.
-                            </p>
+        <!-- Marks -->
 
-                        </button>
+        <article class="feature-card calculator-card">
 
-                    </div>
+            <div class="card-icon">A+</div>
 
-                </section>
+            <div class="card-content">
 
+                <span class="card-tag">GRADE</span>
 
+                <h3>Marks & Grade</h3>
 
-                <!-- =====================================
-                     STEP 02 — FACULTY
-                ====================================== -->
+                <p>
+                    Enter your marks and calculate the corresponding
+                    grade and grade point.
+                </p>
 
-                <section
-                    class="study-step hidden"
-                    id="studyStepFaculty"
-                >
-
-                    <div class="step-heading">
-
-                        <button
-                            type="button"
-                            class="back-button"
-                            data-back="class"
-                        >
-                            ← Class
-                        </button>
-
-                        <span class="step-number">
-                            02
-                        </span>
-
-                        <div>
-                            <span class="section-label">
-                                YOUR CLASS
-                            </span>
-
-                            <h2 id="facultyTitle">
-                                Choose faculty
-                            </h2>
-
-                            <p>
-                                Select your faculty or study area.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="choice-grid faculty-grid"
-                        id="facultyGrid"
-                    >
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="science"
-                        >
-                            <div class="card-top">
-                                <span>01</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                SCI
-                            </div>
-
-                            <h3>
-                                Science
-                            </h3>
-
-                            <p>
-                                Physics, Chemistry, Biology,
-                                Mathematics and Computer Science.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="management"
-                        >
-                            <div class="card-top">
-                                <span>02</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                MGT
-                            </div>
-
-                            <h3>
-                                Management
-                            </h3>
-
-                            <p>
-                                Accounting, Economics, Business Studies,
-                                Finance and related subjects.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="humanities"
-                        >
-                            <div class="card-top">
-                                <span>03</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                HUM
-                            </div>
-
-                            <h3>
-                                Humanities
-                            </h3>
-
-                            <p>
-                                Sociology, History, Geography,
-                                Political Science and related subjects.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="education"
-                        >
-                            <div class="card-top">
-                                <span>04</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                EDU
-                            </div>
-
-                            <h3>
-                                Education
-                            </h3>
-
-                            <p>
-                                Education, Psychology, Sociology
-                                and education-related subjects.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="computer"
-                        >
-                            <div class="card-top">
-                                <span>05</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                CS
-                            </div>
-
-                            <h3>
-                                Computer Science
-                            </h3>
-
-                            <p>
-                                Computing, programming,
-                                mathematics and technology.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="law"
-                        >
-                            <div class="card-top">
-                                <span>06</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                LAW
-                            </div>
-
-                            <h3>
-                                Law
-                            </h3>
-
-                            <p>
-                                Legal studies, constitutional concepts
-                                and related subjects.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="hotel"
-                        >
-                            <div class="card-top">
-                                <span>07</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                HM
-                            </div>
-
-                            <h3>
-                                Hotel Management
-                            </h3>
-
-                            <p>
-                                Hospitality, tourism, management
-                                and related subjects.
-                            </p>
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="choice-card faculty-choice"
-                            data-faculty="agriculture"
-                        >
-                            <div class="card-top">
-                                <span>08</span>
-                                <b>↗</b>
-                            </div>
-
-                            <div class="card-icon">
-                                AGR
-                            </div>
-
-                            <h3>
-                                Agriculture
-                            </h3>
-
-                            <p>
-                                Agriculture, environment and
-                                biological study.
-                            </p>
-                        </button>
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =====================================
-                     STEP 03 — SUBJECT
-                ====================================== -->
-
-                <section
-                    class="study-step hidden"
-                    id="studyStepSubject"
-                >
-
-                    <div class="step-heading">
-
-                        <button
-                            type="button"
-                            class="back-button"
-                            data-back="faculty"
-                        >
-                            ← Faculty
-                        </button>
-
-                        <span class="step-number">
-                            03
-                        </span>
-
-                        <div>
-                            <span class="section-label">
-                                SELECT SUBJECT
-                            </span>
-
-                            <h2 id="subjectTitle">
-                                Choose a subject
-                            </h2>
-
-                            <p id="subjectDescription">
-                                Select a subject to continue.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <div class="path" id="subjectPath">
-                        <span id="pathClass">Class 11</span>
-                        <span>›</span>
-                        <span id="pathFaculty">Science</span>
-                    </div>
-
-
-                    <div
-                        class="choice-grid subject-grid"
-                        id="subjectGrid"
-                    >
-                    </div>
-
-                </section>
-
-
-
-                <!-- =====================================
-                     STEP 04 — RESOURCE
-                ====================================== -->
-
-                <section
-                    class="study-step hidden"
-                    id="studyStepResource"
-                >
-
-                    <div class="step-heading">
-
-                        <button
-                            type="button"
-                            class="back-button"
-                            data-back="subject"
-                        >
-                            ← Subject
-                        </button>
-
-                        <span class="step-number">
-                            04
-                        </span>
-
-                        <div>
-                            <span class="section-label">
-                                STUDY RESOURCE
-                            </span>
-
-                            <h2 id="resourceTitle">
-                                Study resources
-                            </h2>
-
-                            <p id="resourceDescription">
-                                Choose what you want to study.
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <div class="path resource-path">
-
-                        <span id="resourceClass">
-                            Class 11
-                        </span>
-
-                        <span>›</span>
-
-                        <span id="resourceFaculty">
-                            Science
-                        </span>
-
-                        <span>›</span>
-
-                        <strong id="resourceSubject">
-                            Subject
-                        </strong>
-
-                    </div>
-
-
-                    <div class="resource-grid">
-
-
-                        <button
-                            type="button"
-                            class="resource-card"
-                            data-resource="notes"
-                        >
+                <button
+                    class="open-tool card-button"
+                    data-tool="grade">
+                    Open Calculator →
+                </button>
 
-                            <span class="resource-number">
-                                01
-                            </span>
+            </div>
 
-                            <span class="resource-icon">
-                                N
-                            </span>
+        </article>
 
-                            <h3>
-                                Notes
-                            </h3>
 
-                            <p>
-                                Chapter notes, concepts and
-                                revision material.
-                            </p>
+        <!-- Attendance -->
 
-                            <span class="resource-arrow">
-                                →
-                            </span>
+        <article class="feature-card calculator-card">
 
-                        </button>
+            <div class="card-icon">AT</div>
 
+            <div class="card-content">
 
-                        <button
-                            type="button"
-                            class="resource-card"
-                            data-resource="questions"
-                        >
+                <span class="card-tag">SCHOOL</span>
 
-                            <span class="resource-number">
-                                02
-                            </span>
+                <h3>Attendance</h3>
 
-                            <span class="resource-icon">
-                                Q
-                            </span>
+                <p>
+                    Calculate current attendance and check the
+                    attendance target.
+                </p>
 
-                            <h3>
-                                Questions
-                            </h3>
+                <button
+                    class="open-tool card-button"
+                    data-tool="attendance">
+                    Open Calculator →
+                </button>
 
-                            <p>
-                                MCQs, short-answer and
-                                long-answer practice.
-                            </p>
+            </div>
 
-                            <span class="resource-arrow">
-                                →
-                            </span>
+        </article>
 
-                        </button>
 
+        <!-- Age -->
 
-                        <button
-                            type="button"
-                            class="resource-card"
-                            data-resource="exam"
-                        >
+        <article class="feature-card calculator-card">
 
-                            <span class="resource-number">
-                                03
-                            </span>
+            <div class="card-icon">AGE</div>
 
-                            <span class="resource-icon">
-                                E
-                            </span>
+            <div class="card-content">
 
-                            <h3>
-                                Exam Preparation
-                            </h3>
+                <span class="card-tag">DATE</span>
 
-                            <p>
-                                Important topics, revision
-                                and exam practice.
-                            </p>
+                <h3>Age Calculator</h3>
 
-                            <span class="resource-arrow">
-                                →
-                            </span>
+                <p>
+                    Enter your date of birth and calculate your
+                    exact age.
+                </p>
 
-                        </button>
+                <button
+                    class="open-tool card-button"
+                    data-tool="age">
+                    Open Calculator →
+                </button>
 
-                    </div>
+            </div>
 
+        </article>
 
-                    <div
-                        class="resource-content hidden"
-                        id="resourceContent"
-                    >
-                    </div>
 
-                </section>
+        <!-- Date Difference -->
 
+        <article class="feature-card calculator-card">
 
+            <div class="card-icon">DD</div>
 
-                <!-- =====================================
-                     NOTE
-                ====================================== -->
+            <div class="card-content">
 
-                <div class="study-note">
+                <span class="card-tag">DATE</span>
 
-                    <span>i</span>
+                <h3>Date Difference</h3>
 
-                    <p>
-                        Subject combinations and curriculum
-                        requirements may vary by institution.
-                    </p>
+                <p>
+                    Find the difference between two dates.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="date">
+                    Open Calculator →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- Unit Converter -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">↔</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">CONVERTER</span>
+
+                <h3>Unit Converter</h3>
+
+                <p>
+                    Convert common units including length,
+                    weight, temperature and more.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="unit">
+                    Open Converter →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- BS AD -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">BS</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">NEPALI DATE</span>
+
+                <h3>BS ↔ AD Converter</h3>
+
+                <p>
+                    Convert dates between Bikram Sambat and
+                    Gregorian calendars.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="bs-ad">
+                    Open Converter →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- Simple Interest -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">SI</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">MATH</span>
+
+                <h3>Simple Interest</h3>
+
+                <p>
+                    Calculate simple interest and total amount.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="simple-interest">
+                    Open Calculator →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- Compound Interest -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">CI</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">MATH</span>
+
+                <h3>Compound Interest</h3>
+
+                <p>
+                    Calculate compound interest with flexible
+                    compounding periods.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="compound-interest">
+                    Open Calculator →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- Discount -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">%</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">MATH</span>
+
+                <h3>Discount Calculator</h3>
+
+                <p>
+                    Calculate discount amount and final price.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="discount">
+                    Open Calculator →
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- Profit Loss -->
+
+        <article class="feature-card calculator-card">
+
+            <div class="card-icon">P/L</div>
+
+            <div class="card-content">
+
+                <span class="card-tag">BUSINESS MATH</span>
+
+                <h3>Profit & Loss</h3>
+
+                <p>
+                    Calculate profit, loss and their percentages.
+                </p>
+
+                <button
+                    class="open-tool card-button"
+                    data-tool="profit">
+                    Open Calculator →
+                </button>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     STUDY HUB
+========================= -->
+
+<section class="section study-section" id="study">
+
+    <div class="section-heading">
+
+        <span class="section-label">STUDY HUB</span>
+
+        <h2>
+            Your academic workspace.
+        </h2>
+
+        <p>
+            Choose your class first, then explore the relevant
+            NEB resources, faculty, notes, questions and exam preparation.
+        </p>
+
+    </div>
+
+
+    <!-- Initial class selection -->
+
+    <div class="study-class-selection" id="studyClassSelection">
+
+        <button
+            class="class-choice"
+            data-class="11">
+
+            <span class="class-number">11</span>
+
+            <span class="class-info">
+                <strong>Class 11</strong>
+                <small>NEB resources & subjects</small>
+            </span>
+
+            <span class="arrow">→</span>
+
+        </button>
+
+
+        <button
+            class="class-choice"
+            data-class="12">
+
+            <span class="class-number">12</span>
+
+            <span class="class-info">
+                <strong>Class 12</strong>
+                <small>NEB resources & subjects</small>
+            </span>
+
+            <span class="arrow">→</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- Study dashboard -->
+
+    <div
+        class="study-dashboard hidden"
+        id="studyDashboard">
+
+        <button
+            class="back-button"
+            id="studyBack">
+            ← Choose another class
+        </button>
+
+
+        <div class="study-dashboard-header">
+
+            <div>
+
+                <span class="section-label">
+                    SELECTED CLASS
+                </span>
+
+                <h3 id="selectedClassTitle">
+                    Class 11
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="study-options">
+
+            <button
+                class="study-option"
+                data-study="neb">
+
+                <span class="study-option-icon">NEB</span>
+
+                <span>
+                    <strong>NEB Resources</strong>
+                    <small>
+                        Board-related academic resources
+                    </small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="study-option"
+                data-study="faculty">
+
+                <span class="study-option-icon">F</span>
+
+                <span>
+                    <strong>Faculty & Subjects</strong>
+                    <small>
+                        Explore subjects according to faculty
+                    </small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="study-option"
+                data-study="notes">
+
+                <span class="study-option-icon">N</span>
+
+                <span>
+                    <strong>Notes</strong>
+                    <small>
+                        Subject notes and study material
+                    </small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="study-option"
+                data-study="questions">
+
+                <span class="study-option-icon">Q</span>
+
+                <span>
+                    <strong>Questions</strong>
+                    <small>
+                        Practice and model questions
+                    </small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="study-option"
+                data-study="exam">
+
+                <span class="study-option-icon">E</span>
+
+                <span>
+                    <strong>Exam Preparation</strong>
+                    <small>
+                        Preparation resources and guidance
+                    </small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="study-sub-content hidden"
+            id="studySubContent">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CODING HUB
+========================= -->
+
+<section class="section" id="coding">
+
+    <div class="section-heading">
+
+        <span class="section-label">CODING HUB</span>
+
+        <h2>
+            Learn to code by building.
+        </h2>
+
+        <p>
+            Start with programming concepts and gradually move
+            toward examples and practice problems.
+        </p>
+
+    </div>
+
+
+    <div class="coding-layout">
+
+        <div class="coding-intro-card">
+
+            <div class="code-window">
+
+                <div class="code-window-bar">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+
+    printf("Hello, StuPivot!");
+
+    return 0;
+}
+                </code></pre>
+
+            </div>
+
+            <h3>
+                Start with C.
+            </h3>
+
+            <p>
+                Learn programming fundamentals with simple,
+                student-friendly explanations and examples.
+            </p>
+
+        </div>
+
+
+        <div class="coding-options">
+
+            <button
+                class="coding-option"
+                data-coding="c">
+
+                <span class="coding-number">01</span>
+
+                <span>
+                    <strong>C Programming</strong>
+                    <small>Learn C from the basics</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="coding-option"
+                data-coding="algorithms">
+
+                <span class="coding-number">02</span>
+
+                <span>
+                    <strong>Algorithms</strong>
+                    <small>Understand step-by-step solutions</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="coding-option"
+                data-coding="concepts">
+
+                <span class="coding-number">03</span>
+
+                <span>
+                    <strong>Programming Concepts</strong>
+                    <small>Variables, loops, arrays and more</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="coding-option"
+                data-coding="examples">
+
+                <span class="coding-number">04</span>
+
+                <span>
+                    <strong>C Examples</strong>
+                    <small>Practical beginner examples</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="coding-option"
+                data-coding="practice">
+
+                <span class="coding-number">05</span>
+
+                <span>
+                    <strong>Practice Problems</strong>
+                    <small>Test your programming knowledge</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <button
+                class="coding-option"
+                data-coding="guides">
+
+                <span class="coding-number">06</span>
+
+                <span>
+                    <strong>Beginner Guides</strong>
+                    <small>Simple explanations for beginners</small>
+                </span>
+
+                <span>→</span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="coding-content hidden"
+        id="codingContent">
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ONLINE TOOLS
+========================= -->
+
+<section class="section" id="tools">
+
+    <div class="section-heading">
+
+        <span class="section-label">ONLINE TOOLS</span>
+
+        <h2>
+            Small tools. Big convenience.
+        </h2>
+
+        <p>
+            Useful utilities for writing, studying and everyday tasks.
+        </p>
+
+    </div>
+
+
+    <div class="tools-grid">
+
+        <article class="tool-card">
+
+            <div class="tool-icon">Aa</div>
+
+            <h3>Word Counter</h3>
+
+            <p>
+                Count words and characters in your text.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="word-counter">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">Aa</div>
+
+            <h3>Case Converter</h3>
+
+            <p>
+                Convert text into uppercase, lowercase and more.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="case-converter">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">Tx</div>
+
+            <h3>Text Cleaner</h3>
+
+            <p>
+                Clean extra spaces and unwanted formatting.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="text-cleaner">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">QR</div>
+
+            <h3>QR Code Generator</h3>
+
+            <p>
+                Create a QR code from text or a link.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="qr">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">•••</div>
+
+            <h3>Password Generator</h3>
+
+            <p>
+                Generate strong random passwords.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="password">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">R</div>
+
+            <h3>Random Number</h3>
+
+            <p>
+                Generate a random number between two values.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="random">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">↔</div>
+
+            <h3>Unit Converter</h3>
+
+            <p>
+                Quickly convert common measurement units.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="unit">
+                Open Tool →
+            </button>
+
+        </article>
+
+
+        <article class="tool-card">
+
+            <div class="tool-icon">BS</div>
+
+            <h3>BS ↔ AD Converter</h3>
+
+            <p>
+                Convert Nepali BS dates to AD and AD dates to BS.
+            </p>
+
+            <button
+                class="open-tool card-button"
+                data-tool="bs-ad">
+                Open Tool →
+            </button>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ARTICLES
+========================= -->
+
+<section class="section" id="articles">
+
+    <div class="section-heading">
+
+        <span class="section-label">ARTICLES</span>
+
+        <h2>
+            Learn something new.
+        </h2>
+
+        <p>
+            Student-friendly guides covering academics,
+            technology and programming.
+        </p>
+
+    </div>
+
+
+    <div class="articles-grid">
+
+        <article class="article-card">
+
+            <span class="article-category">
+                ACADEMICS
+            </span>
+
+            <h3>
+                How NEB GPA Calculation Works
+            </h3>
+
+            <p>
+                Understand GPA, grade points, subjects and
+                the academic calculation process.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="neb-gpa">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                ACADEMICS
+            </span>
+
+            <h3>
+                GPA vs CGPA
+            </h3>
+
+            <p>
+                Learn the difference between GPA and CGPA
+                and when each calculation is useful.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="gpa-cgpa">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                PROGRAMMING
+            </span>
+
+            <h3>
+                Starting C Programming
+            </h3>
+
+            <p>
+                A beginner-friendly introduction to C programming,
+                algorithms and problem solving.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="c-programming">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                STUDY
+            </span>
+
+            <h3>
+                Building a Better Study Routine
+            </h3>
+
+            <p>
+                Practical ideas for organizing subjects,
+                practice and revision.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="study-routine">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                COMPUTER SCIENCE
+            </span>
+
+            <h3>
+                Why Computer Science Matters
+            </h3>
+
+            <p>
+                Explore the foundations of computing and
+                why programming skills are useful.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="computer-science">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                TECHNOLOGY
+            </span>
+
+            <h3>
+                What Happens When You Open a Website?
+            </h3>
+
+            <p>
+                Follow the basic journey from a browser request
+                to the webpage appearing on your screen.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="website">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                TOOLS
+            </span>
+
+            <h3>
+                Using StuPivot Effectively
+            </h3>
+
+            <p>
+                Learn how to use the calculators, study tools,
+                coding hub and online utilities.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="stupivot-tools">
+                Read Article →
+            </button>
+
+        </article>
+
+
+        <article class="article-card">
+
+            <span class="article-category">
+                CALENDAR
+            </span>
+
+            <h3>
+                BS and AD Calendar Conversion
+            </h3>
+
+            <p>
+                Understand the difference between Bikram Sambat
+                and Gregorian calendar dates.
+            </p>
+
+            <button
+                class="read-article"
+                data-article="bs-ad">
+                Read Article →
+            </button>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<section class="section search-section" id="search">
+
+    <div class="search-box">
+
+        <span class="section-label">
+            SEARCH STUPIVOT
+        </span>
+
+        <h2>
+            Find what you need.
+        </h2>
+
+        <p>
+            Search calculators, tools, coding resources and articles.
+        </p>
+
+        <div class="site-search">
+
+            <input
+                type="search"
+                id="siteSearch"
+                placeholder="Search StuPivot..."
+                autocomplete="off">
+
+            <button
+                type="button"
+                id="searchButton">
+                Search
+            </button>
+
+        </div>
+
+        <div
+            id="searchResults"
+            class="search-results">
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FEEDBACK
+========================= -->
+
+<section class="section" id="feedback">
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            FEEDBACK
+        </span>
+
+        <h2>
+            Help improve StuPivot.
+        </h2>
+
+        <p>
+            Share your experience or tell us what should be improved.
+        </p>
+
+    </div>
+
+
+    <div class="form-container">
+
+        <form
+            class="feedback-form"
+            id="feedbackForm"
+            action="https://formspree.io/f/xjykpqlb"
+            method="POST">
+
+            <input
+                type="hidden"
+                name="_subject"
+                value="StuPivot Feedback">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="feedbackName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="feedbackName"
+                        name="name"
+                        placeholder="Your name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="feedbackEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="feedbackEmail"
+                        name="email"
+                        placeholder="Your email"
+                        required>
 
                 </div>
 
             </div>
 
-        </section>
 
-    </main>
+            <div class="form-group">
+
+                <label for="feedbackRating">
+                    Rating
+                </label>
+
+                <select
+                    id="feedbackRating"
+                    name="rating"
+                    required>
+
+                    <option value="">
+                        Select rating
+                    </option>
+
+                    <option value="5">
+                        5 - Excellent
+                    </option>
+
+                    <option value="4">
+                        4 - Good
+                    </option>
+
+                    <option value="3">
+                        3 - Average
+                    </option>
+
+                    <option value="2">
+                        2 - Needs improvement
+                    </option>
+
+                    <option value="1">
+                        1 - Poor
+                    </option>
+
+                </select>
+
+            </div>
 
 
-    <!-- IMPORTANT:
-         JavaScript is loaded AFTER the HTML.
-    -->
+            <div class="form-group">
 
-    <script src="script.js"></script>
+                <label for="feedbackMessage">
+                    Feedback
+                </label>
+
+                <textarea
+                    id="feedbackMessage"
+                    name="message"
+                    rows="7"
+                    placeholder="Write your feedback here..."
+                    required></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="primary-button">
+                Send Feedback →
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONTACT
+========================= -->
+
+<section class="section" id="contact">
+
+    <div class="contact-layout">
+
+        <div class="contact-info">
+
+            <span class="section-label">
+                CONTACT
+            </span>
+
+            <h2>
+                Have something to say?
+            </h2>
+
+            <p>
+                Send a message, suggestion or question through
+                the contact form.
+            </p>
+
+
+            <div class="contact-details">
+
+                <div class="contact-item">
+
+                    <span class="contact-icon">@</span>
+
+                    <div>
+                        <small>Instagram</small>
+                        <strong>
+                            rijanshrestha0228
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <span class="contact-icon">GH</span>
+
+                    <div>
+                        <small>GitHub</small>
+                        <strong>
+                            Rijan0228
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="contact-item">
+
+                    <span class="contact-icon">◎</span>
+
+                    <div>
+                        <small>Location</small>
+                        <strong>
+                            Nepal
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-container">
+
+            <form
+                class="contact-form"
+                id="contactForm"
+                action="YOUR_FORMSPREE_ID"
+                method="POST">
+
+                <input
+                    type="hidden"
+                    name="_subject"
+                    value="StuPivot Contact Message">
+
+                <div class="form-group">
+
+                    <label for="contactName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactName"
+                        name="name"
+                        placeholder="Your name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="contactEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="contactEmail"
+                        name="email"
+                        placeholder="Your email"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="contactMessage">
+                        Message
+                    </label>
+
+                    <textarea
+                        id="contactMessage"
+                        name="message"
+                        rows="8"
+                        placeholder="Write your message..."
+                        required></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-button">
+                    Send Message →
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section class="section" id="about">
+
+    <div class="about-card">
+
+        <span class="section-label">
+            ABOUT STUPIVOT
+        </span>
+
+        <h2>
+            Built to make student life simpler.
+        </h2>
+
+        <p>
+            StuPivot is a free student-focused platform designed
+            to bring academic calculators, study resources,
+            programming learning and useful digital tools together.
+        </p>
+
+        <p>
+            The goal is simple: reduce the time students spend
+            searching for small tools and help them focus more
+            on learning, practicing and building.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LEGAL
+========================= -->
+
+<section class="section legal-section" id="legal">
+
+    <div class="section-heading">
+
+        <span class="section-label">
+            INFORMATION
+        </span>
+
+        <h2>
+            Policies & Terms
+        </h2>
+
+    </div>
+
+
+    <div class="legal-grid">
+
+        <button
+            class="legal-card"
+            data-legal="privacy">
+
+            <span>01</span>
+
+            <strong>
+                Privacy Policy
+            </strong>
+
+            <small>
+                How StuPivot handles information.
+            </small>
+
+        </button>
+
+
+        <button
+            class="legal-card"
+            data-legal="terms">
+
+            <span>02</span>
+
+            <strong>
+                Terms of Use
+            </strong>
+
+            <small>
+                Rules for using StuPivot.
+            </small>
+
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="site-footer">
+
+    <div class="footer-main">
+
+        <div class="footer-brand">
+
+            <a href="#home" class="logo">
+                <span class="logo-mark">S</span>
+                <span class="logo-text">StuPivot</span>
+            </a>
+
+            <p>
+                A free toolkit for students to calculate,
+                learn and build.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <div>
+
+                <h4>Explore</h4>
+
+                <a href="#calculators">
+                    Calculators
+                </a>
+
+                <a href="#study">
+                    Study Hub
+                </a>
+
+                <a href="#coding">
+                    Coding Hub
+                </a>
+
+                <a href="#tools">
+                    Online Tools
+                </a>
+
+            </div>
+
+
+            <div>
+
+                <h4>Learn</h4>
+
+                <a href="#articles">
+                    Articles
+                </a>
+
+                <a href="#about">
+                    About
+                </a>
+
+                <a href="#feedback">
+                    Feedback
+                </a>
+
+                <a href="#contact">
+                    Contact
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © <span id="year"></span> StuPivot.
+            All rights reserved.
+        </span>
+
+        <span>
+            Built for students.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================
+     CALCULATOR / TOOL MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="toolModal"
+    aria-hidden="true">
+
+    <div class="modal-overlay"></div>
+
+    <div
+        class="modal-container"
+        role="dialog"
+        aria-modal="true">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="modalClose"
+            aria-label="Close">
+            ×
+        </button>
+
+        <div
+            class="modal-content"
+            id="modalContent">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ARTICLE MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="articleModal"
+    aria-hidden="true">
+
+    <div class="modal-overlay"></div>
+
+    <div
+        class="modal-container article-modal-container"
+        role="dialog"
+        aria-modal="true">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="articleClose"
+            aria-label="Close">
+            ×
+        </button>
+
+        <article
+            class="article-content"
+            id="articleContent">
+        </article>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     LEGAL MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="legalModal"
+    aria-hidden="true">
+
+    <div class="modal-overlay"></div>
+
+    <div
+        class="modal-container article-modal-container"
+        role="dialog"
+        aria-modal="true">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="legalClose"
+            aria-label="Close">
+            ×
+        </button>
+
+        <article
+            class="article-content"
+            id="legalContent">
+        </article>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite">
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
