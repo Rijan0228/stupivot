@@ -2,53 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>StuPivot - Student Tools, Study Hub & Coding Resources</title>
+    <title>StuPivot — Student Tools, Study Hub & Coding Resources</title>
 
     <meta name="description"
-          content="StuPivot is a free student toolkit with NEB GPA, CGPA, percentage, attendance, date, BS AD conversion, coding resources, study materials and useful online tools.">
+        content="StuPivot is a free student toolkit with academic calculators, Class 11 and 12 study resources, coding resources and useful online tools.">
 
     <meta name="keywords"
-          content="StuPivot, student tools, NEB GPA calculator, CGPA calculator, percentage calculator, Class 11, Class 12, Class 10, C programming, study resources, BS AD converter">
+        content="StuPivot, student tools, GPA calculator, CGPA calculator, Class 11, Class 12, NEB, coding, study resources">
 
     <meta name="author" content="Rijan Shrestha">
-
     <meta name="robots" content="index, follow">
 
-    <link rel="canonical" href="https://Rijan0228.github.io/stupviot/">
+    <link rel="canonical" href="https://rijan0228.github.io/rijan-protofolio/">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="StuPivot - Student Toolkit">
+    <meta property="og:title" content="StuPivot — Student Toolkit">
     <meta property="og:description"
-          content="Free student calculators, study resources, coding guides and useful online tools.">
+        content="Calculate, learn and build with StuPivot.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://Rijan0228.github.io/stupviot/">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- =========================
-     BACKGROUND EFFECTS
-========================= -->
-
 <div class="background-effects">
-    <div class="glow glow-blue"></div>
-    <div class="glow glow-purple"></div>
-    <div class="glow glow-cyan"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
     <div class="grid-background"></div>
+    <div class="noise"></div>
 </div>
 
-
-<!-- =========================
-     NAVIGATION
-========================= -->
-
-<header class="site-header">
-
+<header class="site-header" id="siteHeader">
     <nav class="navbar">
 
         <a href="#home" class="logo">
@@ -57,7 +44,6 @@
         </a>
 
         <div class="nav-links" id="navLinks">
-
             <a href="#home">Home</a>
             <a href="#calculators">Calculators</a>
             <a href="#study">Study Hub</a>
@@ -66,56 +52,51 @@
             <a href="#articles">Articles</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
-
         </div>
 
         <div class="nav-actions">
 
-            <button
-                type="button"
-                class="icon-button"
-                id="themeToggle"
-                aria-label="Toggle theme">
-                ◐
-            </button>
-
-            <button
-                type="button"
-                class="icon-button"
-                id="searchOpen"
-                aria-label="Open search">
+            <button class="icon-button"
+                    id="searchOpen"
+                    type="button"
+                    aria-label="Search">
                 ⌕
             </button>
 
-            <button
-                type="button"
-                class="menu-button"
-                id="menuBtn"
-                aria-label="Open menu">
+            <button class="icon-button"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Toggle theme">
+                ◐
+            </button>
+
+            <button class="menu-button"
+                    id="menuBtn"
+                    type="button"
+                    aria-label="Open menu"
+                    aria-expanded="false">
                 ☰
             </button>
 
         </div>
 
     </nav>
-
 </header>
 
 
 <main>
 
-
-<!-- =========================
+<!-- =====================================================
      HERO
-========================= -->
+===================================================== -->
 
 <section class="hero section" id="home">
 
-    <div class="hero-content">
+    <div class="hero-content reveal">
 
         <div class="hero-badge">
             <span class="status-dot"></span>
-            Built for students
+            BUILT FOR STUDENTS
         </div>
 
         <h1>
@@ -127,36 +108,67 @@
         <p>
             StuPivot brings useful student calculators, study resources,
             coding guides and everyday academic tools together in one
-            simple and free platform.
+            fast, simple and free platform.
         </p>
 
         <div class="hero-actions">
 
             <a href="#calculators" class="primary-button">
                 Explore Tools
+                <span>→</span>
             </a>
 
             <a href="#study" class="secondary-button">
-                Study Hub
+                Open Study Hub
             </a>
 
         </div>
 
+        <div class="hero-stats">
+            <div>
+                <strong>20+</strong>
+                <span>Student Tools</span>
+            </div>
+
+            <div>
+                <strong>11–12</strong>
+                <span>Study Hub</span>
+            </div>
+
+            <div>
+                <strong>24/7</strong>
+                <span>Available</span>
+            </div>
+        </div>
+
     </div>
 
-    <div class="hero-visual">
 
-        <div class="hero-orbit orbit-one"></div>
-        <div class="hero-orbit orbit-two"></div>
+    <div class="hero-visual reveal">
+
+        <div class="hero-orbit orbit-1"></div>
+        <div class="hero-orbit orbit-2"></div>
+
+        <div class="floating-chip chip-1">
+            GPA
+        </div>
+
+        <div class="floating-chip chip-2">
+            CODE
+        </div>
+
+        <div class="floating-chip chip-3">
+            NOTES
+        </div>
 
         <div class="hero-card">
 
             <div class="hero-card-top">
-                <span>StuPivot</span>
+                <span>STUPIVOT / CORE</span>
                 <span class="live-dot"></span>
             </div>
 
-            <div class="hero-card-icon">
+            <div class="hero-card-logo">
                 SP
             </div>
 
@@ -165,8 +177,14 @@
             </h3>
 
             <p>
-                One platform for everyday student needs.
+                One digital workspace for everyday student needs.
             </p>
+
+            <div class="hero-card-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
         </div>
 
@@ -175,49 +193,84 @@
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      QUICK ACCESS
-========================= -->
+===================================================== -->
 
-<section class="quick-access section">
+<section class="section quick-access">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
         <span class="section-label">QUICK ACCESS</span>
-        <h2>Start with what you need</h2>
+
+        <h2>
+            Start with what you need.
+        </h2>
+
+        <p>
+            Jump directly into the part of StuPivot you want.
+        </p>
     </div>
+
 
     <div class="quick-grid">
 
-        <button class="quick-card" data-scroll="calculators">
+        <button class="quick-card reveal"
+                data-scroll="calculators">
+
             <span class="quick-icon">∑</span>
+
             <span>
                 <strong>Calculators</strong>
-                <small>GPA, marks, attendance & more</small>
+                <small>GPA, marks, attendance and more</small>
             </span>
+
+            <b>→</b>
+
         </button>
 
-        <button class="quick-card" data-scroll="study">
+
+        <button class="quick-card reveal"
+                data-scroll="study">
+
             <span class="quick-icon">⌘</span>
+
             <span>
                 <strong>Study Hub</strong>
                 <small>Class 11 & Class 12 resources</small>
             </span>
+
+            <b>→</b>
+
         </button>
 
-        <button class="quick-card" data-scroll="coding">
+
+        <button class="quick-card reveal"
+                data-scroll="coding">
+
             <span class="quick-icon">&lt;/&gt;</span>
+
             <span>
                 <strong>Coding Hub</strong>
-                <small>Learn programming step by step</small>
+                <small>Programming and coding resources</small>
             </span>
+
+            <b>→</b>
+
         </button>
 
-        <button class="quick-card" data-scroll="tools">
+
+        <button class="quick-card reveal"
+                data-scroll="tools">
+
             <span class="quick-icon">✦</span>
+
             <span>
                 <strong>Online Tools</strong>
-                <small>Useful everyday student utilities</small>
+                <small>Useful everyday digital utilities</small>
             </span>
+
+            <b>→</b>
+
         </button>
 
     </div>
@@ -225,22 +278,24 @@
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      CALCULATORS
-========================= -->
+===================================================== -->
 
 <section class="section" id="calculators">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
-        <span class="section-label">CALCULATORS</span>
+        <span class="section-label">
+            CALCULATORS
+        </span>
 
         <h2>
             Calculate smarter.
         </h2>
 
         <p>
-            Simple academic and everyday calculators designed for students.
+            Academic and everyday calculators designed for students.
         </p>
 
     </div>
@@ -248,363 +303,238 @@
 
     <div class="calculator-grid">
 
-        <!-- GPA -->
 
-        <article class="feature-card calculator-card featured-card">
-
+        <article class="feature-card featured-card reveal">
             <div class="card-icon">GPA</div>
 
-            <div class="card-content">
+            <span class="card-tag">NEB</span>
 
-                <span class="card-tag">NEB</span>
+            <h3>GPA Calculator</h3>
 
-                <h3>GPA Calculator</h3>
+            <p>
+                Calculate GPA using subject marks and grade points.
+            </p>
 
-                <p>
-                    Calculate GPA for Class 10, Class 11 and Class 12
-                    using the appropriate academic structure.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="gpa">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- CGPA -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">CG</div>
 
-            <div class="card-content">
+            <span class="card-tag">ACADEMIC</span>
 
-                <span class="card-tag">ACADEMIC</span>
+            <h3>CGPA Calculator</h3>
 
-                <h3>CGPA Calculator</h3>
+            <p>
+                Calculate average or credit-weighted CGPA.
+            </p>
 
-                <p>
-                    Calculate CGPA using equal or credit-weighted
-                    grade points.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="cgpa">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Percentage -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">%</div>
 
-            <div class="card-content">
+            <span class="card-tag">MARKS</span>
 
-                <span class="card-tag">MARKS</span>
+            <h3>Percentage</h3>
 
-                <h3>Percentage Calculator</h3>
+            <p>
+                Calculate percentage from obtained and total marks.
+            </p>
 
-                <p>
-                    Enter obtained and total marks to calculate
-                    your percentage.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="percentage">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Marks -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">A+</div>
 
-            <div class="card-content">
+            <span class="card-tag">GRADE</span>
 
-                <span class="card-tag">GRADE</span>
+            <h3>Marks & Grade</h3>
 
-                <h3>Marks & Grade</h3>
+            <p>
+                Find grade and grade point from percentage.
+            </p>
 
-                <p>
-                    Enter your marks and calculate the corresponding
-                    grade and grade point.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="grade">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Attendance -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">AT</div>
 
-            <div class="card-content">
+            <span class="card-tag">SCHOOL</span>
 
-                <span class="card-tag">SCHOOL</span>
+            <h3>Attendance</h3>
 
-                <h3>Attendance</h3>
+            <p>
+                Calculate current attendance and target requirements.
+            </p>
 
-                <p>
-                    Calculate current attendance and check the
-                    attendance target.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="attendance">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Age -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">AGE</div>
 
-            <div class="card-content">
+            <span class="card-tag">DATE</span>
 
-                <span class="card-tag">DATE</span>
+            <h3>Age Calculator</h3>
 
-                <h3>Age Calculator</h3>
+            <p>
+                Calculate your current age from your birth date.
+            </p>
 
-                <p>
-                    Enter your date of birth and calculate your
-                    exact age.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="age">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Date Difference -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">DD</div>
 
-            <div class="card-content">
+            <span class="card-tag">DATE</span>
 
-                <span class="card-tag">DATE</span>
+            <h3>Date Difference</h3>
 
-                <h3>Date Difference</h3>
+            <p>
+                Find the number of days between two dates.
+            </p>
 
-                <p>
-                    Find the difference between two dates.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="date">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Unit Converter -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">↔</div>
 
-            <div class="card-content">
+            <span class="card-tag">CONVERTER</span>
 
-                <span class="card-tag">CONVERTER</span>
+            <h3>Unit Converter</h3>
 
-                <h3>Unit Converter</h3>
+            <p>
+                Convert length, weight, temperature and other units.
+            </p>
 
-                <p>
-                    Convert common units including length,
-                    weight, temperature and more.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="unit">
-                    Open Converter →
-                </button>
-
-            </div>
-
+                Open Converter →
+            </button>
         </article>
 
 
-        <!-- BS AD -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">BS</div>
 
-            <div class="card-content">
+            <span class="card-tag">NEPALI DATE</span>
 
-                <span class="card-tag">NEPALI DATE</span>
+            <h3>BS ↔ AD</h3>
 
-                <h3>BS ↔ AD Converter</h3>
+            <p>
+                Convert between Bikram Sambat and Gregorian dates.
+            </p>
 
-                <p>
-                    Convert dates between Bikram Sambat and
-                    Gregorian calendars.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="bs-ad">
-                    Open Converter →
-                </button>
-
-            </div>
-
+                Open Converter →
+            </button>
         </article>
 
 
-        <!-- Simple Interest -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">SI</div>
 
-            <div class="card-content">
+            <span class="card-tag">MATH</span>
 
-                <span class="card-tag">MATH</span>
+            <h3>Simple Interest</h3>
 
-                <h3>Simple Interest</h3>
+            <p>
+                Calculate simple interest and total amount.
+            </p>
 
-                <p>
-                    Calculate simple interest and total amount.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="simple-interest">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Compound Interest -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">CI</div>
 
-            <div class="card-content">
+            <span class="card-tag">MATH</span>
 
-                <span class="card-tag">MATH</span>
+            <h3>Compound Interest</h3>
 
-                <h3>Compound Interest</h3>
+            <p>
+                Calculate compound interest with flexible compounding.
+            </p>
 
-                <p>
-                    Calculate compound interest with flexible
-                    compounding periods.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="compound-interest">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Discount -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">%</div>
 
-            <div class="card-content">
+            <span class="card-tag">MATH</span>
 
-                <span class="card-tag">MATH</span>
+            <h3>Discount</h3>
 
-                <h3>Discount Calculator</h3>
+            <p>
+                Calculate discount amount and final price.
+            </p>
 
-                <p>
-                    Calculate discount amount and final price.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="discount">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
 
-        <!-- Profit Loss -->
-
-        <article class="feature-card calculator-card">
-
+        <article class="feature-card reveal">
             <div class="card-icon">P/L</div>
 
-            <div class="card-content">
+            <span class="card-tag">BUSINESS MATH</span>
 
-                <span class="card-tag">BUSINESS MATH</span>
+            <h3>Profit & Loss</h3>
 
-                <h3>Profit & Loss</h3>
+            <p>
+                Calculate profit, loss and their percentages.
+            </p>
 
-                <p>
-                    Calculate profit, loss and their percentages.
-                </p>
-
-                <button
-                    class="open-tool card-button"
+            <button class="card-button open-tool"
                     data-tool="profit">
-                    Open Calculator →
-                </button>
-
-            </div>
-
+                Open Calculator →
+            </button>
         </article>
 
     </div>
@@ -612,193 +542,307 @@
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      STUDY HUB
-========================= -->
+===================================================== -->
 
 <section class="section study-section" id="study">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
-        <span class="section-label">STUDY HUB</span>
+        <span class="section-label">
+            STUDY HUB
+        </span>
 
         <h2>
             Your academic workspace.
         </h2>
 
         <p>
-            Choose your class first, then explore the relevant
-            NEB resources, faculty, notes, questions and exam preparation.
+            Choose your class first. Then choose your faculty,
+            subject and the resource you need.
         </p>
 
     </div>
 
 
-    <!-- Initial class selection -->
+    <div class="study-flow">
 
-    <div class="study-class-selection" id="studyClassSelection">
+        <!-- STEP 1 -->
 
-        <button
-            class="class-choice"
-            data-class="11">
+        <div class="study-step"
+             id="studyStepClass">
 
-            <span class="class-number">11</span>
+            <div class="study-step-heading">
+                <span>01</span>
 
-            <span class="class-info">
-                <strong>Class 11</strong>
-                <small>NEB resources & subjects</small>
-            </span>
-
-            <span class="arrow">→</span>
-
-        </button>
+                <div>
+                    <small>START HERE</small>
+                    <h3>Select your class</h3>
+                </div>
+            </div>
 
 
-        <button
-            class="class-choice"
-            data-class="12">
+            <div class="study-choice-grid">
 
-            <span class="class-number">12</span>
+                <button class="study-choice class-choice"
+                        data-class="11">
 
-            <span class="class-info">
-                <strong>Class 12</strong>
-                <small>NEB resources & subjects</small>
-            </span>
+                    <span class="choice-number">
+                        11
+                    </span>
 
-            <span class="arrow">→</span>
+                    <span class="choice-text">
+                        <strong>Class 11</strong>
+                        <small>NEB academic resources</small>
+                    </span>
 
-        </button>
+                    <span>→</span>
 
-    </div>
-
-
-    <!-- Study dashboard -->
-
-    <div
-        class="study-dashboard hidden"
-        id="studyDashboard">
-
-        <button
-            class="back-button"
-            id="studyBack">
-            ← Choose another class
-        </button>
+                </button>
 
 
-        <div class="study-dashboard-header">
+                <button class="study-choice class-choice"
+                        data-class="12">
 
-            <div>
+                    <span class="choice-number">
+                        12
+                    </span>
 
-                <span class="section-label">
-                    SELECTED CLASS
-                </span>
+                    <span class="choice-text">
+                        <strong>Class 12</strong>
+                        <small>NEB academic resources</small>
+                    </span>
 
-                <h3 id="selectedClassTitle">
-                    Class 11
-                </h3>
+                    <span>→</span>
+
+                </button>
 
             </div>
 
         </div>
 
 
-        <div class="study-options">
+        <!-- STEP 2 -->
 
-            <button
-                class="study-option"
-                data-study="neb">
+        <div class="study-step hidden"
+             id="studyStepFaculty">
 
-                <span class="study-option-icon">NEB</span>
+            <div class="study-navigation">
 
-                <span>
-                    <strong>NEB Resources</strong>
-                    <small>
-                        Board-related academic resources
-                    </small>
+                <button class="back-button"
+                        data-study-back="class">
+                    ← Back to Classes
+                </button>
+
+                <span class="study-path"
+                      id="studyClassPath">
+                    CLASS 11
                 </span>
 
-                <span>→</span>
-
-            </button>
+            </div>
 
 
-            <button
-                class="study-option"
-                data-study="faculty">
+            <div class="study-step-heading">
+                <span>02</span>
 
-                <span class="study-option-icon">F</span>
-
-                <span>
-                    <strong>Faculty & Subjects</strong>
-                    <small>
-                        Explore subjects according to faculty
-                    </small>
-                </span>
-
-                <span>→</span>
-
-            </button>
+                <div>
+                    <small>CHOOSE STREAM</small>
+                    <h3>Select your faculty</h3>
+                </div>
+            </div>
 
 
-            <button
-                class="study-option"
-                data-study="notes">
+            <div class="faculty-grid">
 
-                <span class="study-option-icon">N</span>
-
-                <span>
-                    <strong>Notes</strong>
-                    <small>
-                        Subject notes and study material
-                    </small>
-                </span>
-
-                <span>→</span>
-
-            </button>
+                <button class="faculty-card"
+                        data-faculty="science">
+                    <span class="faculty-icon">SCI</span>
+                    <strong>Science</strong>
+                    <small>Science & technology subjects</small>
+                    <b>→</b>
+                </button>
 
 
-            <button
-                class="study-option"
-                data-study="questions">
-
-                <span class="study-option-icon">Q</span>
-
-                <span>
-                    <strong>Questions</strong>
-                    <small>
-                        Practice and model questions
-                    </small>
-                </span>
-
-                <span>→</span>
-
-            </button>
+                <button class="faculty-card"
+                        data-faculty="management">
+                    <span class="faculty-icon">MGT</span>
+                    <strong>Management</strong>
+                    <small>Business & management subjects</small>
+                    <b>→</b>
+                </button>
 
 
-            <button
-                class="study-option"
-                data-study="exam">
+                <button class="faculty-card"
+                        data-faculty="humanities">
+                    <span class="faculty-icon">HUM</span>
+                    <strong>Humanities</strong>
+                    <small>Society, culture & human studies</small>
+                    <b>→</b>
+                </button>
 
-                <span class="study-option-icon">E</span>
 
-                <span>
-                    <strong>Exam Preparation</strong>
-                    <small>
-                        Preparation resources and guidance
-                    </small>
-                </span>
+                <button class="faculty-card"
+                        data-faculty="education">
+                    <span class="faculty-icon">EDU</span>
+                    <strong>Education</strong>
+                    <small>Education-focused subjects</small>
+                    <b>→</b>
+                </button>
 
-                <span>→</span>
-
-            </button>
+            </div>
 
         </div>
 
 
-        <div
-            class="study-sub-content hidden"
-            id="studySubContent">
+        <!-- STEP 3 -->
+
+        <div class="study-step hidden"
+             id="studyStepSubject">
+
+            <div class="study-navigation">
+
+                <button class="back-button"
+                        data-study-back="faculty">
+                    ← Back to Faculties
+                </button>
+
+                <span class="study-path"
+                      id="studyFacultyPath">
+                    SCIENCE
+                </span>
+
+            </div>
+
+
+            <div class="study-step-heading">
+                <span>03</span>
+
+                <div>
+                    <small>CHOOSE SUBJECT</small>
+                    <h3 id="subjectHeading">
+                        Select a subject
+                    </h3>
+                </div>
+            </div>
+
+
+            <div class="subject-grid"
+                 id="subjectGrid">
+            </div>
+
+        </div>
+
+
+        <!-- STEP 4 -->
+
+        <div class="study-step hidden"
+             id="studyStepResource">
+
+            <div class="study-navigation">
+
+                <button class="back-button"
+                        data-study-back="subject">
+                    ← Back to Subjects
+                </button>
+
+                <span class="study-path"
+                      id="studySubjectPath">
+                    SUBJECT
+                </span>
+
+            </div>
+
+
+            <div class="study-resource-header">
+
+                <span class="resource-symbol">
+                    SP
+                </span>
+
+                <div>
+                    <small>SELECTED SUBJECT</small>
+
+                    <h3 id="resourceHeading">
+                        Computer Science
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <div class="resource-grid">
+
+                <button class="resource-card"
+                        data-resource="notes">
+
+                    <span>01</span>
+
+                    <strong>Notes</strong>
+
+                    <small>
+                        Subject notes and study material
+                    </small>
+
+                    <b>→</b>
+
+                </button>
+
+
+                <button class="resource-card"
+                        data-resource="questions">
+
+                    <span>02</span>
+
+                    <strong>Questions</strong>
+
+                    <small>
+                        Practice and model questions
+                    </small>
+
+                    <b>→</b>
+
+                </button>
+
+
+                <button class="resource-card"
+                        data-resource="exams">
+
+                    <span>03</span>
+
+                    <strong>Exam Preparation</strong>
+
+                    <small>
+                        Revision and examination resources
+                    </small>
+
+                    <b>→</b>
+
+                </button>
+
+
+                <button class="resource-card"
+                        data-resource="neb">
+
+                    <span>04</span>
+
+                    <strong>NEB Resources</strong>
+
+                    <small>
+                        Board-related resources
+                    </small>
+
+                    <b>→</b>
+
+                </button>
+
+            </div>
+
+
+            <div class="study-result"
+                 id="studyResourceResult">
+            </div>
+
         </div>
 
     </div>
@@ -806,191 +850,122 @@
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      CODING HUB
-========================= -->
+===================================================== -->
 
 <section class="section" id="coding">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
-        <span class="section-label">CODING HUB</span>
+        <span class="section-label">
+            CODING HUB
+        </span>
 
         <h2>
             Learn to code by building.
         </h2>
 
         <p>
-            Start with programming concepts and gradually move
-            toward examples and practice problems.
+            Start with programming concepts and move toward practical
+            coding exercises.
         </p>
 
     </div>
 
 
-    <div class="coding-layout">
+    <div class="coding-grid">
 
-        <div class="coding-intro-card">
+        <button class="coding-card reveal"
+                data-code="c">
 
-            <div class="code-window">
+            <span class="coding-number">01</span>
 
-                <div class="code-window-bar">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <pre><code>
-#include &lt;stdio.h&gt;
-
-int main() {
-
-    printf("Hello, StuPivot!");
-
-    return 0;
-}
-                </code></pre>
-
+            <div>
+                <strong>C Programming</strong>
+                <small>
+                    Fundamentals, loops, arrays and functions
+                </small>
             </div>
 
-            <h3>
-                Start with C.
-            </h3>
+            <b>→</b>
 
-            <p>
-                Learn programming fundamentals with simple,
-                student-friendly explanations and examples.
-            </p>
-
-        </div>
+        </button>
 
 
-        <div class="coding-options">
+        <button class="coding-card reveal"
+                data-code="html">
 
-            <button
-                class="coding-option"
-                data-coding="c">
+            <span class="coding-number">02</span>
 
-                <span class="coding-number">01</span>
+            <div>
+                <strong>HTML</strong>
+                <small>
+                    Build the structure of webpages
+                </small>
+            </div>
 
-                <span>
-                    <strong>C Programming</strong>
-                    <small>Learn C from the basics</small>
-                </span>
+            <b>→</b>
 
-                <span>→</span>
-
-            </button>
-
-
-            <button
-                class="coding-option"
-                data-coding="algorithms">
-
-                <span class="coding-number">02</span>
-
-                <span>
-                    <strong>Algorithms</strong>
-                    <small>Understand step-by-step solutions</small>
-                </span>
-
-                <span>→</span>
-
-            </button>
+        </button>
 
 
-            <button
-                class="coding-option"
-                data-coding="concepts">
+        <button class="coding-card reveal"
+                data-code="css">
 
-                <span class="coding-number">03</span>
+            <span class="coding-number">03</span>
 
-                <span>
-                    <strong>Programming Concepts</strong>
-                    <small>Variables, loops, arrays and more</small>
-                </span>
+            <div>
+                <strong>CSS</strong>
+                <small>
+                    Style and design modern websites
+                </small>
+            </div>
 
-                <span>→</span>
+            <b>→</b>
 
-            </button>
-
-
-            <button
-                class="coding-option"
-                data-coding="examples">
-
-                <span class="coding-number">04</span>
-
-                <span>
-                    <strong>C Examples</strong>
-                    <small>Practical beginner examples</small>
-                </span>
-
-                <span>→</span>
-
-            </button>
+        </button>
 
 
-            <button
-                class="coding-option"
-                data-coding="practice">
+        <button class="coding-card reveal"
+                data-code="javascript">
 
-                <span class="coding-number">05</span>
+            <span class="coding-number">04</span>
 
-                <span>
-                    <strong>Practice Problems</strong>
-                    <small>Test your programming knowledge</small>
-                </span>
+            <div>
+                <strong>JavaScript</strong>
+                <small>
+                    Add logic and interactivity
+                </small>
+            </div>
 
-                <span>→</span>
+            <b>→</b>
 
-            </button>
+        </button>
 
-
-            <button
-                class="coding-option"
-                data-coding="guides">
-
-                <span class="coding-number">06</span>
-
-                <span>
-                    <strong>Beginner Guides</strong>
-                    <small>Simple explanations for beginners</small>
-                </span>
-
-                <span>→</span>
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div
-        class="coding-content hidden"
-        id="codingContent">
     </div>
 
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      ONLINE TOOLS
-========================= -->
+===================================================== -->
 
 <section class="section" id="tools">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
-        <span class="section-label">ONLINE TOOLS</span>
+        <span class="section-label">
+            ONLINE TOOLS
+        </span>
 
         <h2>
             Small tools. Big convenience.
         </h2>
 
         <p>
-            Useful utilities for writing, studying and everyday tasks.
+            Useful utilities for everyday student tasks.
         </p>
 
     </div>
@@ -998,155 +973,69 @@ int main() {
 
     <div class="tools-grid">
 
-        <article class="tool-card">
-
-            <div class="tool-icon">Aa</div>
-
+        <article class="tool-card reveal">
+            <span>TXT</span>
             <h3>Word Counter</h3>
-
-            <p>
-                Count words and characters in your text.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="word-counter">
+            <p>Count words, characters and lines.</p>
+            <button class="card-button open-tool"
+                    data-tool="word-counter">
                 Open Tool →
             </button>
-
         </article>
 
 
-        <article class="tool-card">
-
-            <div class="tool-icon">Aa</div>
-
+        <article class="tool-card reveal">
+            <span>Aa</span>
             <h3>Case Converter</h3>
-
-            <p>
-                Convert text into uppercase, lowercase and more.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="case-converter">
+            <p>Convert text into different letter cases.</p>
+            <button class="card-button open-tool"
+                    data-tool="case-converter">
                 Open Tool →
             </button>
-
         </article>
 
 
-        <article class="tool-card">
-
-            <div class="tool-icon">Tx</div>
-
+        <article class="tool-card reveal">
+            <span>CLR</span>
             <h3>Text Cleaner</h3>
-
-            <p>
-                Clean extra spaces and unwanted formatting.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="text-cleaner">
+            <p>Remove unnecessary spaces and clean text.</p>
+            <button class="card-button open-tool"
+                    data-tool="text-cleaner">
                 Open Tool →
             </button>
-
         </article>
 
 
-        <article class="tool-card">
-
-            <div class="tool-icon">QR</div>
-
-            <h3>QR Code Generator</h3>
-
-            <p>
-                Create a QR code from text or a link.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="qr">
+        <article class="tool-card reveal">
+            <span>QR</span>
+            <h3>QR Generator</h3>
+            <p>Create a QR code from text or a URL.</p>
+            <button class="card-button open-tool"
+                    data-tool="qr">
                 Open Tool →
             </button>
-
         </article>
 
 
-        <article class="tool-card">
-
-            <div class="tool-icon">•••</div>
-
+        <article class="tool-card reveal">
+            <span>KEY</span>
             <h3>Password Generator</h3>
-
-            <p>
-                Generate strong random passwords.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="password">
+            <p>Generate a random password locally.</p>
+            <button class="card-button open-tool"
+                    data-tool="password">
                 Open Tool →
             </button>
-
         </article>
 
 
-        <article class="tool-card">
-
-            <div class="tool-icon">R</div>
-
+        <article class="tool-card reveal">
+            <span>RND</span>
             <h3>Random Number</h3>
-
-            <p>
-                Generate a random number between two values.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="random">
+            <p>Generate a random number within a range.</p>
+            <button class="card-button open-tool"
+                    data-tool="random">
                 Open Tool →
             </button>
-
-        </article>
-
-
-        <article class="tool-card">
-
-            <div class="tool-icon">↔</div>
-
-            <h3>Unit Converter</h3>
-
-            <p>
-                Quickly convert common measurement units.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="unit">
-                Open Tool →
-            </button>
-
-        </article>
-
-
-        <article class="tool-card">
-
-            <div class="tool-icon">BS</div>
-
-            <h3>BS ↔ AD Converter</h3>
-
-            <p>
-                Convert Nepali BS dates to AD and AD dates to BS.
-            </p>
-
-            <button
-                class="open-tool card-button"
-                data-tool="bs-ad">
-                Open Tool →
-            </button>
-
         </article>
 
     </div>
@@ -1154,128 +1043,50 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      ARTICLES
-========================= -->
+===================================================== -->
 
 <section class="section" id="articles">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
-        <span class="section-label">ARTICLES</span>
+        <span class="section-label">
+            ARTICLES
+        </span>
 
         <h2>
-            Learn something new.
+            Learn something useful.
         </h2>
 
         <p>
-            Student-friendly guides covering academics,
-            technology and programming.
+            Short articles covering study, technology and StuPivot tools.
         </p>
 
     </div>
 
 
-    <div class="articles-grid">
+    <div class="article-grid">
 
-        <article class="article-card">
-
-            <span class="article-category">
-                ACADEMICS
-            </span>
-
-            <h3>
-                How NEB GPA Calculation Works
-            </h3>
-
-            <p>
-                Understand GPA, grade points, subjects and
-                the academic calculation process.
-            </p>
-
-            <button
-                class="read-article"
-                data-article="neb-gpa">
-                Read Article →
-            </button>
-
-        </article>
-
-
-        <article class="article-card">
-
-            <span class="article-category">
-                ACADEMICS
-            </span>
-
-            <h3>
-                GPA vs CGPA
-            </h3>
-
-            <p>
-                Learn the difference between GPA and CGPA
-                and when each calculation is useful.
-            </p>
-
-            <button
-                class="read-article"
-                data-article="gpa-cgpa">
-                Read Article →
-            </button>
-
-        </article>
-
-
-        <article class="article-card">
-
-            <span class="article-category">
-                PROGRAMMING
-            </span>
-
-            <h3>
-                Starting C Programming
-            </h3>
-
-            <p>
-                A beginner-friendly introduction to C programming,
-                algorithms and problem solving.
-            </p>
-
-            <button
-                class="read-article"
-                data-article="c-programming">
-                Read Article →
-            </button>
-
-        </article>
-
-
-        <article class="article-card">
-
-            <span class="article-category">
-                STUDY
-            </span>
+        <article class="article-card reveal">
+            <span class="article-category">STUDY</span>
 
             <h3>
                 Building a Better Study Routine
             </h3>
 
             <p>
-                Practical ideas for organizing subjects,
-                practice and revision.
+                Learn practical ways to organize revision and practice.
             </p>
 
-            <button
-                class="read-article"
-                data-article="study-routine">
+            <button class="read-article"
+                    data-article="study-routine">
                 Read Article →
             </button>
-
         </article>
 
 
-        <article class="article-card">
-
+        <article class="article-card reveal">
             <span class="article-category">
                 COMPUTER SCIENCE
             </span>
@@ -1285,21 +1096,17 @@ int main() {
             </h3>
 
             <p>
-                Explore the foundations of computing and
-                why programming skills are useful.
+                Explore programming, algorithms and logical thinking.
             </p>
 
-            <button
-                class="read-article"
-                data-article="computer-science">
+            <button class="read-article"
+                    data-article="computer-science">
                 Read Article →
             </button>
-
         </article>
 
 
-        <article class="article-card">
-
+        <article class="article-card reveal">
             <span class="article-category">
                 TECHNOLOGY
             </span>
@@ -1309,21 +1116,17 @@ int main() {
             </h3>
 
             <p>
-                Follow the basic journey from a browser request
-                to the webpage appearing on your screen.
+                Follow the basic journey from browser to webpage.
             </p>
 
-            <button
-                class="read-article"
-                data-article="website">
+            <button class="read-article"
+                    data-article="website">
                 Read Article →
             </button>
-
         </article>
 
 
-        <article class="article-card">
-
+        <article class="article-card reveal">
             <span class="article-category">
                 TOOLS
             </span>
@@ -1333,21 +1136,17 @@ int main() {
             </h3>
 
             <p>
-                Learn how to use the calculators, study tools,
-                coding hub and online utilities.
+                Discover how the different StuPivot sections work together.
             </p>
 
-            <button
-                class="read-article"
-                data-article="stupivot-tools">
+            <button class="read-article"
+                    data-article="stupivot-tools">
                 Read Article →
             </button>
-
         </article>
 
 
-        <article class="article-card">
-
+        <article class="article-card reveal">
             <span class="article-category">
                 CALENDAR
             </span>
@@ -1357,16 +1156,13 @@ int main() {
             </h3>
 
             <p>
-                Understand the difference between Bikram Sambat
-                and Gregorian calendar dates.
+                Understand the difference between BS and Gregorian dates.
             </p>
 
-            <button
-                class="read-article"
-                data-article="bs-ad">
+            <button class="read-article"
+                    data-article="bs-ad">
                 Read Article →
             </button>
-
         </article>
 
     </div>
@@ -1374,13 +1170,13 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      SEARCH
-========================= -->
+===================================================== -->
 
 <section class="section search-section" id="search">
 
-    <div class="search-box">
+    <div class="search-box reveal">
 
         <span class="section-label">
             SEARCH STUPIVOT
@@ -1394,25 +1190,24 @@ int main() {
             Search calculators, tools, coding resources and articles.
         </p>
 
+
         <div class="site-search">
 
-            <input
-                type="search"
-                id="siteSearch"
-                placeholder="Search StuPivot..."
-                autocomplete="off">
+            <input type="search"
+                   id="siteSearch"
+                   placeholder="Search StuPivot..."
+                   autocomplete="off">
 
-            <button
-                type="button"
-                id="searchButton">
+            <button id="searchButton"
+                    type="button">
                 Search
             </button>
 
         </div>
 
-        <div
-            id="searchResults"
-            class="search-results">
+
+        <div id="searchResults"
+             class="search-results">
         </div>
 
     </div>
@@ -1420,13 +1215,13 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      FEEDBACK
-========================= -->
+===================================================== -->
 
 <section class="section" id="feedback">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
         <span class="section-label">
             FEEDBACK
@@ -1443,50 +1238,42 @@ int main() {
     </div>
 
 
-    <div class="form-container">
+    <div class="form-container reveal">
 
-        <form
-            class="feedback-form"
-            id="feedbackForm"
-            action="https://formspree.io/f/xjykpqlb"
-            method="POST">
+        <form class="feedback-form"
+              id="feedbackForm"
+              action="https://formspree.io/f/xjykpqlb"
+              method="POST">
 
-            <input
-                type="hidden"
-                name="_subject"
-                value="StuPivot Feedback">
+            <input type="hidden"
+                   name="_subject"
+                   value="StuPivot Feedback">
 
             <div class="form-grid">
 
                 <div class="form-group">
-
                     <label for="feedbackName">
                         Name
                     </label>
 
-                    <input
-                        type="text"
-                        id="feedbackName"
-                        name="name"
-                        placeholder="Your name"
-                        required>
-
+                    <input type="text"
+                           id="feedbackName"
+                           name="name"
+                           placeholder="Your name"
+                           required>
                 </div>
 
 
                 <div class="form-group">
-
                     <label for="feedbackEmail">
                         Email
                     </label>
 
-                    <input
-                        type="email"
-                        id="feedbackEmail"
-                        name="email"
-                        placeholder="Your email"
-                        required>
-
+                    <input type="email"
+                           id="feedbackEmail"
+                           name="email"
+                           placeholder="Your email"
+                           required>
                 </div>
 
             </div>
@@ -1498,10 +1285,9 @@ int main() {
                     Rating
                 </label>
 
-                <select
-                    id="feedbackRating"
-                    name="rating"
-                    required>
+                <select id="feedbackRating"
+                        name="rating"
+                        required>
 
                     <option value="">
                         Select rating
@@ -1535,22 +1321,20 @@ int main() {
             <div class="form-group">
 
                 <label for="feedbackMessage">
-                    Feedback
+                    Message
                 </label>
 
-                <textarea
-                    id="feedbackMessage"
-                    name="message"
-                    rows="7"
-                    placeholder="Write your feedback here..."
-                    required></textarea>
+                <textarea id="feedbackMessage"
+                          name="message"
+                          placeholder="Write your feedback..."
+                          rows="6"
+                          required></textarea>
 
             </div>
 
 
-            <button
-                type="submit"
-                class="primary-button">
+            <button type="submit"
+                    class="primary-button">
                 Send Feedback →
             </button>
 
@@ -1561,90 +1345,79 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      CONTACT
-========================= -->
+===================================================== -->
 
 <section class="section" id="contact">
 
-    <div class="contact-layout">
+    <div class="section-heading reveal">
 
-        <div class="contact-info">
+        <span class="section-label">
+            CONTACT
+        </span>
 
-            <span class="section-label">
-                CONTACT
-            </span>
+        <h2>
+            Have something to say?
+        </h2>
 
-            <h2>
-                Have something to say?
-            </h2>
+        <p>
+            Send a message through the contact form.
+        </p>
 
-            <p>
-                Send a message, suggestion or question through
-                the contact form.
-            </p>
+    </div>
 
 
-            <div class="contact-details">
+    <div class="contact-grid">
 
-                <div class="contact-item">
+        <div class="contact-info reveal">
 
-                    <span class="contact-icon">@</span>
+            <div class="contact-item">
+                <span>◎</span>
 
-                    <div>
-                        <small>Instagram</small>
-                        <strong>
-                            rijanshrestha0228
-                        </strong>
-                    </div>
-
+                <div>
+                    <small>Location</small>
+                    <strong>Nepal</strong>
                 </div>
+            </div>
 
 
-                <div class="contact-item">
+            <div class="contact-item">
+                <span>@</span>
 
-                    <span class="contact-icon">GH</span>
-
-                    <div>
-                        <small>GitHub</small>
-                        <strong>
-                            Rijan0228
-                        </strong>
-                    </div>
-
+                <div>
+                    <small>Email</small>
+                    <strong>
+                        Contact through the form
+                    </strong>
                 </div>
+            </div>
 
 
-                <div class="contact-item">
+            <div class="contact-item">
+                <span>↗</span>
 
-                    <span class="contact-icon">◎</span>
-
-                    <div>
-                        <small>Location</small>
-                        <strong>
-                            Nepal
-                        </strong>
-                    </div>
-
+                <div>
+                    <small>Purpose</small>
+                    <strong>
+                        Questions, suggestions & feedback
+                    </strong>
                 </div>
-
             </div>
 
         </div>
 
 
-        <div class="form-container">
+        <div class="form-container reveal">
 
-            <form
-                class="contact-form"
-                id="contactForm"
-                action="https://formspree.io/f/xjykpqlb"
-                method="POST">
+            <form class="contact-form"
+                  id="contactForm"
+                  action="https://formspree.io/f/xjykpqlb"
+                  method="POST">
 
-                <input
-                    type="hidden"
-                    name="_subject"
-                    value="StuPivot Contact Message">
+                <input type="hidden"
+                       name="_subject"
+                       value="StuPivot Contact Message">
 
                 <div class="form-group">
 
@@ -1652,12 +1425,11 @@ int main() {
                         Name
                     </label>
 
-                    <input
-                        type="text"
-                        id="contactName"
-                        name="name"
-                        placeholder="Your name"
-                        required>
+                    <input type="text"
+                           id="contactName"
+                           name="name"
+                           placeholder="Your name"
+                           required>
 
                 </div>
 
@@ -1668,12 +1440,11 @@ int main() {
                         Email
                     </label>
 
-                    <input
-                        type="email"
-                        id="contactEmail"
-                        name="email"
-                        placeholder="Your email"
-                        required>
+                    <input type="email"
+                           id="contactEmail"
+                           name="email"
+                           placeholder="Your email"
+                           required>
 
                 </div>
 
@@ -1684,19 +1455,17 @@ int main() {
                         Message
                     </label>
 
-                    <textarea
-                        id="contactMessage"
-                        name="message"
-                        rows="8"
-                        placeholder="Write your message..."
-                        required></textarea>
+                    <textarea id="contactMessage"
+                              name="message"
+                              rows="7"
+                              placeholder="Write your message..."
+                              required></textarea>
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="primary-button">
+                <button type="submit"
+                        class="primary-button">
                     Send Message →
                 </button>
 
@@ -1709,13 +1478,13 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      ABOUT
-========================= -->
+===================================================== -->
 
 <section class="section" id="about">
 
-    <div class="about-card">
+    <div class="about-card reveal">
 
         <span class="section-label">
             ABOUT STUPIVOT
@@ -1742,13 +1511,13 @@ int main() {
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      LEGAL
-========================= -->
+===================================================== -->
 
 <section class="section legal-section" id="legal">
 
-    <div class="section-heading">
+    <div class="section-heading reveal">
 
         <span class="section-label">
             INFORMATION
@@ -1763,9 +1532,8 @@ int main() {
 
     <div class="legal-grid">
 
-        <button
-            class="legal-card"
-            data-legal="privacy">
+        <button class="legal-card"
+                data-legal="privacy">
 
             <span>01</span>
 
@@ -1780,9 +1548,8 @@ int main() {
         </button>
 
 
-        <button
-            class="legal-card"
-            data-legal="terms">
+        <button class="legal-card"
+                data-legal="terms">
 
             <span>02</span>
 
@@ -1803,9 +1570,9 @@ int main() {
 </main>
 
 
-<!-- =========================
+<!-- =====================================================
      FOOTER
-========================= -->
+===================================================== -->
 
 <footer class="site-footer">
 
@@ -1813,9 +1580,12 @@ int main() {
 
         <div class="footer-brand">
 
-            <a href="#home" class="logo">
+            <a href="#home"
+               class="logo">
+
                 <span class="logo-mark">S</span>
                 <span class="logo-text">StuPivot</span>
+
             </a>
 
             <p>
@@ -1832,21 +1602,10 @@ int main() {
 
                 <h4>Explore</h4>
 
-                <a href="#calculators">
-                    Calculators
-                </a>
-
-                <a href="#study">
-                    Study Hub
-                </a>
-
-                <a href="#coding">
-                    Coding Hub
-                </a>
-
-                <a href="#tools">
-                    Online Tools
-                </a>
+                <a href="#calculators">Calculators</a>
+                <a href="#study">Study Hub</a>
+                <a href="#coding">Coding Hub</a>
+                <a href="#tools">Online Tools</a>
 
             </div>
 
@@ -1855,21 +1614,10 @@ int main() {
 
                 <h4>Learn</h4>
 
-                <a href="#articles">
-                    Articles
-                </a>
-
-                <a href="#about">
-                    About
-                </a>
-
-                <a href="#feedback">
-                    Feedback
-                </a>
-
-                <a href="#contact">
-                    Contact
-                </a>
+                <a href="#articles">Articles</a>
+                <a href="#about">About</a>
+                <a href="#feedback">Feedback</a>
+                <a href="#contact">Contact</a>
 
             </div>
 
@@ -1885,76 +1633,62 @@ int main() {
             All rights reserved.
         </span>
 
-        <span>
-            Built for students.
-        </span>
+        <a href="#home">
+            Back to top ↑
+        </a>
 
     </div>
 
 </footer>
 
 
-<!-- =========================
-     CALCULATOR / TOOL MODAL
-========================= -->
+<!-- =====================================================
+     TOOL MODAL
+===================================================== -->
 
-<div
-    class="modal"
-    id="toolModal"
-    aria-hidden="true">
+<div class="modal"
+     id="toolModal"
+     aria-hidden="true">
 
     <div class="modal-overlay"></div>
 
-    <div
-        class="modal-container"
-        role="dialog"
-        aria-modal="true">
+    <div class="modal-container"
+         role="dialog"
+         aria-modal="true">
 
-        <button
-            type="button"
-            class="modal-close"
-            id="modalClose"
-            aria-label="Close">
+        <button class="modal-close"
+                id="modalClose"
+                type="button">
             ×
         </button>
 
-        <div
-            class="modal-content"
-            id="modalContent">
-        </div>
+        <div id="modalContent"></div>
 
     </div>
 
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      ARTICLE MODAL
-========================= -->
+===================================================== -->
 
-<div
-    class="modal"
-    id="articleModal"
-    aria-hidden="true">
+<div class="modal"
+     id="articleModal"
+     aria-hidden="true">
 
     <div class="modal-overlay"></div>
 
-    <div
-        class="modal-container article-modal-container"
-        role="dialog"
-        aria-modal="true">
+    <div class="modal-container article-modal-container">
 
-        <button
-            type="button"
-            class="modal-close"
-            id="articleClose"
-            aria-label="Close">
+        <button class="modal-close"
+                id="articleClose"
+                type="button">
             ×
         </button>
 
-        <article
-            class="article-content"
-            id="articleContent">
+        <article class="article-content"
+                 id="articleContent">
         </article>
 
     </div>
@@ -1962,33 +1696,26 @@ int main() {
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      LEGAL MODAL
-========================= -->
+===================================================== -->
 
-<div
-    class="modal"
-    id="legalModal"
-    aria-hidden="true">
+<div class="modal"
+     id="legalModal"
+     aria-hidden="true">
 
     <div class="modal-overlay"></div>
 
-    <div
-        class="modal-container article-modal-container"
-        role="dialog"
-        aria-modal="true">
+    <div class="modal-container article-modal-container">
 
-        <button
-            type="button"
-            class="modal-close"
-            id="legalClose"
-            aria-label="Close">
+        <button class="modal-close"
+                id="legalClose"
+                type="button">
             ×
         </button>
 
-        <article
-            class="article-content"
-            id="legalContent">
+        <article class="article-content"
+                 id="legalContent">
         </article>
 
     </div>
@@ -1996,15 +1723,10 @@ int main() {
 </div>
 
 
-<!-- =========================
-     TOAST
-========================= -->
-
-<div
-    class="toast"
-    id="toast"
-    role="status"
-    aria-live="polite">
+<div class="toast"
+     id="toast"
+     role="status"
+     aria-live="polite">
 </div>
 
 
