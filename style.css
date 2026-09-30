@@ -1740,3 +1740,504 @@ animation:none !important;
 }
 
 }
+
+/* =========================================================
+   STUPIVOT — MOBILE FINAL POLISH
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+    body {
+        font-size: 15px;
+    }
+
+    section {
+        padding: 58px 0;
+    }
+
+    .section,
+    .hero {
+        width: 94%;
+        max-width: 560px;
+    }
+
+    .navbar {
+        width: 94%;
+        min-height: 62px;
+        gap: 7px;
+    }
+
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    .logo-mark {
+        width: 31px;
+        height: 31px;
+    }
+
+    .nav-actions {
+        margin-left: auto;
+        gap: 5px;
+    }
+
+    .icon-button,
+    .menu-button,
+    .icon-btn,
+    .menu-btn {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+    }
+
+    .menu-button,
+    .menu-btn {
+        display: grid;
+    }
+
+    .nav-links {
+        position: absolute;
+
+        top: 67px;
+        left: 3%;
+        right: 3%;
+
+        width: auto;
+
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+
+        padding: 10px;
+        gap: 3px;
+
+        border-radius: 17px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(8, 12, 21, .99),
+                rgba(4, 7, 13, .99)
+            );
+
+        border:
+            1px solid
+            rgba(40, 231, 255, .18);
+
+        box-shadow:
+            0 25px 70px rgba(0,0,0,.65),
+            0 0 35px rgba(40,231,255,.08);
+
+        z-index: 1100;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 13px;
+        border-radius: 10px;
+        font-size: .92rem;
+    }
+
+    .nav-links a:hover {
+        background:
+            rgba(40,231,255,.06);
+    }
+
+    .hero {
+        min-height: auto;
+        padding-top: 68px;
+        padding-bottom: 55px;
+    }
+
+    .hero h1 {
+        font-size:
+            clamp(
+                2.5rem,
+                14vw,
+                4.2rem
+            );
+
+        line-height: .98;
+
+        letter-spacing: -2px;
+    }
+
+    .hero p {
+        font-size: .96rem;
+        line-height: 1.7;
+    }
+
+    .hero-actions,
+    .hero-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .card-button,
+    .btn {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    /* Hide the large desktop orbit graphic on phone */
+    .hero-visual {
+        display: none;
+    }
+
+    .section-heading {
+        margin-bottom: 23px;
+    }
+
+    .section-heading h2 {
+        font-size:
+            clamp(
+                1.9rem,
+                9vw,
+                2.7rem
+            );
+    }
+
+    .section-heading p {
+        font-size: .92rem;
+    }
+
+    /* Cards */
+
+    .quick-grid,
+    .calculator-grid,
+    .tools-grid,
+    .articles-grid,
+    .legal-grid,
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .quick-card {
+        min-height: 80px;
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .feature-card,
+    .tool-card,
+    .article-card,
+    .legal-card,
+    .about-card,
+    .coding-intro-card,
+    .coding-content,
+    .contact-form,
+    .feedback-form,
+    .search-box {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .feature-card {
+        grid-template-columns:
+            50px minmax(0,1fr);
+
+        gap: 12px;
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 13px;
+    }
+
+    /* Study Hub */
+
+    .study-flow {
+        width: 100%;
+    }
+
+    .study-class-selection,
+    .study-choice-grid,
+    .resource-choice-grid {
+        grid-template-columns: 1fr;
+        gap: 11px;
+    }
+
+    .study-step-heading {
+        gap: 11px;
+        margin-bottom: 19px;
+    }
+
+    .study-step-number {
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+        border-radius: 12px;
+    }
+
+    .study-step-heading > div {
+        min-width: 0;
+    }
+
+    .study-step-heading h3 {
+        font-size: 1.3rem;
+    }
+
+    .study-step-heading p {
+        font-size: .86rem;
+    }
+
+    .study-back-button {
+        width: 100%;
+        min-height: 43px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2px;
+    }
+
+    .class-choice,
+    .study-choice-card,
+    .resource-choice-card {
+        padding: 16px;
+        border-radius: 15px;
+    }
+
+    .class-choice {
+        min-height: 120px;
+    }
+
+    .class-number {
+        font-size: 3rem;
+        margin-bottom: 12px;
+    }
+
+    .study-choice-card {
+        min-height: 108px;
+    }
+
+    .study-choice-icon,
+    .resource-card-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .resource-choice-card {
+        min-height: 100px;
+
+        grid-template-columns:
+            24px 42px minmax(0,1fr) 18px;
+
+        gap: 9px;
+    }
+
+    .resource-card-arrow {
+        position: static;
+        justify-self: end;
+        font-size: 1.1rem;
+    }
+
+    .study-selected-path {
+        padding: 10px 12px;
+        font-size: .78rem;
+        gap: 5px;
+    }
+
+    /* Coding */
+
+    .coding-layout,
+    .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .coding-option {
+        grid-template-columns:
+            29px minmax(0,1fr) 18px;
+
+        padding: 13px 12px;
+        border-radius: 13px;
+    }
+
+    .coding-option strong {
+        font-size: .9rem;
+    }
+
+    .coding-option small {
+        font-size: .75rem;
+    }
+
+    .coding-topic-list {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    /* Forms */
+
+    .form-grid,
+    .form-row,
+    .subject-fields {
+        grid-template-columns: 1fr;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        min-height: 46px;
+        font-size: 16px;
+    }
+
+    textarea {
+        min-height: 170px;
+    }
+
+    /* Search */
+
+    .site-search,
+    .search-box {
+        width: 100%;
+    }
+
+    .site-search {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .site-search button {
+        min-height: 46px;
+    }
+
+    /* Calculator */
+
+    .result-row {
+        grid-template-columns: 1fr 1fr;
+        font-size: .82rem;
+    }
+
+    .live-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .cgpa-row {
+        grid-template-columns: 25px 1fr;
+    }
+
+    .cgpa-row input:last-child {
+        grid-column: 2;
+    }
+
+    /* Modal */
+
+    .modal {
+        padding: 7px;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-height: 95vh;
+        padding: 20px 15px;
+        border-radius: 17px;
+    }
+
+    .modal-close {
+        width: 36px;
+        height: 36px;
+        top: 9px;
+        right: 9px;
+    }
+
+    /* Footer */
+
+    .footer-main,
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-bottom {
+        text-align: center;
+    }
+
+    /* Toast */
+
+    .toast {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: none;
+        text-align: center;
+    }
+}
+
+
+@media (max-width: 430px) {
+
+    section {
+        padding: 50px 0;
+    }
+
+    .section,
+    .hero,
+    .navbar {
+        width: 95%;
+    }
+
+    .hero {
+        padding-top: 58px;
+    }
+
+    .hero h1 {
+        font-size:
+            clamp(
+                2.4rem,
+                14vw,
+                3.5rem
+            );
+    }
+
+    .section-heading h2 {
+        font-size: 1.85rem;
+    }
+
+    .feature-card {
+        grid-template-columns:
+            46px minmax(0,1fr);
+
+        padding: 15px;
+    }
+
+    .card-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .class-choice,
+    .study-choice-card,
+    .resource-choice-card {
+        padding: 15px;
+    }
+
+    .resource-choice-card {
+        grid-template-columns:
+            22px 40px minmax(0,1fr) 17px;
+    }
+
+    .study-selected-path {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-content {
+        padding: 18px 13px;
+    }
+
+}
