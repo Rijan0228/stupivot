@@ -2906,14 +2906,16 @@ function initUnit() {
    BS ↔ AD CONVERTER
    ========================================================= */
 
+/* =========================================================
+   BS ↔ AD CONVERTER
+   Uses @remotemerge/nepali-date-converter
+   ========================================================= */
+
 function renderBSADTool() {
 
     return toolShell(
-
         "BS ↔ AD Converter",
-
         "Convert Bikram Sambat and Gregorian dates.",
-
         `
 
         <div class="form-group">
@@ -2922,8 +2924,7 @@ function renderBSADTool() {
                 Conversion
             </label>
 
-            <select
-                id="calendarDirection">
+            <select id="calendarDirection">
 
                 <option value="bs-ad">
                     BS → AD
@@ -2986,11 +2987,337 @@ function renderBSADTool() {
         </div>
 
         `
-
     );
 
 }
 
+
+function initBSAD() {
+
+    const direction =
+        $("#calendarDirection");
+
+    const dateInput =
+        $("#calendarDate");
+
+    const label =
+        $("#calendarDateLabel");
+
+    const help =
+        $("#calendarDateHelp");
+
+
+    const updateDirection = () => {
+
+        const bsMode =
+            direction.value === "bs-ad";
+
+
+        label.textContent =
+            bsMode
+                ? "BS Date"
+                : "AD Date";
+
+
+        dateInput.placeholder =
+            bsMode
+                ? "2080-01-15"
+                : "2023-04-28";
+
+
+        help.textContent =
+            bsMode
+                ? "Enter BS date as YYYY-MM-DD."
+                : "Enter AD date as YYYY-MM-DD.";
+
+
+        clearError();
+
+
+        const result =
+            $("#toolResult");
+
+        if (result) {
+            result.innerHTML = "";
+        }
+
+    };
+
+
+    direction?.addEventListener(
+        "change",
+        updateDirection
+    );
+
+
+    updateDirection();
+
+
+    $("#convertCalendar")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+
+                    let input =
+                        normalizeDigits(
+                            dateInput.value.trim()
+                        );
+
+
+                    input =
+                        input
+                            .replace(
+                                /[\/\.\s]/g,
+                                "-"
+                            )
+                            .replace(
+                                /-{2,}/g,
+                                "-"
+                            );
+
+
+                    if (
+                        !/^\d{4}-\d{1,2}-\d{1,2}$/
+                            .test(input)
+                    ) {
+
+                        throw new Error(
+                            "Please use YYYY-MM-DD format."
+                        );
+
+                    }
+
+
+                    const [
+                        year,
+                        month,
+                        day
+                    ] =
+                        input
+                            .split("-")
+                            .map(Number);
+
+
+                    /*
+                     * IMPORTANT:
+                     * The remotemerge library exposes
+                     * window.DateConverter
+                     */
+
+                    const DateConverter =
+                        window.DateConverter;
+
+
+                    if (
+                        typeof DateConverter !==
+                        "function"
+                    ) {
+
+                        throw new Error(
+                            "DateConverter did not load. Make sure the converter <script> is above script.js in index.html."
+                        );
+
+                    }
+
+
+                    let converted;
+
+
+                    /* =====================================
+                       BS → AD
+                       ===================================== */
+
+                    if (
+                        direction.value ===
+                        "bs-ad"
+                    ) {
+
+                        const bsString =
+                            `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+
+                        const converter =
+                            new DateConverter(
+                                bsString
+                            );
+
+
+                        converted =
+                            converter.toAd();
+
+
+                        if (
+                            !converted ||
+                            typeof converted.year !==
+                                "number" ||
+                            typeof converted.month !==
+                                "number" ||
+                            typeof converted.date !==
+                                "number"
+                        ) {
+
+                            throw new Error(
+                                "Invalid BS date."
+                            );
+
+                        }
+
+
+                    }
+
+
+                    /* =====================================
+                       AD → BS
+                       ===================================== */
+
+                    else {
+
+                        const adString =
+                            `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+
+                        /*
+                         * Validate actual Gregorian date
+                         */
+
+                        if (
+                            !validISODate(
+                                adString
+                            )
+                        ) {
+
+                            throw new Error(
+                                "Please enter a real Gregorian date."
+                            );
+
+                        }
+
+
+                        const converter =
+                            new DateConverter(
+                                adString
+                            );
+
+
+                        converted =
+                            converter.toBs();
+
+
+                        if (
+                            !converted ||
+                            typeof converted.year !==
+                                "number" ||
+                            typeof converted.month !==
+                                "number" ||
+                            typeof converted.date !==
+                                "number"
+                        ) {
+
+                            throw new Error(
+                                "Invalid AD date."
+                            );
+
+                        }
+
+                    }
+
+
+                    const result =
+                        `${converted.year}-${String(converted.month).padStart(2, "0")}-${String(converted.date).padStart(2, "0")}`;
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+
+                                ${
+                                    direction.value ===
+                                    "bs-ad"
+
+                                        ? "AD DATE"
+
+                                        : "BS DATE"
+
+                                }
+
+                            </span>
+
+
+                            <strong>
+
+                                ${esc(result)}
+
+                            </strong>
+
+
+                            <small>
+
+                                ${
+                                    direction.value ===
+                                    "bs-ad"
+
+                                        ? "Bikram Sambat → Gregorian"
+
+                                        : "Gregorian → Bikram Sambat"
+
+                                }
+
+                            </small>
+
+                        </div>
+
+                    `;
+
+
+                } catch (error) {
+
+                    showError(
+                        error.message ||
+                        "Date conversion failed."
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+function normalizeDigits(value) {
+
+    const map = {
+
+        "०": "0",
+        "१": "1",
+        "२": "2",
+        "३": "3",
+        "४": "4",
+        "५": "5",
+        "६": "6",
+        "७": "7",
+        "८": "8",
+        "९": "9"
+
+    };
+
+
+    return value.replace(
+        /[०-९]/g,
+        digit =>
+            map[digit]
+    );
+
+}
 
 function normalizeNepaliDigits(value) {
 
