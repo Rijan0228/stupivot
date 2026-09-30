@@ -1,205 +1,482 @@
 /* =========================================================
-   STUPIVOT — NEW SCRIPT.JS
+   STUPIVOT — MAIN JAVASCRIPT
+   Clean integrated version
    ========================================================= */
+
 "use strict";
 
-const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>[...p.querySelectorAll(s)];
-const esc=v=>String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
-const n=(v,l="Value")=>{
-    v=String(v??"").trim();
-    if(!v)throw Error(`${l} is required.`);
-    if(!/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(v))
-        throw Error(`${l} must be a valid number.`);
-    v=Number(v);
-    if(!Number.isFinite(v))throw Error(`${l} is invalid.`);
-    return v;
-};
-const money=v=>Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
-const scroll=id=>document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
-const localDate=s=>{
-    const [y,m,d]=s.split("-").map(Number);
-    return new Date(y,m-1,d);
-};
-const isoValid=s=>{
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;
-    const [y,m,d]=s.split("-").map(Number);
-    const x=new Date(y,m-1,d);
-    return x.getFullYear()===y &&
-           x.getMonth()===m-1 &&
-           x.getDate()===d;
+const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
+
+const $$ = (selector, parent = document) =>
+    [...parent.querySelectorAll(selector)];
+
+
+/* =========================================================
+   GLOBAL HELPERS
+   ========================================================= */
+
+const money = value =>
+    Number(value).toLocaleString(undefined, {
+        maximumFractionDigits: 2
+    });
+
+const num = (value, label = "Value") => {
+
+    const text =
+        String(value ?? "").trim();
+
+    if (!text) {
+        throw new Error(`${label} is required.`);
+    }
+
+    if (!/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(text)) {
+        throw new Error(
+            `${label} must be a valid number.`
+        );
+    }
+
+    const result = Number(text);
+
+    if (!Number.isFinite(result)) {
+        throw new Error(`${label} is invalid.`);
+    }
+
+    return result;
 };
 
-/* ---------------- Toast ---------------- */
+const esc = value =>
+    String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+const localDate = value => {
+
+    const [
+        year,
+        month,
+        day
+    ] = value.split("-").map(Number);
+
+    return new Date(
+        year,
+        month - 1,
+        day
+    );
+};
+
+const validISODate = value => {
+
+    if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(value)
+    ) {
+        return false;
+    }
+
+    const [
+        year,
+        month,
+        day
+    ] = value.split("-").map(Number);
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+    );
+};
+
+function scrollToId(id) {
+
+    document
+        .getElementById(id)
+        ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+}
+
+function clearError() {
+
+    const errorBox =
+        $("#toolError");
+
+    if (!errorBox) return;
+
+    errorBox.textContent = "";
+
+    errorBox.classList.remove("visible");
+
+}
+
+function showError(message) {
+
+    const errorBox =
+        $("#toolError");
+
+    if (!errorBox) return;
+
+    errorBox.textContent =
+        message;
+
+    errorBox.classList.add("visible");
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
 
 let toastTimer;
 
-function toast(msg,type="normal"){
-    const t=$("#toast");
-    if(!t)return;
+function showToast(
+    message,
+    type = "normal"
+) {
 
-    t.textContent=msg;
-    t.className="toast show";
+    const toast =
+        $("#toast");
 
-    if(type==="error"){
-        t.classList.add("toast-error");
+    if (!toast) return;
+
+    toast.textContent =
+        message;
+
+    toast.className =
+        "toast show";
+
+    if (type === "error") {
+
+        toast.classList.add(
+            "toast-error"
+        );
+
     }
 
-    clearTimeout(toastTimer);
-
-    toastTimer=setTimeout(()=>{
-        t.classList.remove("show");
-    },3200);
-}
-
-function error(msg){
-    const e=$("#toolError");
-
-    if(e){
-        e.textContent=msg;
-        e.classList.add("visible");
-    }
-}
-
-function clearError(){
-    const e=$("#toolError");
-
-    if(e){
-        e.textContent="";
-        e.classList.remove("visible");
-    }
-}
-
-if($("#year")){
-    $("#year").textContent=new Date().getFullYear();
-}
-
-/* ---------------- Modals ---------------- */
-
-const toolModal=$("#toolModal");
-const articleModal=$("#articleModal");
-const legalModal=$("#legalModal");
-
-const modalContent=$("#modalContent");
-const articleContent=$("#articleContent");
-const legalContent=$("#legalContent");
-
-function openModal(m){
-    if(!m)return;
-
-    m.classList.add("active");
-    m.setAttribute("aria-hidden","false");
-
-    document.body.classList.add("modal-open");
-}
-
-function closeModal(m){
-    if(!m)return;
-
-    m.classList.remove("active");
-    m.setAttribute("aria-hidden","true");
-
-    if(
-        ![toolModal,articleModal,legalModal]
-        .some(x=>x?.classList.contains("active"))
-    ){
-        document.body.classList.remove("modal-open");
-    }
-}
-
-$("#modalClose")?.addEventListener(
-    "click",
-    ()=>closeModal(toolModal)
-);
-
-$("#articleClose")?.addEventListener(
-    "click",
-    ()=>closeModal(articleModal)
-);
-
-$("#legalClose")?.addEventListener(
-    "click",
-    ()=>closeModal(legalModal)
-);
-
-$$(".modal").forEach(m=>{
-    $(".modal-overlay",m)?.addEventListener(
-        "click",
-        ()=>closeModal(m)
+    clearTimeout(
+        toastTimer
     );
-});
 
-document.addEventListener("keydown",e=>{
-    if(e.key==="Escape"){
+    toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove(
+                    "show"
+                );
+            },
+            3200
+        );
+
+}
+
+
+/* =========================================================
+   YEAR
+   ========================================================= */
+
+if ($("#year")) {
+
+    $("#year").textContent =
+        new Date().getFullYear();
+
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+const toolModal =
+    $("#toolModal");
+
+const articleModal =
+    $("#articleModal");
+
+const legalModal =
+    $("#legalModal");
+
+const modalContent =
+    $("#modalContent");
+
+const articleContent =
+    $("#articleContent");
+
+const legalContent =
+    $("#legalContent");
+
+
+function openModal(modal) {
+
+    if (!modal) return;
+
+    modal.classList.add(
+        "active"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+function closeModal(modal) {
+
+    if (!modal) return;
+
+    modal.classList.remove(
+        "active"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    const anotherOpen =
+        toolModal?.classList.contains("active") ||
+        articleModal?.classList.contains("active") ||
+        legalModal?.classList.contains("active");
+
+    if (!anotherOpen) {
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+
+}
+
+
+$("#modalClose")
+    ?.addEventListener(
+        "click",
+        () => closeModal(toolModal)
+    );
+
+$("#articleClose")
+    ?.addEventListener(
+        "click",
+        () => closeModal(articleModal)
+    );
+
+$("#legalClose")
+    ?.addEventListener(
+        "click",
+        () => closeModal(legalModal)
+    );
+
+
+$$(".modal")
+    .forEach(modal => {
+
+        $(".modal-overlay", modal)
+            ?.addEventListener(
+                "click",
+                () => closeModal(modal)
+            );
+
+    });
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !== "Escape"
+        ) {
+            return;
+        }
+
         closeModal(toolModal);
         closeModal(articleModal);
         closeModal(legalModal);
+
     }
-});
+);
 
-/* ---------------- Navigation ---------------- */
 
-const menuBtn=$("#menuBtn");
-const navLinks=$("#navLinks");
+/* =========================================================
+   MOBILE MENU + NAVIGATION
+   ========================================================= */
 
-menuBtn?.addEventListener("click",()=>{
-    navLinks?.classList.toggle("active");
-    menuBtn.classList.toggle("active");
+const menuBtn =
+    $("#menuBtn");
 
-    menuBtn.setAttribute(
-        "aria-expanded",
-        String(navLinks?.classList.contains("active"))
-    );
-});
+const navLinks =
+    $("#navLinks");
 
-$$(".nav-links a").forEach(a=>{
-    a.addEventListener("click",()=>{
-        navLinks?.classList.remove("active");
-        menuBtn?.classList.remove("active");
 
-        menuBtn?.setAttribute(
-            "aria-expanded",
-            "false"
+menuBtn?.addEventListener(
+    "click",
+    () => {
+
+        navLinks?.classList.toggle(
+            "active"
         );
+
+        menuBtn.classList.toggle(
+            "active"
+        );
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            String(
+                navLinks?.classList.contains(
+                    "active"
+                )
+            )
+        );
+
+    }
+);
+
+
+$$(".nav-links a")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                navLinks?.classList.remove(
+                    "active"
+                );
+
+                menuBtn?.classList.remove(
+                    "active"
+                );
+
+                menuBtn?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
     });
-});
 
-$$(".quick-card").forEach(b=>{
-    b.addEventListener(
-        "click",
-        ()=>scroll(b.dataset.scroll)
+
+/* =========================================================
+   QUICK ACCESS
+   ========================================================= */
+
+$$(".quick-card")
+    .forEach(card => {
+
+        card.addEventListener(
+            "click",
+            () => {
+
+                scrollToId(
+                    card.dataset.scroll
+                );
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+const savedTheme =
+    localStorage.getItem(
+        "stupivot-theme"
     );
-});
 
-const saved=localStorage.getItem("stupivot-theme");
 
-if(saved==="light"){
-    document.body.classList.add("light-mode");
+if (
+    savedTheme === "light"
+) {
+
+    document.body.classList.add(
+        "light-mode"
+    );
+
 }
 
-$("#themeToggle")?.addEventListener("click",()=>{
-    document.body.classList.toggle("light-mode");
 
-    localStorage.setItem(
-        "stupivot-theme",
-        document.body.classList.contains("light-mode")
-            ? "light"
-            : "dark"
+$("#themeToggle")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            document.body.classList.toggle(
+                "light-mode"
+            );
+
+            localStorage.setItem(
+                "stupivot-theme",
+                document.body.classList.contains(
+                    "light-mode"
+                )
+                    ? "light"
+                    : "dark"
+            );
+
+        }
     );
-});
 
-$("#searchOpen")?.addEventListener("click",()=>{
-    scroll("search");
 
-    setTimeout(()=>{
-        $("#siteSearch")?.focus();
-    },450);
-});
+/* =========================================================
+   SEARCH OPEN
+   ========================================================= */
 
-/* ---------------- Tool shell ---------------- */
+$("#searchOpen")
+    ?.addEventListener(
+        "click",
+        () => {
 
-function shell(title,sub,body){
+            scrollToId(
+                "search"
+            );
+
+            setTimeout(
+                () => {
+                    $("#siteSearch")?.focus();
+                },
+                450
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   TOOL SHELL
+   ========================================================= */
+
+function toolShell(
+    title,
+    subtitle,
+    body
+) {
 
     return `
+
         <div class="tool-interface">
 
             <div class="tool-interface-header">
@@ -213,7 +490,7 @@ function shell(title,sub,body){
                 </h2>
 
                 <p>
-                    ${esc(sub)}
+                    ${esc(subtitle)}
                 </p>
 
             </div>
@@ -232,12 +509,21 @@ function shell(title,sub,body){
             </div>
 
         </div>
+
     `;
+
 }
 
-function field(id,label,ph,type="text"){
+
+function inputField(
+    id,
+    label,
+    placeholder = "",
+    type = "text"
+) {
 
     return `
+
         <div class="form-group">
 
             <label for="${id}">
@@ -247,38 +533,108 @@ function field(id,label,ph,type="text"){
             <input
                 id="${id}"
                 type="${type}"
-                ${type==="text"?'inputmode="decimal"':''}
-                placeholder="${esc(ph||"")}"
+                ${
+                    type === "text"
+                        ? 'inputmode="decimal"'
+                        : ""
+                }
+                placeholder="${esc(
+                    placeholder
+                )}"
                 autocomplete="off">
 
         </div>
+
     `;
+
 }
 
-/* ---------------- Grades ---------------- */
 
-const GRADES=[
-    {m:90,g:"A+",p:4},
-    {m:80,g:"A",p:3.6},
-    {m:70,g:"B+",p:3.2},
-    {m:60,g:"B",p:2.8},
-    {m:50,g:"C+",p:2.4},
-    {m:40,g:"C",p:2},
-    {m:35,g:"D",p:1.6},
-    {m:0,g:"NG",p:0}
+/* =========================================================
+   GRADE SCALE
+   ========================================================= */
+
+const GRADE_SCALE = [
+
+    {
+        min: 90,
+        grade: "A+",
+        point: 4.0
+    },
+
+    {
+        min: 80,
+        grade: "A",
+        point: 3.6
+    },
+
+    {
+        min: 70,
+        grade: "B+",
+        point: 3.2
+    },
+
+    {
+        min: 60,
+        grade: "B",
+        point: 2.8
+    },
+
+    {
+        min: 50,
+        grade: "C+",
+        point: 2.4
+    },
+
+    {
+        min: 40,
+        grade: "C",
+        point: 2.0
+    },
+
+    {
+        min: 35,
+        grade: "D",
+        point: 1.6
+    },
+
+    {
+        min: 0,
+        grade: "NG",
+        point: 0
+    }
+
 ];
 
-const gradeOf=p=>
-    GRADES.find(x=>p>=x.m)||GRADES.at(-1);
 
-/* ---------------- Faculties ---------------- */
+function gradeFor(percent) {
 
-const FACULTIES={
+    return (
+        GRADE_SCALE.find(
+            item =>
+                percent >= item.min
+        ) ||
+        GRADE_SCALE[
+            GRADE_SCALE.length - 1
+        ]
+    );
 
-    science:{
-        name:"Science",
-        icon:"SC",
-        subjects:[
+}
+
+
+/* =========================================================
+   NEB FACULTIES
+   ENGLISH + NEPALI IN EVERY FACULTY
+   ========================================================= */
+
+const NEB_FACULTIES = {
+
+    science: {
+
+        name: "Science",
+
+        subjects: [
+
             "English",
             "Nepali",
             "Physics",
@@ -286,13 +642,17 @@ const FACULTIES={
             "Biology",
             "Mathematics",
             "Computer Science"
+
         ]
+
     },
 
-    management:{
-        name:"Management",
-        icon:"MG",
-        subjects:[
+    management: {
+
+        name: "Management",
+
+        subjects: [
+
             "English",
             "Nepali",
             "Accounting",
@@ -300,13 +660,17 @@ const FACULTIES={
             "Business Studies",
             "Computer Science",
             "Mathematics"
+
         ]
+
     },
 
-    humanities:{
-        name:"Humanities",
-        icon:"HU",
-        subjects:[
+    humanities: {
+
+        name: "Humanities",
+
+        subjects: [
+
             "English",
             "Nepali",
             "Sociology",
@@ -314,101 +678,253 @@ const FACULTIES={
             "Mass Communication",
             "Psychology",
             "Economics"
+
         ]
+
     },
 
-    education:{
-        name:"Education",
-        icon:"ED",
-        subjects:[
+    education: {
+
+        name: "Education",
+
+        subjects: [
+
             "English",
             "Nepali",
             "Education",
             "Economics",
             "Computer Science"
+
         ]
+
     },
 
-    law:{
-        name:"Law",
-        icon:"LW",
-        subjects:[
+    law: {
+
+        name: "Law",
+
+        subjects: [
+
             "English",
             "Nepali",
             "Legal Studies",
             "Social Studies",
             "Economics"
+
         ]
+
     }
 
 };
 
-const COMMON=[
+
+const COMMON_NEB_SUBJECTS = [
+
     "Nepali",
     "English",
     "Social Studies & Life Skills",
     "Mathematics"
+
 ];
 
-/* ---------------- Tools ---------------- */
 
-const TOOLS={};
+/* =========================================================
+   TOOL OPENING
+   ========================================================= */
 
-function registerTool(id,render,init){
-    TOOLS[id]={
-        render,
-        init
-    };
-}
+const TOOL_RENDERERS = {
 
-$$(".open-tool").forEach(b=>{
-    b.addEventListener(
-        "click",
-        ()=>openTool(b.dataset.tool)
-    );
-});
+    gpa: renderGPATool,
 
-function openTool(id){
+    cgpa: renderCGPATool,
 
-    if(!TOOLS[id]){
-        toast(
-            "This tool is unavailable.",
+    percentage: renderPercentageTool,
+
+    grade: renderGradeTool,
+
+    attendance: renderAttendanceTool,
+
+    age: renderAgeTool,
+
+    date: renderDateTool,
+
+    unit: renderUnitTool,
+
+    "bs-ad": renderBSADTool,
+
+    "simple-interest": renderSITool,
+
+    "compound-interest":
+        renderCITool,
+
+    discount:
+        renderDiscountTool,
+
+    profit:
+        renderProfitTool,
+
+    "word-counter":
+        renderWordCounterTool,
+
+    "case-converter":
+        renderCaseConverterTool,
+
+    "text-cleaner":
+        renderTextCleanerTool,
+
+    qr:
+        renderQRTool,
+
+    password:
+        renderPasswordTool,
+
+    random:
+        renderRandomTool
+
+};
+
+
+$$(".open-tool")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                openTool(
+                    button.dataset.tool
+                );
+
+            }
+        );
+
+    });
+
+
+function openTool(tool) {
+
+    const renderer =
+        TOOL_RENDERERS[tool];
+
+    if (
+        !renderer ||
+        !modalContent
+    ) {
+
+        showToast(
+            "This tool is not available yet.",
             "error"
         );
+
         return;
+
     }
 
-    modalContent.innerHTML=
-        TOOLS[id].render();
+    modalContent.innerHTML =
+        renderer();
 
-    openModal(toolModal);
+    openModal(
+        toolModal
+    );
 
-    try{
+    try {
 
-        TOOLS[id].init();
+        initializeTool(
+            tool
+        );
 
-    }catch(e){
+    } catch (error) {
 
-        error(
-            e.message ||
-            "Could not initialize this tool."
+        showError(
+            error.message ||
+            "Could not initialize the tool."
         );
 
     }
+
 }
+
+
+function initializeTool(tool) {
+
+    const initializers = {
+
+        gpa: initGPA,
+
+        cgpa: initCGPA,
+
+        percentage:
+            initPercentage,
+
+        grade:
+            initGrade,
+
+        attendance:
+            initAttendance,
+
+        age:
+            initAge,
+
+        date:
+            initDateDifference,
+
+        unit:
+            initUnit,
+
+        "bs-ad":
+            initBSAD,
+
+        "simple-interest":
+            initSI,
+
+        "compound-interest":
+            initCI,
+
+        discount:
+            initDiscount,
+
+        profit:
+            initProfit,
+
+        "word-counter":
+            initWordCounter,
+
+        "case-converter":
+            initCaseConverter,
+
+        "text-cleaner":
+            initTextCleaner,
+
+        qr:
+            initQR,
+
+        password:
+            initPassword,
+
+        random:
+            initRandom
+
+    };
+
+    initializers[tool]?.();
+
+}
+
 
 /* =========================================================
    GPA CALCULATOR
    ========================================================= */
 
-registerTool(
-    "gpa",
+function renderGPATool() {
 
-    ()=>shell(
+    return toolShell(
+
         "NEB GPA Calculator",
-        "Choose your class and enter marks.",
+
+        "Choose Class 10, 11 or 12, then enter subject marks.",
 
         `
+
         <div class="form-group">
 
             <label for="gpaClass">
@@ -438,79 +954,117 @@ registerTool(
         </div>
 
         <div id="gpaDynamicArea"></div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#gpaClass")?.addEventListener(
+}
+
+
+function initGPA() {
+
+    $("#gpaClass")
+        ?.addEventListener(
             "change",
-            e=>{
+            event => {
 
-                const a=
+                const area =
                     $("#gpaDynamicArea");
 
-                if(!e.target.value){
+                if (!area) return;
 
-                    a.innerHTML="";
+                if (!event.target.value) {
+
+                    area.innerHTML = "";
+
                     return;
 
                 }
 
-                e.target.value==="10"
-                    ? gpa10(a)
-                    : gpa11(
-                        a,
-                        e.target.value
+                if (
+                    event.target.value === "10"
+                ) {
+
+                    renderClass10GPA(
+                        area
                     );
+
+                } else {
+
+                    renderClass11GPA(
+                        area,
+                        event.target.value
+                    );
+
+                }
 
             }
         );
 
-    }
-);
+}
 
-function gpaRows(
-    area,
-    names,
-    buttonLabel,
-    callback
-){
 
-    area.innerHTML=`
+function renderClass10GPA(area) {
+
+    const subjects = [
+
+        "Compulsory Subject 1",
+        "Compulsory Subject 2",
+        "Compulsory Subject 3",
+        "Compulsory Subject 4",
+        "Compulsory Subject 5",
+        "Optional Subject 1",
+        "Optional Subject 2"
+
+    ];
+
+    area.innerHTML = `
+
+        <div class="calculator-info">
+
+            <p>
+                Enter marks out of 100
+                for all seven subjects.
+            </p>
+
+        </div>
 
         <div class="subject-list">
 
             ${
-                names.map(
-                    (s,i)=>`
+                subjects
+                    .map(
+                        (name, i) => `
 
-                    <div class="subject-row">
+                        <div class="subject-row">
 
-                        <div class="subject-number">
-                            ${i+1}
+                            <div
+                                class="subject-number">
+                                ${i + 1}
+                            </div>
+
+                            <div
+                                class="subject-fields">
+
+                                <input
+                                    id="class10Name${i}"
+                                    type="text"
+                                    placeholder="${esc(name)} name">
+
+                                <input
+                                    id="class10Marks${i}"
+                                    type="text"
+                                    inputmode="decimal"
+                                    placeholder="Marks / 100">
+
+                            </div>
+
                         </div>
 
-                        <div class="subject-fields">
-
-                            <input
-                                id="subName${i}"
-                                type="text"
-                                value="${esc(s)}"
-                                placeholder="Subject name">
-
-                            <input
-                                id="subMarks${i}"
-                                type="text"
-                                inputmode="decimal"
-                                placeholder="Marks / 100">
-
-                        </div>
-
-                    </div>
-
-                `
-                ).join("")
+                    `
+                    )
+                    .join("")
             }
 
         </div>
@@ -518,76 +1072,415 @@ function gpaRows(
         <button
             type="button"
             class="primary-button calculate-button"
-            id="gpaCalc">
+            id="calculateClass10GPA">
 
-            ${buttonLabel}
+            Calculate GPA
 
         </button>
 
     `;
 
-    $("#gpaCalc")?.addEventListener(
-        "click",
-        callback
-    );
+
+    $("#calculateClass10GPA")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const result = [];
+
+                    for (
+                        let i = 0;
+                        i < subjects.length;
+                        i++
+                    ) {
+
+                        const name =
+                            $(
+                                "#class10Name" +
+                                i
+                            )
+                                .value
+                                .trim();
+
+                        if (!name) {
+
+                            throw new Error(
+                                `Please enter Subject ${i + 1} name.`
+                            );
+
+                        }
+
+                        const marks =
+                            num(
+                                $(
+                                    "#class10Marks" +
+                                    i
+                                ).value,
+                                `${name} marks`
+                            );
+
+                        if (
+                            marks < 0 ||
+                            marks > 100
+                        ) {
+
+                            throw new Error(
+                                `${name} must be between 0 and 100.`
+                            );
+
+                        }
+
+                        const g =
+                            gradeFor(
+                                marks
+                            );
+
+                        result.push({
+
+                            name,
+
+                            marks,
+
+                            grade:
+                                g.grade,
+
+                            point:
+                                g.point
+
+                        });
+
+                    }
+
+                    const gpa =
+                        result.reduce(
+                            (
+                                total,
+                                subject
+                            ) =>
+                                total +
+                                subject.point,
+                            0
+                        ) /
+                        result.length;
+
+                    renderGPAResult(
+                        result,
+                        gpa,
+                        "Class 10"
+                    );
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
 }
 
-function calculateGPA(names,label){
 
-    const rows=[];
+function renderClass11GPA(
+    area,
+    selectedClass
+) {
 
-    names.forEach((_,i)=>{
+    area.innerHTML = `
 
-        const name=
-            $("#subName"+i)
-            .value
-            .trim();
+        <div class="calculator-info">
 
-        const marks=
-            n(
-                $("#subMarks"+i).value,
-                `${name||`Subject ${i+1}`} marks`
-            );
+            <strong>
+                Class ${selectedClass}
+            </strong>
 
-        if(!name){
+            <p>
+                Choose a faculty.
+                English and Nepali are
+                included in every faculty.
+            </p>
 
-            throw Error(
-                `Please enter Subject ${i+1} name.`
-            );
+        </div>
 
-        }
+        <div class="form-group">
 
-        if(
-            marks<0 ||
-            marks>100
-        ){
+            <label for="gpaFaculty">
+                Faculty / Stream
+            </label>
 
-            throw Error(
-                `${name} must be between 0 and 100.`
-            );
+            <select id="gpaFaculty">
 
-        }
+                <option value="">
+                    Select Faculty
+                </option>
 
-        const g=
-            gradeOf(marks);
+                ${
+                    Object.entries(
+                        NEB_FACULTIES
+                    )
+                    .map(
+                        ([key, faculty]) =>
+                            `
+                            <option value="${key}">
+                                ${esc(
+                                    faculty.name
+                                )}
+                            </option>
+                            `
+                    )
+                    .join("")
+                }
 
-        rows.push({
-            name,
-            marks,
-            grade:g.g,
-            point:g.p
-        });
+            </select>
 
-    });
+        </div>
 
-    const gpa=
-        rows.reduce(
-            (s,x)=>s+x.point,
-            0
-        ) /
-        rows.length;
+        <div id="facultySubjects"></div>
 
-    $("#toolResult").innerHTML=`
+    `;
+
+
+    $("#gpaFaculty")
+        ?.addEventListener(
+            "change",
+            event => {
+
+                const faculty =
+                    NEB_FACULTIES[
+                        event.target.value
+                    ];
+
+                const subjectArea =
+                    $("#facultySubjects");
+
+                if (!subjectArea) return;
+
+                if (!faculty) {
+
+                    subjectArea.innerHTML =
+                        "";
+
+                    return;
+
+                }
+
+                renderFacultySubjects(
+                    subjectArea,
+                    selectedClass,
+                    faculty
+                );
+
+            }
+        );
+
+}
+
+
+function renderFacultySubjects(
+    area,
+    selectedClass,
+    faculty
+) {
+
+    const subjects =
+        [
+            ...new Set(
+                [
+                    ...COMMON_NEB_SUBJECTS,
+                    ...faculty.subjects
+                ]
+            )
+        ]
+        .slice(0, 7);
+
+
+    area.innerHTML = `
+
+        <div class="calculator-info">
+
+            <p>
+                English and Nepali are included
+                in this faculty.
+                Enter final marks out of 100.
+            </p>
+
+        </div>
+
+        <div class="subject-list">
+
+            ${
+                subjects
+                    .map(
+                        (subject, i) =>
+                            `
+
+                            <div
+                                class="subject-row">
+
+                                <div
+                                    class="subject-number">
+
+                                    ${i + 1}
+
+                                </div>
+
+                                <div
+                                    class="subject-fields">
+
+                                    <input
+                                        id="nebName${i}"
+                                        type="text"
+                                        value="${esc(subject)}">
+
+                                    <input
+                                        id="nebMarks${i}"
+                                        type="text"
+                                        inputmode="decimal"
+                                        placeholder="Marks / 100">
+
+                                </div>
+
+                            </div>
+
+                            `
+                    )
+                    .join("")
+            }
+
+        </div>
+
+        <button
+            type="button"
+            class="primary-button calculate-button"
+            id="calculateNEBGPA">
+
+            Calculate Class
+            ${selectedClass} GPA
+
+        </button>
+
+    `;
+
+
+    $("#calculateNEBGPA")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const result = [];
+
+                    for (
+                        let i = 0;
+                        i < subjects.length;
+                        i++
+                    ) {
+
+                        const name =
+                            $(
+                                "#nebName" +
+                                i
+                            )
+                                .value
+                                .trim();
+
+                        if (!name) {
+
+                            throw new Error(
+                                `Please enter Subject ${i + 1} name.`
+                            );
+
+                        }
+
+                        const marks =
+                            num(
+                                $(
+                                    "#nebMarks" +
+                                    i
+                                ).value,
+                                `${name} marks`
+                            );
+
+                        if (
+                            marks < 0 ||
+                            marks > 100
+                        ) {
+
+                            throw new Error(
+                                `${name} must be between 0 and 100.`
+                            );
+
+                        }
+
+                        const g =
+                            gradeFor(
+                                marks
+                            );
+
+                        result.push({
+
+                            name,
+
+                            marks,
+
+                            grade:
+                                g.grade,
+
+                            point:
+                                g.point
+
+                        });
+
+                    }
+
+                    const gpa =
+                        result.reduce(
+                            (
+                                total,
+                                subject
+                            ) =>
+                                total +
+                                subject.point,
+                            0
+                        ) /
+                        result.length;
+
+                    renderGPAResult(
+                        result,
+                        gpa,
+                        `Class ${selectedClass}`
+                    );
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+function renderGPAResult(
+    rows,
+    gpa,
+    label
+) {
+
+    $("#toolResult").innerHTML = `
 
         <div class="result-header">
 
@@ -608,244 +1501,60 @@ function calculateGPA(names,label){
         <div class="result-table">
 
             ${
-                rows.map(x=>`
-
-                    <div class="result-row">
-
-                        <span>
-                            ${esc(x.name)}
-                        </span>
-
-                        <span>
-                            ${money(x.marks)}
-                        </span>
-
-                        <span>
-                            ${x.grade}
-                        </span>
-
-                        <span>
-                            ${x.point.toFixed(1)}
-                        </span>
-
-                    </div>
-
-                `).join("")
-            }
-
-        </div>
-
-    `;
-}
-
-function gpa10(area){
-
-    const names=[
-
-        "Compulsory Subject 1",
-        "Compulsory Subject 2",
-        "Compulsory Subject 3",
-        "Compulsory Subject 4",
-        "Compulsory Subject 5",
-        "Optional Subject 1",
-        "Optional Subject 2"
-
-    ];
-
-    gpaRows(
-        area,
-        names,
-        "Calculate Class 10 GPA",
-        ()=>{
-
-            try{
-
-                clearError();
-
-                calculateGPA(
-                    names,
-                    "Class 10"
-                );
-
-            }catch(e){
-
-                error(e.message);
-
-            }
-
-        }
-    );
-}
-
-function gpa11(area,c){
-
-    area.innerHTML=`
-
-        <div class="calculator-info">
-
-            <strong>
-                Class ${c}
-            </strong>
-
-            <p>
-                English and Nepali are included
-                in every faculty.
-            </p>
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="gpaFaculty">
-                Faculty / Stream
-            </label>
-
-            <select id="gpaFaculty">
-
-                <option value="">
-                    Select Faculty
-                </option>
-
-                ${
-                    Object.entries(
-                        FACULTIES
-                    )
+                rows
                     .map(
-                        ([k,v])=>
-                            `<option value="${k}">
-                                ${v.name}
-                            </option>`
-                    )
-                    .join("")
-                }
+                        row => `
 
-            </select>
+                        <div class="result-row">
 
-        </div>
+                            <span>
+                                ${esc(row.name)}
+                            </span>
 
-        <div id="facultySubjects"></div>
+                            <span>
+                                ${money(row.marks)}
+                            </span>
 
-    `;
+                            <span>
+                                ${row.grade}
+                            </span>
 
-    $("#gpaFaculty")?.addEventListener(
-        "change",
-        e=>{
+                            <span>
+                                ${row.point.toFixed(1)}
+                            </span>
 
-            const f=
-                FACULTIES[
-                    e.target.value
-                ];
-
-            const a=
-                $("#facultySubjects");
-
-            if(!f){
-
-                a.innerHTML="";
-                return;
-
-            }
-
-            const names=
-                [
-                    ...new Set(
-                        [
-                            ...COMMON,
-                            ...f.subjects
-                        ]
-                    )
-                ].slice(0,7);
-
-            a.innerHTML=`
-
-                <div class="subject-list">
-
-                    ${
-                        names.map(
-                            (s,i)=>`
-
-                            <div class="subject-row">
-
-                                <div class="subject-number">
-                                    ${i+1}
-                                </div>
-
-                                <div class="subject-fields">
-
-                                    <input
-                                        id="subName${i}"
-                                        type="text"
-                                        value="${esc(s)}">
-
-                                    <input
-                                        id="subMarks${i}"
-                                        type="text"
-                                        inputmode="decimal"
-                                        placeholder="Final marks / 100">
-
-                                </div>
-
-                            </div>
+                        </div>
 
                         `
-                        ).join("")
-                    }
+                    )
+                    .join("")
+            }
 
-                </div>
+        </div>
 
-                <button
-                    type="button"
-                    class="primary-button calculate-button"
-                    id="gpaCalc">
+    `;
 
-                    Calculate Class ${c} GPA
-
-                </button>
-
-            `;
-
-            $("#gpaCalc")?.addEventListener(
-                "click",
-                ()=>{
-
-                    try{
-
-                        clearError();
-
-                        calculateGPA(
-                            names,
-                            `Class ${c}`
-                        );
-
-                    }catch(err){
-
-                        error(err.message);
-
-                    }
-
-                }
-            );
-
-        }
-    );
 }
 
+
 /* =========================================================
-   CGPA
+   CGPA CALCULATOR
    ========================================================= */
 
-registerTool(
-    "cgpa",
+function renderCGPATool() {
 
-    ()=>shell(
+    return toolShell(
+
         "CGPA Calculator",
-        "Equal-credit or credit-weighted.",
+
+        "Use equal-credit or credit-weighted entries.",
 
         `
+
         <div class="form-group">
 
             <label for="cgpaMode">
-                Method
+                Calculation Method
             </label>
 
             <select id="cgpaMode">
@@ -862,11 +1571,19 @@ registerTool(
 
         </div>
 
-        ${field(
-            "cgpaCount",
-            "Number of entries",
-            "Example: 6"
-        )}
+        <div class="form-group">
+
+            <label for="cgpaCount">
+                Number of entries
+            </label>
+
+            <input
+                id="cgpaCount"
+                type="text"
+                inputmode="numeric"
+                placeholder="Example: 6">
+
+        </div>
 
         <div id="cgpaRows"></div>
 
@@ -875,7 +1592,7 @@ registerTool(
             <button
                 type="button"
                 class="secondary-button"
-                id="makeCGPA">
+                id="createCGPARows">
 
                 Create Fields
 
@@ -884,203 +1601,163 @@ registerTool(
             <button
                 type="button"
                 class="primary-button"
-                id="calcCGPA">
+                id="calculateCGPA">
 
                 Calculate CGPA
 
             </button>
 
         </div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        const make=()=>{
+}
 
-            const c=
-                Number(
-                    $("#cgpaCount").value
-                );
 
-            if(
-                !Number.isInteger(c) ||
-                c<1 ||
-                c>30
-            ){
+function initCGPA() {
 
-                throw Error(
-                    "Enter a whole number from 1 to 30."
-                );
-
-            }
-
-            const w=
-                $("#cgpaMode").value==="weighted";
-
-            $("#cgpaRows").innerHTML=`
-
-                <div class="cgpa-list">
-
-                    ${
-                        Array.from(
-                            {length:c},
-                            (_,i)=>`
-
-                            <div class="cgpa-row">
-
-                                <span>
-                                    ${i+1}
-                                </span>
-
-                                <input
-                                    id="cgpaGP${i}"
-                                    type="text"
-                                    inputmode="decimal"
-                                    placeholder="Grade Point">
-
-                                ${
-                                    w
-                                    ? `
-                                    <input
-                                        id="cgpaCredit${i}"
-                                        type="text"
-                                        inputmode="decimal"
-                                        placeholder="Credit Hours">
-                                    `
-                                    : ""
-                                }
-
-                            </div>
-
-                        `
-                        ).join("")
-                    }
-
-                </div>
-
-            `;
-        };
-
-        $("#makeCGPA")?.addEventListener(
+    $("#createCGPARows")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
-                    make();
 
-                }catch(e){
+                    const count =
+                        Number(
+                            $("#cgpaCount").value
+                        );
 
-                    error(e.message);
+                    if (
+                        !Number.isInteger(count) ||
+                        count < 1 ||
+                        count > 30
+                    ) {
+
+                        throw new Error(
+                            "Enter a whole number from 1 to 30."
+                        );
+
+                    }
+
+                    renderCGPARows(
+                        count
+                    );
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-        $("#cgpaMode")?.addEventListener(
-            "change",
-            ()=>{
 
-                if(
-                    $("#cgpaRows")
-                    .children
-                    .length
-                ){
-
-                    try{
-
-                        make();
-
-                    }catch(e){
-
-                        error(e.message);
-
-                    }
-
-                }
-
-            }
-        );
-
-        $("#calcCGPA")?.addEventListener(
+    $("#calculateCGPA")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const rows=
+                    const rows =
                         $$(".cgpa-row");
 
-                    if(!rows.length){
+                    if (!rows.length) {
 
-                        throw Error(
+                        throw new Error(
                             "Create the fields first."
                         );
 
                     }
 
-                    const w=
-                        $("#cgpaMode").value==="weighted";
+                    const weighted =
+                        $(
+                            "#cgpaMode"
+                        ).value ===
+                        "weighted";
 
-                    let a=0;
-                    let b=0;
+                    let numerator = 0;
+                    let denominator = 0;
 
-                    rows.forEach((_,i)=>{
+                    rows.forEach(
+                        (_, i) => {
 
-                        const gp=
-                            n(
-                                $("#cgpaGP"+i).value,
-                                `Grade point ${i+1}`
-                            );
-
-                        if(
-                            gp<0 ||
-                            gp>4
-                        ){
-
-                            throw Error(
-                                `Grade point ${i+1} must be between 0 and 4.`
-                            );
-
-                        }
-
-                        if(w){
-
-                            const cr=
-                                n(
-                                    $("#cgpaCredit"+i).value,
-                                    `Credit ${i+1}`
+                            const gp =
+                                num(
+                                    $(
+                                        "#cgpaGP" +
+                                        i
+                                    ).value,
+                                    `Grade point ${i + 1}`
                                 );
 
-                            if(cr<=0){
+                            if (
+                                gp < 0 ||
+                                gp > 4
+                            ) {
 
-                                throw Error(
-                                    `Credit ${i+1} must be greater than 0.`
+                                throw new Error(
+                                    `Grade point ${i + 1} must be between 0 and 4.`
                                 );
 
                             }
 
-                            a+=gp*cr;
-                            b+=cr;
+                            if (weighted) {
 
-                        }else{
+                                const credit =
+                                    num(
+                                        $(
+                                            "#cgpaCredit" +
+                                            i
+                                        ).value,
+                                        `Credit ${i + 1}`
+                                    );
 
-                            a+=gp;
-                            b++;
+                                if (
+                                    credit <= 0
+                                ) {
+
+                                    throw new Error(
+                                        `Credit ${i + 1} must be greater than 0.`
+                                    );
+
+                                }
+
+                                numerator +=
+                                    gp *
+                                    credit;
+
+                                denominator +=
+                                    credit;
+
+                            } else {
+
+                                numerator +=
+                                    gp;
+
+                                denominator++;
+
+                            }
 
                         }
+                    );
 
-                    });
+                    const cgpa =
+                        numerator /
+                        denominator;
 
-                    const v=
-                        a/b;
-
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
                         <div class="result-header">
 
@@ -1089,372 +1766,518 @@ registerTool(
                             </span>
 
                             <strong>
-                                ${v.toFixed(2)}
+                                ${cgpa.toFixed(2)}
                             </strong>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
+
+
+function renderCGPARows(count) {
+
+    const weighted =
+        $("#cgpaMode").value ===
+        "weighted";
+
+    $("#cgpaRows")
+        .innerHTML = `
+
+        <div class="cgpa-list">
+
+            ${
+                Array.from(
+                    { length: count },
+                    (_, i) =>
+                        `
+
+                        <div
+                            class="cgpa-row">
+
+                            <span>
+                                ${i + 1}
+                            </span>
+
+                            <input
+                                id="cgpaGP${i}"
+                                type="text"
+                                inputmode="decimal"
+                                placeholder="Grade Point">
+
+                            ${
+                                weighted
+                                    ? `
+                                    <input
+                                        id="cgpaCredit${i}"
+                                        type="text"
+                                        inputmode="decimal"
+                                        placeholder="Credit Hours">
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                        `
+                ).join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
 
 /* =========================================================
-   BASIC CALCULATORS
+   PERCENTAGE
    ========================================================= */
 
-registerTool(
-    "percentage",
+function renderPercentageTool() {
 
-    ()=>shell(
+    return toolShell(
+
         "Percentage Calculator",
-        "Calculate percentage.",
+
+        "Calculate percentage from obtained and total marks.",
 
         `
-        ${field(
+
+        ${inputField(
             "percentageObtained",
             "Obtained Marks",
-            "425"
+            "Example: 425"
         )}
 
-        ${field(
+        ${inputField(
             "percentageTotal",
             "Total Marks",
-            "500"
+            "Example: 500"
         )}
 
         <button
             type="button"
             class="primary-button"
-            id="calcPct">
+            id="calculatePercentage">
 
             Calculate Percentage
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#calcPct")?.addEventListener(
+}
+
+
+function initPercentage() {
+
+    $("#calculatePercentage")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const a=
-                        n(
-                            $("#percentageObtained").value,
+                    const obtained =
+                        num(
+                            $(
+                                "#percentageObtained"
+                            ).value,
                             "Obtained marks"
                         );
 
-                    const b=
-                        n(
-                            $("#percentageTotal").value,
+                    const total =
+                        num(
+                            $(
+                                "#percentageTotal"
+                            ).value,
                             "Total marks"
                         );
 
-                    if(
-                        b<=0 ||
-                        a<0 ||
-                        a>b
-                    ){
+                    if (
+                        total <= 0 ||
+                        obtained < 0 ||
+                        obtained > total
+                    ) {
 
-                        throw Error(
+                        throw new Error(
                             "Enter valid obtained and total marks."
                         );
 
                     }
 
-                    $("#toolResult").innerHTML=`
+                    const percentage =
+                        obtained /
+                        total *
+                        100;
 
-                        <div class="result-header">
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
 
                             <span>
                                 PERCENTAGE
                             </span>
 
                             <strong>
-                                ${(a/b*100).toFixed(2)}%
+                                ${percentage.toFixed(2)}%
                             </strong>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "grade",
 
-    ()=>shell(
+/* =========================================================
+   MARKS + GRADE
+   ========================================================= */
+
+function renderGradeTool() {
+
+    return toolShell(
+
         "Marks & Grade",
-        "Calculate grade and grade point.",
+
+        "Calculate percentage, grade and grade point.",
 
         `
-        ${field(
+
+        ${inputField(
             "gradeObtained",
             "Obtained Marks",
-            "82"
+            "Example: 82"
         )}
 
-        ${field(
+        ${inputField(
             "gradeTotal",
             "Full Marks",
-            "100"
+            "Example: 100"
         )}
 
         <button
             type="button"
             class="primary-button"
-            id="calcGrade">
+            id="calculateGrade">
 
             Calculate Grade
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#calcGrade")?.addEventListener(
+}
+
+
+function initGrade() {
+
+    $("#calculateGrade")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const a=
-                        n(
-                            $("#gradeObtained").value,
+                    const obtained =
+                        num(
+                            $(
+                                "#gradeObtained"
+                            ).value,
                             "Obtained marks"
                         );
 
-                    const b=
-                        n(
-                            $("#gradeTotal").value,
+                    const total =
+                        num(
+                            $(
+                                "#gradeTotal"
+                            ).value,
                             "Full marks"
                         );
 
-                    if(
-                        b<=0 ||
-                        a<0 ||
-                        a>b
-                    ){
+                    if (
+                        total <= 0 ||
+                        obtained < 0 ||
+                        obtained > total
+                    ) {
 
-                        throw Error(
+                        throw new Error(
                             "Enter valid marks."
                         );
 
                     }
 
-                    const p=
-                        a/b*100;
+                    const percent =
+                        obtained /
+                        total *
+                        100;
 
-                    const g=
-                        gradeOf(p);
+                    const grade =
+                        gradeFor(
+                            percent
+                        );
 
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
-                        <div class="result-header">
+                        <div
+                            class="result-header">
 
                             <span>
-                                ${p.toFixed(2)}%
+                                ${percent.toFixed(2)}%
                             </span>
 
                             <strong>
-                                ${g.g}
+                                ${grade.grade}
                             </strong>
 
                             <small>
                                 Grade Point:
-                                ${g.p.toFixed(1)}
+                                ${grade.point.toFixed(1)}
                             </small>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "attendance",
 
-    ()=>shell(
+/* =========================================================
+   ATTENDANCE
+   ========================================================= */
+
+function renderAttendanceTool() {
+
+    return toolShell(
+
         "Attendance Calculator",
-        "Calculate attendance and target.",
+
+        "Calculate your attendance and target.",
 
         `
-        ${field(
-            "attended",
+
+        ${inputField(
+            "attendancePresent",
             "Classes Attended",
-            "42"
+            "Example: 42"
         )}
 
-        ${field(
-            "totalClasses",
+        ${inputField(
+            "attendanceTotal",
             "Total Classes",
-            "50"
+            "Example: 50"
         )}
 
-        ${field(
-            "attTarget",
+        ${inputField(
+            "attendanceTarget",
             "Target Attendance %",
-            "75"
+            "Example: 75"
         )}
 
         <button
             type="button"
             class="primary-button"
-            id="calcAtt">
+            id="calculateAttendance">
 
             Calculate Attendance
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#calcAtt")?.addEventListener(
+}
+
+
+function initAttendance() {
+
+    $("#calculateAttendance")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const a=
-                        n(
-                            $("#attended").value,
+                    const attended =
+                        num(
+                            $(
+                                "#attendancePresent"
+                            ).value,
                             "Attended classes"
                         );
 
-                    const b=
-                        n(
-                            $("#totalClasses").value,
+                    const total =
+                        num(
+                            $(
+                                "#attendanceTotal"
+                            ).value,
                             "Total classes"
                         );
 
-                    const t=
-                        n(
-                            $("#attTarget").value,
-                            "Target"
+                    const target =
+                        num(
+                            $(
+                                "#attendanceTarget"
+                            ).value,
+                            "Target attendance"
                         );
 
-                    if(
-                        b<=0 ||
-                        a<0 ||
-                        a>b ||
-                        t<0 ||
-                        t>100
-                    ){
+                    if (
+                        total <= 0 ||
+                        attended < 0 ||
+                        attended > total ||
+                        target < 0 ||
+                        target > 100
+                    ) {
 
-                        throw Error(
+                        throw new Error(
                             "Enter valid attendance values."
                         );
 
                     }
 
-                    const p=
-                        a/b*100;
+                    const current =
+                        attended /
+                        total *
+                        100;
 
-                    let msg;
+                    let message;
 
-                    if(p>=t){
+                    if (
+                        current >= target
+                    ) {
 
-                        msg=
-                            `You meet the ${t}% target.`;
+                        message =
+                            `You meet the ${target}% target.`;
 
-                    }else if(t>=100){
+                    } else if (
+                        target >= 100
+                    ) {
 
-                        msg=
+                        message =
                             "A 100% target cannot be reached after missed classes.";
 
-                    }else{
+                    } else {
 
-                        msg=
-                            `Attend about ${
-                                Math.ceil(
-                                    (t*b/100-a) /
-                                    (1-t/100)
+                        const needed =
+                            Math.ceil(
+                                (
+                                    target *
+                                    total /
+                                    100 -
+                                    attended
+                                ) /
+                                (
+                                    1 -
+                                    target /
+                                    100
                                 )
-                            } more class(es) without missing one.`;
+                            );
+
+                        message =
+                            `Attend about ${needed} more class(es) without missing one.`;
 
                     }
 
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
-                        <div class="result-header">
+                        <div
+                            class="result-header">
 
                             <span>
                                 ATTENDANCE
                             </span>
 
                             <strong>
-                                ${p.toFixed(2)}%
+                                ${current.toFixed(2)}%
                             </strong>
 
                             <small>
-                                ${esc(msg)}
+                                ${esc(message)}
                             </small>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "age",
 
-    ()=>shell(
+/* =========================================================
+   AGE
+   ========================================================= */
+
+function renderAgeTool() {
+
+    return toolShell(
+
         "Age Calculator",
-        "Calculate exact age from date of birth.",
+
+        "Calculate exact age from your date of birth.",
 
         `
+
         <div class="form-group">
 
             <label for="dateOfBirth">
@@ -1470,122 +2293,142 @@ registerTool(
         <button
             type="button"
             class="primary-button"
-            id="calcAge">
+            id="calculateAge">
 
             Calculate Age
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#calcAge")?.addEventListener(
+}
+
+
+function initAge() {
+
+    $("#calculateAge")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const s=
-                        $("#dateOfBirth").value;
+                    const value =
+                        $("#dateOfBirth")
+                        .value;
 
-                    if(!s){
+                    if (!value) {
 
-                        throw Error(
-                            "Select your date of birth."
+                        throw new Error(
+                            "Please select your date of birth."
                         );
 
                     }
 
-                    const d=
-                        localDate(s);
+                    const dob =
+                        localDate(
+                            value
+                        );
 
-                    const t=
+                    const today =
                         new Date();
 
-                    if(d>t){
+                    if (dob > today) {
 
-                        throw Error(
+                        throw new Error(
                             "Date of birth cannot be in the future."
                         );
 
                     }
 
-                    let y=
-                        t.getFullYear() -
-                        d.getFullYear();
+                    let years =
+                        today.getFullYear() -
+                        dob.getFullYear();
 
-                    let m=
-                        t.getMonth() -
-                        d.getMonth();
+                    let months =
+                        today.getMonth() -
+                        dob.getMonth();
 
-                    let day=
-                        t.getDate() -
-                        d.getDate();
+                    let days =
+                        today.getDate() -
+                        dob.getDate();
 
-                    if(day<0){
+                    if (days < 0) {
 
-                        m--;
+                        months--;
 
-                        day +=
+                        days +=
                             new Date(
-                                t.getFullYear(),
-                                t.getMonth(),
+                                today.getFullYear(),
+                                today.getMonth(),
                                 0
                             ).getDate();
 
                     }
 
-                    if(m<0){
+                    if (months < 0) {
 
-                        y--;
-                        m+=12;
+                        years--;
+
+                        months += 12;
 
                     }
 
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
-                        <div class="result-header">
+                        <div
+                            class="result-header">
 
                             <span>
                                 YOUR AGE
                             </span>
 
                             <strong>
-                                ${y} years
+                                ${years} years
                             </strong>
 
                             <small>
-                                ${m} months and
-                                ${day} days
+                                ${months} months and
+                                ${days} days
                             </small>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "date",
 
-    ()=>shell(
+/* =========================================================
+   DATE DIFFERENCE
+   ========================================================= */
+
+function renderDateTool() {
+
+    return toolShell(
+
         "Date Difference",
+
         "Find the difference between two dates.",
 
         `
+
         <div class="form-group">
 
             <label for="dateOne">
@@ -1613,50 +2456,68 @@ registerTool(
         <button
             type="button"
             class="primary-button"
-            id="calcDateDiff">
+            id="calculateDateDifference">
 
             Calculate Difference
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#calcDateDiff")?.addEventListener(
+}
+
+
+function initDateDifference() {
+
+    $("#calculateDateDifference")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const a=
-                        $("#dateOne").value;
+                    const first =
+                        $("#dateOne")
+                        .value;
 
-                    const b=
-                        $("#dateTwo").value;
+                    const second =
+                        $("#dateTwo")
+                        .value;
 
-                    if(!a||!b){
+                    if (
+                        !first ||
+                        !second
+                    ) {
 
-                        throw Error(
-                            "Select both dates."
+                        throw new Error(
+                            "Please select both dates."
                         );
 
                     }
 
-                    const days=
+                    const date1 =
+                        localDate(first);
+
+                    const date2 =
+                        localDate(second);
+
+                    const days =
                         Math.round(
                             Math.abs(
-                                localDate(b) -
-                                localDate(a)
+                                date2 - date1
                             ) /
                             86400000
                         );
 
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
-                        <div class="result-header">
+                        <div
+                            class="result-header">
 
                             <span>
                                 DATE DIFFERENCE
@@ -1668,7 +2529,9 @@ registerTool(
                             </strong>
 
                             <small>
-                                ${Math.floor(days/7).toLocaleString()}
+                                ${Math.floor(
+                                    days / 7
+                                ).toLocaleString()}
                                 weeks
                             </small>
 
@@ -1676,528 +2539,108 @@ registerTool(
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
-
-                }
-
-            }
-        );
-
-    }
-);
-
-/* =========================================================
-   INTEREST / DISCOUNT / PROFIT
-   ========================================================= */
-
-registerTool(
-    "simple-interest",
-
-    ()=>shell(
-        "Simple Interest",
-        "Calculate simple interest and total amount.",
-
-        `
-        ${field(
-            "siP",
-            "Principal",
-            "10000"
-        )}
-
-        ${field(
-            "siR",
-            "Rate (%)",
-            "5"
-        )}
-
-        ${field(
-            "siT",
-            "Time (years)",
-            "2"
-        )}
-
-        <button
-            type="button"
-            class="primary-button"
-            id="calcSI">
-
-            Calculate
-
-        </button>
-        `
-    ),
-
-    ()=>{
-
-        $("#calcSI")?.addEventListener(
-            "click",
-            ()=>{
-
-                try{
-
-                    clearError();
-
-                    const p=
-                        n(
-                            $("#siP").value,
-                            "Principal"
-                        );
-
-                    const r=
-                        n(
-                            $("#siR").value,
-                            "Rate"
-                        );
-
-                    const t=
-                        n(
-                            $("#siT").value,
-                            "Time"
-                        );
-
-                    if(
-                        p<0 ||
-                        r<0 ||
-                        t<0
-                    ){
-
-                        throw Error(
-                            "Values cannot be negative."
-                        );
-
-                    }
-
-                    const i=
-                        p*r*t/100;
-
-                    $("#toolResult").innerHTML=`
-
-                        <div class="result-header">
-
-                            <span>
-                                SIMPLE INTEREST
-                            </span>
-
-                            <strong>
-                                ${money(i)}
-                            </strong>
-
-                            <small>
-                                Total amount:
-                                ${money(p+i)}
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }catch(e){
-
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "compound-interest",
-
-    ()=>shell(
-        "Compound Interest",
-        "Calculate compound interest.",
-
-        `
-        ${field(
-            "ciP",
-            "Principal",
-            "10000"
-        )}
-
-        ${field(
-            "ciR",
-            "Annual Rate (%)",
-            "5"
-        )}
-
-        ${field(
-            "ciT",
-            "Time (years)",
-            "2"
-        )}
-
-        ${field(
-            "ciN",
-            "Compounds per year",
-            "4"
-        )}
-
-        <button
-            type="button"
-            class="primary-button"
-            id="calcCI">
-
-            Calculate
-
-        </button>
-        `
-    ),
-
-    ()=>{
-
-        $("#calcCI")?.addEventListener(
-            "click",
-            ()=>{
-
-                try{
-
-                    clearError();
-
-                    const p=
-                        n(
-                            $("#ciP").value,
-                            "Principal"
-                        );
-
-                    const r=
-                        n(
-                            $("#ciR").value,
-                            "Rate"
-                        );
-
-                    const t=
-                        n(
-                            $("#ciT").value,
-                            "Time"
-                        );
-
-                    const f=
-                        n(
-                            $("#ciN").value,
-                            "Frequency"
-                        );
-
-                    if(
-                        p<0 ||
-                        r<0 ||
-                        t<0 ||
-                        f<=0
-                    ){
-
-                        throw Error(
-                            "Enter valid values."
-                        );
-
-                    }
-
-                    const a=
-                        p*
-                        Math.pow(
-                            1+r/(100*f),
-                            f*t
-                        );
-
-                    $("#toolResult").innerHTML=`
-
-                        <div class="result-header">
-
-                            <span>
-                                COMPOUND INTEREST
-                            </span>
-
-                            <strong>
-                                ${money(a-p)}
-                            </strong>
-
-                            <small>
-                                Total amount:
-                                ${money(a)}
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }catch(e){
-
-                    error(e.message);
-
-                }
-
-            }
-        );
-
-    }
-);
-
-registerTool(
-    "discount",
-
-    ()=>shell(
-        "Discount Calculator",
-        "Calculate discount and final price.",
-
-        `
-        ${field(
-            "discPrice",
-            "Original Price",
-            "2500"
-        )}
-
-        ${field(
-            "discRate",
-            "Discount (%)",
-            "15"
-        )}
-
-        <button
-            type="button"
-            class="primary-button"
-            id="calcDiscount">
-
-            Calculate
-
-        </button>
-        `
-    ),
-
-    ()=>{
-
-        $("#calcDiscount")?.addEventListener(
-            "click",
-            ()=>{
-
-                try{
-
-                    clearError();
-
-                    const p=
-                        n(
-                            $("#discPrice").value,
-                            "Original price"
-                        );
-
-                    const r=
-                        n(
-                            $("#discRate").value,
-                            "Discount rate"
-                        );
-
-                    if(
-                        p<0 ||
-                        r<0 ||
-                        r>100
-                    ){
-
-                        throw Error(
-                            "Enter valid discount values."
-                        );
-
-                    }
-
-                    const d=
-                        p*r/100;
-
-                    $("#toolResult").innerHTML=`
-
-                        <div class="result-header">
-
-                            <span>
-                                DISCOUNT
-                            </span>
-
-                            <strong>
-                                ${money(d)}
-                            </strong>
-
-                            <small>
-                                Final price:
-                                ${money(p-d)}
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }catch(e){
-
-                    error(e.message);
-
-                }
-
-            }
-        );
-
-    }
-);
-
-registerTool(
-    "profit",
-
-    ()=>shell(
-        "Profit & Loss",
-        "Calculate profit or loss.",
-
-        `
-        ${field(
-            "cp",
-            "Cost Price",
-            "1000"
-        )}
-
-        ${field(
-            "sp",
-            "Selling Price",
-            "1250"
-        )}
-
-        <button
-            type="button"
-            class="primary-button"
-            id="calcProfit">
-
-            Calculate
-
-        </button>
-        `
-    ),
-
-    ()=>{
-
-        $("#calcProfit")?.addEventListener(
-            "click",
-            ()=>{
-
-                try{
-
-                    clearError();
-
-                    const c=
-                        n(
-                            $("#cp").value,
-                            "Cost price"
-                        );
-
-                    const s=
-                        n(
-                            $("#sp").value,
-                            "Selling price"
-                        );
-
-                    if(c<=0){
-
-                        throw Error(
-                            "Cost price must be greater than 0."
-                        );
-
-                    }
-
-                    const d=s-c;
-                    const p=
-                        Math.abs(
-                            d/c*100
-                        );
-
-                    const typ=
-                        d>0
-                            ? "PROFIT"
-                            : d<0
-                                ? "LOSS"
-                                : "NO PROFIT / NO LOSS";
-
-                    $("#toolResult").innerHTML=`
-
-                        <div class="result-header">
-
-                            <span>
-                                ${typ}
-                            </span>
-
-                            <strong>
-                                ${money(Math.abs(d))}
-                            </strong>
-
-                            <small>
-                                ${p.toFixed(2)}%
-                            </small>
-
-                        </div>
-
-                    `;
-
-                }catch(e){
-
-                    error(e.message);
-
-                }
-
-            }
-        );
-
-    }
-);
 
 /* =========================================================
    UNIT CONVERTER
    ========================================================= */
 
-const UNIT={
+const UNITS = {
 
-    length:{
-        meter:1,
-        kilometer:1000,
-        centimeter:.01,
-        millimeter:.001,
-        mile:1609.344,
-        yard:.9144,
-        foot:.3048,
-        inch:.0254
+    length: {
+
+        meter: 1,
+
+        kilometer: 1000,
+
+        centimeter: 0.01,
+
+        millimeter: 0.001,
+
+        mile: 1609.344,
+
+        yard: 0.9144,
+
+        foot: 0.3048,
+
+        inch: 0.0254
+
     },
 
-    weight:{
-        kilogram:1,
-        gram:.001,
-        milligram:.000001,
-        pound:.45359237,
-        ounce:.028349523125
+    weight: {
+
+        kilogram: 1,
+
+        gram: 0.001,
+
+        milligram: 0.000001,
+
+        pound: 0.45359237,
+
+        ounce: 0.028349523125
+
     },
 
-    time:{
-        second:1,
-        minute:60,
-        hour:3600,
-        day:86400
+    time: {
+
+        second: 1,
+
+        minute: 60,
+
+        hour: 3600,
+
+        day: 86400
+
     },
 
-    temperature:{
-        celsius:1,
-        fahrenheit:2,
-        kelvin:3
+    temperature: {
+
+        celsius: 1,
+
+        fahrenheit: 2,
+
+        kelvin: 3
+
     }
 
 };
 
-function pretty(s){
 
-    return s
-        .replace(/-/g," ")
-        .replace(/\b\w/g,c=>c.toUpperCase());
+function labelize(value) {
+
+    return String(value)
+        .replace(/-/g, " ")
+        .replace(
+            /\b\w/g,
+            char =>
+                char.toUpperCase()
+        );
 
 }
 
-registerTool(
-    "unit",
 
-    ()=>shell(
+function renderUnitTool() {
+
+    return toolShell(
+
         "Unit Converter",
-        "Convert common measurements.",
+
+        "Convert common units.",
 
         `
+
         <div class="form-group">
 
             <label for="unitCategory">
@@ -2226,10 +2669,10 @@ registerTool(
 
         </div>
 
-        ${field(
+        ${inputField(
             "unitValue",
             "Value",
-            "12.5"
+            "Example: 12.5"
         )}
 
         <div class="form-group">
@@ -2260,167 +2703,227 @@ registerTool(
             Convert
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        const update=()=>{
+}
 
-            const c=
-                $("#unitCategory").value;
 
-            const o=
+function initUnit() {
+
+    const category =
+        $("#unitCategory");
+
+    const update =
+        () => {
+
+            const type =
+                category.value;
+
+            const options =
                 Object.keys(
-                    UNIT[c]
+                    UNITS[type]
                 );
 
-            $("#unitFrom").innerHTML=
-                o
-                .map(
-                    x=>
-                        `<option value="${x}">
-                            ${pretty(x)}
-                        </option>`
-                )
-                .join("");
+            $("#unitFrom")
+                .innerHTML =
+                    options
+                        .map(
+                            option =>
+                                `
+                                <option value="${option}">
+                                    ${labelize(option)}
+                                </option>
+                                `
+                        )
+                        .join("");
 
-            $("#unitTo").innerHTML=
-                o
-                .map(
-                    x=>
-                        `<option value="${x}">
-                            ${pretty(x)}
-                        </option>`
-                )
-                .join("");
+            $("#unitTo")
+                .innerHTML =
+                    options
+                        .map(
+                            option =>
+                                `
+                                <option value="${option}">
+                                    ${labelize(option)}
+                                </option>
+                                `
+                        )
+                        .join("");
 
         };
 
-        update();
 
-        $("#unitCategory")?.addEventListener(
-            "change",
-            update
-        );
+    update();
 
-        $("#convertUnit")?.addEventListener(
+
+    category?.addEventListener(
+        "change",
+        update
+    );
+
+
+    $("#convertUnit")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const v=
-                        n(
-                            $("#unitValue").value,
+                    const value =
+                        num(
+                            $("#unitValue")
+                                .value,
                             "Value"
                         );
 
-                    const c=
-                        $("#unitCategory").value;
+                    const type =
+                        category.value;
 
-                    const f=
-                        $("#unitFrom").value;
+                    const from =
+                        $("#unitFrom")
+                            .value;
 
-                    const t=
-                        $("#unitTo").value;
+                    const to =
+                        $("#unitTo")
+                            .value;
 
-                    let r;
+                    let result;
 
-                    if(c!=="temperature"){
+                    if (
+                        type !==
+                        "temperature"
+                    ) {
 
-                        r=
-                            v*
-                            UNIT[c][f] /
-                            UNIT[c][t];
+                        result =
+                            value *
+                            UNITS[type][from] /
+                            UNITS[type][to];
 
-                    }else{
+                    } else {
 
-                        let x=v;
+                        let celsius =
+                            value;
 
-                        if(
-                            f==="fahrenheit"
-                        ){
+                        if (
+                            from ===
+                            "fahrenheit"
+                        ) {
 
-                            x=
-                                (v-32)*
-                                5/9;
+                            celsius =
+                                (
+                                    value -
+                                    32
+                                ) *
+                                5 /
+                                9;
 
                         }
 
-                        if(
-                            f==="kelvin"
-                        ){
+                        if (
+                            from ===
+                            "kelvin"
+                        ) {
 
-                            x=
-                                v-273.15;
+                            celsius =
+                                value -
+                                273.15;
 
                         }
 
-                        r=
-                            t==="celsius"
-                                ? x
-                                : t==="fahrenheit"
-                                    ? x*9/5+32
-                                    : x+273.15;
+                        if (
+                            to ===
+                            "celsius"
+                        ) {
+
+                            result =
+                                celsius;
+
+                        } else if (
+                            to ===
+                            "fahrenheit"
+                        ) {
+
+                            result =
+                                celsius *
+                                9 /
+                                5 +
+                                32;
+
+                        } else {
+
+                            result =
+                                celsius +
+                                273.15;
+
+                        }
 
                     }
 
-                    $("#toolResult").innerHTML=`
+                    $("#toolResult")
+                        .innerHTML = `
 
-                        <div class="result-header">
+                        <div
+                            class="result-header">
 
                             <span>
                                 RESULT
                             </span>
 
                             <strong>
-                                ${money(r)}
+                                ${money(result)}
                             </strong>
 
                             <small>
-                                ${pretty(f)}
+                                ${labelize(from)}
                                 →
-                                ${pretty(t)}
+                                ${labelize(to)}
                             </small>
 
                         </div>
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
+
 
 /* =========================================================
    BS ↔ AD CONVERTER
    ========================================================= */
 
-registerTool(
-    "bs-ad",
+function renderBSADTool() {
 
-    ()=>shell(
+    return toolShell(
+
         "BS ↔ AD Converter",
+
         "Convert Bikram Sambat and Gregorian dates.",
 
         `
+
         <div class="form-group">
 
             <label for="calendarDirection">
                 Conversion
             </label>
 
-            <select id="calendarDirection">
+            <select
+                id="calendarDirection">
 
                 <option value="bs-ad">
                     BS → AD
@@ -2434,6 +2937,7 @@ registerTool(
 
         </div>
 
+
         <div class="form-group">
 
             <label
@@ -2445,21 +2949,22 @@ registerTool(
             </label>
 
             <input
-                id="calendarDate"
                 type="text"
+                id="calendarDate"
                 inputmode="numeric"
-                placeholder="2080-01-15"
-                autocomplete="off">
+                autocomplete="off"
+                placeholder="2080-01-15">
 
             <small
                 class="input-help"
                 id="calendarDateHelp">
 
-                Example: 2080-01-15
+                Enter BS date as YYYY-MM-DD.
 
             </small>
 
         </div>
+
 
         <button
             type="button"
@@ -2469,236 +2974,954 @@ registerTool(
             Convert Date →
 
         </button>
+
+
+        <div class="calculator-note">
+
+            Example:
+            2080-01-15 BS
+            =
+            2023-04-28 AD
+
+        </div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        const d=
-            $("#calendarDirection");
+}
 
-        const i=
-            $("#calendarDate");
 
-        const l=
-            $("#calendarDateLabel");
+function normalizeNepaliDigits(value) {
 
-        const h=
-            $("#calendarDateHelp");
+    const map = {
 
-        const update=()=>{
+        "०": "0",
+        "१": "1",
+        "२": "2",
+        "३": "3",
+        "४": "4",
+        "५": "5",
+        "६": "6",
+        "७": "7",
+        "८": "8",
+        "९": "9"
 
-            const bs=
-                d.value==="bs-ad";
+    };
 
-            l.textContent=
-                bs
+    return value.replace(
+        /[०-९]/g,
+        digit =>
+            map[digit]
+    );
+
+}
+
+
+function initBSAD() {
+
+    const direction =
+        $("#calendarDirection");
+
+    const dateInput =
+        $("#calendarDate");
+
+    const label =
+        $("#calendarDateLabel");
+
+    const help =
+        $("#calendarDateHelp");
+
+
+    const update =
+        () => {
+
+            const isBS =
+                direction.value ===
+                "bs-ad";
+
+            label.textContent =
+                isBS
                     ? "BS Date"
                     : "AD Date";
 
-            i.placeholder=
-                bs
+            dateInput.placeholder =
+                isBS
                     ? "2080-01-15"
                     : "2023-04-28";
 
-            h.textContent=
-                bs
+            help.textContent =
+                isBS
+
                     ? "Enter BS date as YYYY-MM-DD."
+
                     : "Enter AD date as YYYY-MM-DD.";
 
             clearError();
 
-            $("#toolResult").innerHTML="";
+            $("#toolResult")
+                .innerHTML = "";
 
         };
 
-        d?.addEventListener(
-            "change",
-            update
-        );
 
-        update();
+    direction?.addEventListener(
+        "change",
+        update
+    );
 
-        $("#convertCalendar")
-            ?.addEventListener(
-                "click",
-                ()=>{
 
-                    try{
+    update();
 
-                        clearError();
 
-                        let s=
-                            i.value
-                            .trim()
+    $("#convertCalendar")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    let input =
+                        normalizeNepaliDigits(
+                            dateInput
+                                .value
+                                .trim()
+                        );
+
+
+                    input =
+                        input
                             .replace(
                                 /[\/\.\s]/g,
                                 "-"
-                            );
-
-                        s=
-                            s.replace(
+                            )
+                            .replace(
                                 /-{2,}/g,
                                 "-"
                             );
 
-                        if(
-                            !/^\d{4}-\d{1,2}-\d{1,2}$/
-                                .test(s)
-                        ){
 
-                            throw Error(
-                                "Use YYYY-MM-DD format."
-                            );
+                    if (
+                        !/^\d{4}-\d{1,2}-\d{1,2}$/
+                            .test(input)
+                    ) {
 
-                        }
-
-                        const [
-                            y,
-                            m,
-                            day
-                        ]=
-                            s
-                            .split("-")
-                            .map(Number);
-
-                        const C=
-                            window.NepaliDate;
-
-                        if(
-                            typeof C!=="function"
-                        ){
-
-                            throw Error(
-                                "Nepali date library did not load. Keep its script before script.js."
-                            );
-
-                        }
-
-                        let out;
-
-                        /* BS → AD */
-
-                        if(
-                            d.value==="bs-ad"
-                        ){
-
-                            if(
-                                y<1970 ||
-                                y>2099
-                            ){
-
-                                throw Error(
-                                    "BS year is outside the supported range."
-                                );
-
-                            }
-
-                            const bs=
-                                new C(
-                                    `${y}-${String(m).padStart(2,"0")}-${String(day).padStart(2,"0")}`
-                                );
-
-                            const ad=
-                                bs.getAD();
-
-                            if(!ad){
-
-                                throw Error(
-                                    "Invalid BS date."
-                                );
-
-                            }
-
-                            out=
-                                `${ad.year}-${String(ad.month+1).padStart(2,"0")}-${String(ad.date).padStart(2,"0")}`;
-
-                        }
-
-                        /* AD → BS */
-
-                        else{
-
-                            if(
-                                !isoValid(s)
-                            ){
-
-                                throw Error(
-                                    "Enter a real Gregorian date."
-                                );
-
-                            }
-
-                            const adDate=
-                                new Date(
-                                    y,
-                                    m-1,
-                                    day
-                                );
-
-                            const bs=
-                                new C(adDate);
-
-                            out=
-                                `${bs.getYear()}-${String(bs.getMonth()+1).padStart(2,"0")}-${String(bs.getDate()).padStart(2,"0")}`;
-
-                        }
-
-                        $("#toolResult").innerHTML=`
-
-                            <div class="result-header">
-
-                                <span>
-                                    ${
-                                        d.value==="bs-ad"
-                                            ? "AD DATE"
-                                            : "BS DATE"
-                                    }
-                                </span>
-
-                                <strong>
-                                    ${esc(out)}
-                                </strong>
-
-                                <small>
-                                    ${
-                                        d.value==="bs-ad"
-                                            ? "Bikram Sambat → Gregorian"
-                                            : "Gregorian → Bikram Sambat"
-                                    }
-                                </small>
-
-                            </div>
-
-                        `;
-
-                    }catch(e){
-
-                        error(
-                            e.message ||
-                            "Date conversion failed."
+                        throw new Error(
+                            "Use YYYY-MM-DD format."
                         );
 
                     }
 
-                }
-            );
 
-    }
-);
+                    const [
+                        year,
+                        month,
+                        day
+                    ] =
+                        input
+                            .split("-")
+                            .map(Number);
+
+
+                    const NepaliDate =
+                        window.NepaliDate;
+
+
+                    if (
+                        typeof NepaliDate !==
+                        "function"
+                    ) {
+
+                        throw new Error(
+                            "The Nepali date library did not load. Check the converter script in index.html."
+                        );
+
+                    }
+
+
+                    let result;
+
+
+                    /* -----------------------------------------
+                       BS → AD
+                       ----------------------------------------- */
+
+                    if (
+                        direction.value ===
+                        "bs-ad"
+                    ) {
+
+                        if (
+                            year < 1975 ||
+                            year > 2100
+                        ) {
+
+                            throw new Error(
+                                "BS year is outside the supported range."
+                            );
+
+                        }
+
+
+                        const bs =
+                            new NepaliDate(
+                                `${
+                                    year
+                                }-${
+                                    String(
+                                        month
+                                    ).padStart(
+                                        2,
+                                        "0"
+                                    )
+                                }-${
+                                    String(
+                                        day
+                                    ).padStart(
+                                        2,
+                                        "0"
+                                    )
+                                }`
+                            );
+
+
+                        const ad =
+                            bs.getAD();
+
+
+                        if (
+                            !ad ||
+                            !Number.isFinite(
+                                ad.year
+                            ) ||
+                            !Number.isFinite(
+                                ad.month
+                            ) ||
+                            !Number.isFinite(
+                                ad.date
+                            )
+                        ) {
+
+                            throw new Error(
+                                "Invalid BS date."
+                            );
+
+                        }
+
+
+                        result =
+                            `${
+                                ad.year
+                            }-${
+                                String(
+                                    ad.month
+                                ).padStart(
+                                    2,
+                                    "0"
+                                )
+                            }-${
+                                String(
+                                    ad.date
+                                ).padStart(
+                                    2,
+                                    "0"
+                                )
+                            }`;
+
+                    }
+
+
+                    /* -----------------------------------------
+                       AD → BS
+                       ----------------------------------------- */
+
+                    else {
+
+                        if (
+                            !validISODate(
+                                input
+                            )
+                        ) {
+
+                            throw new Error(
+                                "Please enter a real Gregorian date."
+                            );
+
+                        }
+
+
+                        const adDate =
+                            new Date(
+                                year,
+                                month - 1,
+                                day
+                            );
+
+
+                        const bs =
+                            new NepaliDate(
+                                adDate
+                            );
+
+
+                        result =
+                            `${
+                                bs.getYear()
+                            }-${
+                                String(
+                                    bs.getMonth()
+                                ).padStart(
+                                    2,
+                                    "0"
+                                )
+                            }-${
+                                String(
+                                    bs.getDate()
+                                ).padStart(
+                                    2,
+                                    "0"
+                                )
+                            }`;
+
+                    }
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                ${
+                                    direction.value ===
+                                    "bs-ad"
+                                        ? "AD DATE"
+                                        : "BS DATE"
+                                }
+                            </span>
+
+                            <strong>
+                                ${esc(result)}
+                            </strong>
+
+                            <small>
+                                ${
+                                    direction.value ===
+                                    "bs-ad"
+
+                                        ? "Bikram Sambat → Gregorian"
+
+                                        : "Gregorian → Bikram Sambat"
+                                }
+                            </small>
+
+                        </div>
+
+                    `;
+
+
+                } catch (error) {
+
+                    showError(
+                        error.message ||
+                        "Date conversion failed."
+                    );
+
+                }
+
+            }
+        );
+
+}
+
 
 /* =========================================================
-   TEXT TOOLS
+   SIMPLE INTEREST
    ========================================================= */
 
-registerTool(
-    "word-counter",
+function renderSITool() {
 
-    ()=>shell(
-        "Word Counter",
-        "Count words and characters.",
+    return toolShell(
+
+        "Simple Interest",
+
+        "Calculate simple interest and total amount.",
 
         `
+
+        ${inputField(
+            "siPrincipal",
+            "Principal",
+            "Example: 10000"
+        )}
+
+        ${inputField(
+            "siRate",
+            "Rate (%)",
+            "Example: 5"
+        )}
+
+        ${inputField(
+            "siTime",
+            "Time (years)",
+            "Example: 2"
+        )}
+
+        <button
+            type="button"
+            class="primary-button"
+            id="calculateSI">
+
+            Calculate
+
+        </button>
+
+        `
+
+    );
+
+}
+
+
+function initSI() {
+
+    $("#calculateSI")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const principal =
+                        num(
+                            $("#siPrincipal")
+                                .value,
+                            "Principal"
+                        );
+
+                    const rate =
+                        num(
+                            $("#siRate")
+                                .value,
+                            "Rate"
+                        );
+
+                    const time =
+                        num(
+                            $("#siTime")
+                                .value,
+                            "Time"
+                        );
+
+                    if (
+                        principal < 0 ||
+                        rate < 0 ||
+                        time < 0
+                    ) {
+
+                        throw new Error(
+                            "Values cannot be negative."
+                        );
+
+                    }
+
+                    const interest =
+                        principal *
+                        rate *
+                        time /
+                        100;
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                SIMPLE INTEREST
+                            </span>
+
+                            <strong>
+                                ${money(interest)}
+                            </strong>
+
+                            <small>
+                                Total amount:
+                                ${money(
+                                    principal +
+                                    interest
+                                )}
+                            </small>
+
+                        </div>
+
+                    `;
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   COMPOUND INTEREST
+   ========================================================= */
+
+function renderCITool() {
+
+    return toolShell(
+
+        "Compound Interest",
+
+        "Calculate compound interest.",
+
+        `
+
+        ${inputField(
+            "ciPrincipal",
+            "Principal",
+            "Example: 10000"
+        )}
+
+        ${inputField(
+            "ciRate",
+            "Annual Rate (%)",
+            "Example: 5"
+        )}
+
+        ${inputField(
+            "ciTime",
+            "Time (years)",
+            "Example: 2"
+        )}
+
+        ${inputField(
+            "ciFrequency",
+            "Compounds per year",
+            "Example: 4"
+        )}
+
+        <button
+            type="button"
+            class="primary-button"
+            id="calculateCI">
+
+            Calculate
+
+        </button>
+
+        `
+
+    );
+
+}
+
+
+function initCI() {
+
+    $("#calculateCI")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const principal =
+                        num(
+                            $("#ciPrincipal")
+                                .value,
+                            "Principal"
+                        );
+
+                    const rate =
+                        num(
+                            $("#ciRate")
+                                .value,
+                            "Annual rate"
+                        );
+
+                    const time =
+                        num(
+                            $("#ciTime")
+                                .value,
+                            "Time"
+                        );
+
+                    const frequency =
+                        num(
+                            $("#ciFrequency")
+                                .value,
+                            "Frequency"
+                        );
+
+
+                    if (
+                        principal < 0 ||
+                        rate < 0 ||
+                        time < 0 ||
+                        frequency <= 0
+                    ) {
+
+                        throw new Error(
+                            "Enter valid values."
+                        );
+
+                    }
+
+
+                    const amount =
+                        principal *
+                        Math.pow(
+                            1 +
+                            rate /
+                            (
+                                100 *
+                                frequency
+                            ),
+                            frequency *
+                            time
+                        );
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                COMPOUND INTEREST
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    amount -
+                                    principal
+                                )}
+                            </strong>
+
+                            <small>
+                                Total amount:
+                                ${money(amount)}
+                            </small>
+
+                        </div>
+
+                    `;
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DISCOUNT
+   ========================================================= */
+
+function renderDiscountTool() {
+
+    return toolShell(
+
+        "Discount Calculator",
+
+        "Calculate discount and final price.",
+
+        `
+
+        ${inputField(
+            "discountPrice",
+            "Original Price",
+            "Example: 2500"
+        )}
+
+        ${inputField(
+            "discountRate",
+            "Discount (%)",
+            "Example: 15"
+        )}
+
+        <button
+            type="button"
+            class="primary-button"
+            id="calculateDiscount">
+
+            Calculate
+
+        </button>
+
+        `
+
+    );
+
+}
+
+
+function initDiscount() {
+
+    $("#calculateDiscount")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const price =
+                        num(
+                            $("#discountPrice")
+                                .value,
+                            "Original price"
+                        );
+
+                    const rate =
+                        num(
+                            $("#discountRate")
+                                .value,
+                            "Discount rate"
+                        );
+
+
+                    if (
+                        price < 0 ||
+                        rate < 0 ||
+                        rate > 100
+                    ) {
+
+                        throw new Error(
+                            "Enter valid discount values."
+                        );
+
+                    }
+
+
+                    const discount =
+                        price *
+                        rate /
+                        100;
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                DISCOUNT
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    discount
+                                )}
+                            </strong>
+
+                            <small>
+                                Final price:
+                                ${money(
+                                    price -
+                                    discount
+                                )}
+                            </small>
+
+                        </div>
+
+                    `;
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   PROFIT / LOSS
+   ========================================================= */
+
+function renderProfitTool() {
+
+    return toolShell(
+
+        "Profit & Loss",
+
+        "Calculate profit or loss.",
+
+        `
+
+        ${inputField(
+            "costPrice",
+            "Cost Price",
+            "Example: 1000"
+        )}
+
+        ${inputField(
+            "sellingPrice",
+            "Selling Price",
+            "Example: 1250"
+        )}
+
+        <button
+            type="button"
+            class="primary-button"
+            id="calculateProfit">
+
+            Calculate
+
+        </button>
+
+        `
+
+    );
+
+}
+
+
+function initProfit() {
+
+    $("#calculateProfit")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                try {
+
+                    clearError();
+
+                    const cost =
+                        num(
+                            $("#costPrice")
+                                .value,
+                            "Cost price"
+                        );
+
+                    const selling =
+                        num(
+                            $("#sellingPrice")
+                                .value,
+                            "Selling price"
+                        );
+
+
+                    if (
+                        cost <= 0
+                    ) {
+
+                        throw new Error(
+                            "Cost price must be greater than 0."
+                        );
+
+                    }
+
+
+                    const difference =
+                        selling -
+                        cost;
+
+
+                    const percentage =
+                        Math.abs(
+                            difference /
+                            cost *
+                            100
+                        );
+
+
+                    const type =
+                        difference > 0
+                            ? "PROFIT"
+                            : difference < 0
+                                ? "LOSS"
+                                : "NO PROFIT / NO LOSS";
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                ${type}
+                            </span>
+
+                            <strong>
+                                ${money(
+                                    Math.abs(
+                                        difference
+                                    )
+                                )}
+                            </strong>
+
+                            <small>
+                                ${percentage.toFixed(2)}%
+                            </small>
+
+                        </div>
+
+                    `;
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   WORD COUNTER
+   ========================================================= */
+
+function renderWordCounterTool() {
+
+    return toolShell(
+
+        "Word Counter",
+
+        "Count words and characters in your text.",
+
+        `
+
         <div class="form-group">
 
             <label for="wordCounterText">
@@ -2712,94 +3935,144 @@ registerTool(
 
         </div>
 
+
         <div class="live-stats">
 
             <div>
-                <strong id="wordCount">
+
+                <strong
+                    id="wordCount">
                     0
                 </strong>
+
                 <span>
                     Words
                 </span>
+
             </div>
 
+
             <div>
-                <strong id="characterCount">
+
+                <strong
+                    id="characterCount">
                     0
                 </strong>
+
                 <span>
                     Characters
                 </span>
+
             </div>
 
+
             <div>
-                <strong id="characterNoSpaceCount">
+
+                <strong
+                    id="characterNoSpaceCount">
                     0
                 </strong>
+
                 <span>
                     No Spaces
                 </span>
+
             </div>
 
+
             <div>
-                <strong id="lineCount">
+
+                <strong
+                    id="lineCount">
                     0
                 </strong>
+
                 <span>
                     Lines
                 </span>
+
             </div>
 
         </div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        const t=
-            $("#wordCounterText");
+}
 
-        const u=()=>{
 
-            const v=
-                t.value;
+function initWordCounter() {
 
-            $("#wordCount").textContent=
-                v.trim()
-                    ? v.trim().split(/\s+/).length
-                    : 0;
+    const text =
+        $("#wordCounterText");
 
-            $("#characterCount").textContent=
-                v.length;
+    if (!text) return;
 
-            $("#characterNoSpaceCount").textContent=
-                v.replace(/\s/g,"").length;
 
-            $("#lineCount").textContent=
-                v
-                    ? v.split("\n").length
-                    : 0;
+    const update =
+        () => {
+
+            const value =
+                text.value;
+
+
+            $("#wordCount")
+                .textContent =
+                    value.trim()
+                        ? value
+                            .trim()
+                            .split(/\s+/)
+                            .length
+                        : 0;
+
+
+            $("#characterCount")
+                .textContent =
+                    value.length;
+
+
+            $("#characterNoSpaceCount")
+                .textContent =
+                    value.replace(
+                        /\s/g,
+                        ""
+                    ).length;
+
+
+            $("#lineCount")
+                .textContent =
+                    value
+                        ? value.split("\n").length
+                        : 0;
 
         };
 
-        t?.addEventListener(
-            "input",
-            u
-        );
 
-        u();
+    text.addEventListener(
+        "input",
+        update
+    );
 
-    }
-);
+    update();
 
-registerTool(
-    "case-converter",
+}
 
-    ()=>shell(
+
+/* =========================================================
+   CASE CONVERTER
+   ========================================================= */
+
+function renderCaseConverterTool() {
+
+    return toolShell(
+
         "Case Converter",
-        "Convert text case.",
+
+        "Convert your text to different cases.",
 
         `
+
         <div class="form-group">
 
             <label for="caseText">
@@ -2808,9 +4081,11 @@ registerTool(
 
             <textarea
                 id="caseText"
-                rows="12"></textarea>
+                rows="12"
+                placeholder="Write your text here..."></textarea>
 
         </div>
+
 
         <div class="button-row">
 
@@ -2823,6 +4098,7 @@ registerTool(
 
             </button>
 
+
             <button
                 type="button"
                 class="secondary-button"
@@ -2832,6 +4108,7 @@ registerTool(
 
             </button>
 
+
             <button
                 type="button"
                 class="secondary-button"
@@ -2840,6 +4117,7 @@ registerTool(
                 Title Case
 
             </button>
+
 
             <button
                 type="button"
@@ -2851,88 +4129,114 @@ registerTool(
             </button>
 
         </div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $$("[data-case]").forEach(b=>{
+}
 
-            b.addEventListener(
-                "click",
-                ()=>{
 
-                    const t=
-                        $("#caseText");
+function initCaseConverter() {
 
-                    const v=
-                        t.value;
+    $$("[data-case]")
+        .forEach(
+            button => {
 
-                    const x=
-                        b.dataset.case;
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    if(
-                        x==="upper"
-                    ){
+                        const field =
+                            $("#caseText");
 
-                        t.value=
-                            v.toUpperCase();
+                        if (!field) return;
+
+                        const value =
+                            field.value;
+
+                        const type =
+                            button.dataset.case;
+
+
+                        if (
+                            type ===
+                            "upper"
+                        ) {
+
+                            field.value =
+                                value.toUpperCase();
+
+                        }
+
+
+                        if (
+                            type ===
+                            "lower"
+                        ) {
+
+                            field.value =
+                                value.toLowerCase();
+
+                        }
+
+
+                        if (
+                            type ===
+                            "title"
+                        ) {
+
+                            field.value =
+                                value
+                                    .toLowerCase()
+                                    .replace(
+                                        /\b\w/g,
+                                        char =>
+                                            char.toUpperCase()
+                                    );
+
+                        }
+
+
+                        if (
+                            type ===
+                            "sentence"
+                        ) {
+
+                            field.value =
+                                value
+                                    .toLowerCase()
+                                    .replace(
+                                        /(^\s*\w|[.!?]\s+\w)/g,
+                                        char =>
+                                            char.toUpperCase()
+                                    );
+
+                        }
 
                     }
+                );
 
-                    if(
-                        x==="lower"
-                    ){
+            }
+        );
 
-                        t.value=
-                            v.toLowerCase();
+}
 
-                    }
 
-                    if(
-                        x==="title"
-                    ){
+/* =========================================================
+   TEXT CLEANER
+   ========================================================= */
 
-                        t.value=
-                            v
-                            .toLowerCase()
-                            .replace(
-                                /\b\w/g,
-                                c=>c.toUpperCase()
-                            );
+function renderTextCleanerTool() {
 
-                    }
+    return toolShell(
 
-                    if(
-                        x==="sentence"
-                    ){
-
-                        t.value=
-                            v
-                            .toLowerCase()
-                            .replace(
-                                /(^\s*\w|[.!?]\s+\w)/g,
-                                c=>c.toUpperCase()
-                            );
-
-                    }
-
-                }
-            );
-
-        });
-
-    }
-);
-
-registerTool(
-    "text-cleaner",
-
-    ()=>shell(
         "Text Cleaner",
+
         "Remove extra spaces and blank lines.",
 
         `
+
         <div class="form-group">
 
             <label for="cleanText">
@@ -2941,9 +4245,11 @@ registerTool(
 
             <textarea
                 id="cleanText"
-                rows="14"></textarea>
+                rows="14"
+                placeholder="Paste or write your text here..."></textarea>
 
         </div>
+
 
         <div class="button-row">
 
@@ -2956,6 +4262,7 @@ registerTool(
 
             </button>
 
+
             <button
                 type="button"
                 class="secondary-button"
@@ -2966,21 +4273,28 @@ registerTool(
             </button>
 
         </div>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#cleanTextButton")
-            ?.addEventListener(
-                "click",
-                ()=>{
+}
 
-                    const t=
-                        $("#cleanText");
 
-                    t.value=
-                        t.value
+function initTextCleaner() {
+
+    $("#cleanTextButton")
+        ?.addEventListener(
+            "click",
+            () => {
+
+                const field =
+                    $("#cleanText");
+
+                if (!field) return;
+
+                field.value =
+                    field.value
                         .replace(
                             /[ \t]+/g,
                             " "
@@ -2991,55 +4305,58 @@ registerTool(
                         )
                         .trim();
 
-                    toast(
-                        "Text cleaned."
+                showToast(
+                    "Text cleaned successfully."
+                );
+
+            }
+        );
+
+
+    $("#copyCleanText")
+        ?.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        $("#cleanText").value
+                    );
+
+                    showToast(
+                        "Text copied."
+                    );
+
+                } catch {
+
+                    showToast(
+                        "Copy was blocked by the browser.",
+                        "error"
                     );
 
                 }
-            );
 
-        $("#copyCleanText")
-            ?.addEventListener(
-                "click",
-                async ()=>{
+            }
+        );
 
-                    try{
+}
 
-                        await navigator.clipboard.writeText(
-                            $("#cleanText").value
-                        );
-
-                        toast(
-                            "Text copied."
-                        );
-
-                    }catch{
-
-                        toast(
-                            "Copy was blocked by the browser.",
-                            "error"
-                        );
-
-                    }
-
-                }
-            );
-
-    }
-);
 
 /* =========================================================
-   QR / PASSWORD / RANDOM
+   QR CODE
    ========================================================= */
 
-registerTool(
-    "qr",
+function renderQRTool() {
 
-    ()=>shell(
+    return toolShell(
+
         "QR Code Generator",
+
         "Create a QR code from text or a URL.",
 
         `
+
         <div class="form-group">
 
             <label for="qrText">
@@ -3053,6 +4370,7 @@ registerTool(
 
         </div>
 
+
         <button
             type="button"
             class="primary-button"
@@ -3061,38 +4379,55 @@ registerTool(
             Generate QR
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#generateQR")?.addEventListener(
+}
+
+
+function initQR() {
+
+    $("#generateQR")
+        ?.addEventListener(
             "click",
-            ()=>{
+            () => {
 
-                try{
+                try {
 
                     clearError();
 
-                    const v=
+                    const value =
                         $("#qrText")
-                        .value
-                        .trim();
+                            .value
+                            .trim();
 
-                    if(!v){
+                    if (!value) {
 
-                        throw Error(
-                            "Enter text or a URL."
+                        throw new Error(
+                            "Please enter text or a URL."
                         );
 
                     }
 
-                    $("#toolResult").innerHTML=`
 
-                        <div class="qr-result">
+                    const src =
+                        "https://api.qrserver.com/v1/create-qr-code/" +
+                        "?size=250x250&data=" +
+                        encodeURIComponent(
+                            value
+                        );
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="qr-result">
 
                             <img
-                                src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(v)}"
+                                src="${src}"
                                 alt="Generated QR code">
 
                             <p>
@@ -3103,67 +4438,92 @@ registerTool(
 
                     `;
 
-                }catch(e){
+                } catch (error) {
 
-                    error(e.message);
+                    showError(
+                        error.message
+                    );
 
                 }
 
             }
         );
 
-    }
-);
+}
 
-registerTool(
-    "password",
 
-    ()=>shell(
+/* =========================================================
+   PASSWORD GENERATOR
+   ========================================================= */
+
+function renderPasswordTool() {
+
+    return toolShell(
+
         "Password Generator",
+
         "Generate a random password.",
 
         `
-        ${field(
+
+        ${inputField(
             "passwordLength",
             "Password Length",
-            "16"
+            "Example: 16"
         )}
+
 
         <div class="checkbox-grid">
 
             <label>
+
                 <input
                     type="checkbox"
                     id="includeUpper"
                     checked>
+
                 Uppercase
+
             </label>
 
+
             <label>
+
                 <input
                     type="checkbox"
                     id="includeLower"
                     checked>
+
                 Lowercase
+
             </label>
 
+
             <label>
+
                 <input
                     type="checkbox"
                     id="includeNumbers"
                     checked>
+
                 Numbers
+
             </label>
 
+
             <label>
+
                 <input
                     type="checkbox"
                     id="includeSymbols"
                     checked>
+
                 Symbols
+
             </label>
 
         </div>
+
 
         <button
             type="button"
@@ -3173,201 +4533,248 @@ registerTool(
             Generate Password
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#generatePassword")
-            ?.addEventListener(
-                "click",
-                ()=>{
+}
 
-                    try{
 
-                        clearError();
+function initPassword() {
 
-                        const len=
-                            n(
-                                $("#passwordLength")
-                                .value,
-                                "Password length"
-                            );
+    $("#generatePassword")
+        ?.addEventListener(
+            "click",
+            () => {
 
-                        if(
-                            !Number.isInteger(len) ||
-                            len<4 ||
-                            len>128
-                        ){
+                try {
 
-                            throw Error(
-                                "Length must be a whole number from 4 to 128."
-                            );
+                    clearError();
 
-                        }
+                    const length =
+                        num(
+                            $(
+                                "#passwordLength"
+                            ).value,
+                            "Password length"
+                        );
 
-                        let chars="";
 
-                        if(
-                            $("#includeUpper")
-                            .checked
-                        ){
+                    if (
+                        !Number.isInteger(
+                            length
+                        ) ||
+                        length < 4 ||
+                        length > 128
+                    ) {
 
-                            chars+=
-                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-                        }
-
-                        if(
-                            $("#includeLower")
-                            .checked
-                        ){
-
-                            chars+=
-                                "abcdefghijklmnopqrstuvwxyz";
-
-                        }
-
-                        if(
-                            $("#includeNumbers")
-                            .checked
-                        ){
-
-                            chars+=
-                                "0123456789";
-
-                        }
-
-                        if(
-                            $("#includeSymbols")
-                            .checked
-                        ){
-
-                            chars+=
-                                "!@#$%^&*()_+-=[]{}";
-
-                        }
-
-                        if(!chars){
-
-                            throw Error(
-                                "Select at least one character type."
-                            );
-
-                        }
-
-                        let p="";
-
-                        const r=
-                            new Uint32Array(len);
-
-                        if(
-                            window.crypto?.getRandomValues
-                        ){
-
-                            window.crypto.getRandomValues(
-                                r
-                            );
-
-                        }
-
-                        for(
-                            let i=0;
-                            i<len;
-                            i++
-                        ){
-
-                            const index=
-                                window.crypto?.getRandomValues
-                                    ? r[i] % chars.length
-                                    : Math.floor(
-                                        Math.random() *
-                                        chars.length
-                                    );
-
-                            p+=chars[index];
-
-                        }
-
-                        $("#toolResult").innerHTML=`
-
-                            <div class="generated-output">
-
-                                <input
-                                    type="text"
-                                    value="${esc(p)}"
-                                    readonly>
-
-                                <button
-                                    type="button"
-                                    class="secondary-button"
-                                    id="copyPassword">
-
-                                    Copy
-
-                                </button>
-
-                            </div>
-
-                        `;
-
-                        $("#copyPassword")
-                            ?.addEventListener(
-                                "click",
-                                async ()=>{
-
-                                    try{
-
-                                        await navigator.clipboard.writeText(
-                                            p
-                                        );
-
-                                        toast(
-                                            "Password copied."
-                                        );
-
-                                    }catch{
-
-                                        toast(
-                                            "Copy was blocked.",
-                                            "error"
-                                        );
-
-                                    }
-
-                                }
-                            );
-
-                    }catch(e){
-
-                        error(e.message);
+                        throw new Error(
+                            "Length must be a whole number from 4 to 128."
+                        );
 
                     }
 
+
+                    let characters = "";
+
+
+                    if (
+                        $("#includeUpper")
+                            .checked
+                    ) {
+
+                        characters +=
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+                    }
+
+
+                    if (
+                        $("#includeLower")
+                            .checked
+                    ) {
+
+                        characters +=
+                            "abcdefghijklmnopqrstuvwxyz";
+
+                    }
+
+
+                    if (
+                        $("#includeNumbers")
+                            .checked
+                    ) {
+
+                        characters +=
+                            "0123456789";
+
+                    }
+
+
+                    if (
+                        $("#includeSymbols")
+                            .checked
+                    ) {
+
+                        characters +=
+                            "!@#$%^&*()_+-=[]{}";
+
+                    }
+
+
+                    if (!characters) {
+
+                        throw new Error(
+                            "Select at least one character type."
+                        );
+
+                    }
+
+
+                    let password = "";
+
+
+                    if (
+                        window.crypto &&
+                        window.crypto.getRandomValues
+                    ) {
+
+                        const values =
+                            new Uint32Array(
+                                length
+                            );
+
+                        window.crypto.getRandomValues(
+                            values
+                        );
+
+
+                        for (
+                            let i = 0;
+                            i < length;
+                            i++
+                        ) {
+
+                            password +=
+                                characters[
+                                    values[i] %
+                                    characters.length
+                                ];
+
+                        }
+
+                    } else {
+
+                        for (
+                            let i = 0;
+                            i < length;
+                            i++
+                        ) {
+
+                            password +=
+                                characters[
+                                    Math.floor(
+                                        Math.random() *
+                                        characters.length
+                                    )
+                                ];
+
+                        }
+
+                    }
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="generated-output">
+
+                            <input
+                                type="text"
+                                value="${esc(password)}"
+                                readonly>
+
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                id="copyPassword">
+
+                                Copy
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    $("#copyPassword")
+                        ?.addEventListener(
+                            "click",
+                            async () => {
+
+                                try {
+
+                                    await navigator.clipboard.writeText(
+                                        password
+                                    );
+
+                                    showToast(
+                                        "Password copied."
+                                    );
+
+                                } catch {
+
+                                    showToast(
+                                        "Copy was blocked.",
+                                        "error"
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
                 }
-            );
 
-    }
-);
+            }
+        );
 
-registerTool(
-    "random",
+}
 
-    ()=>shell(
+
+/* =========================================================
+   RANDOM NUMBER
+   ========================================================= */
+
+function renderRandomTool() {
+
+    return toolShell(
+
         "Random Number Generator",
-        "Generate a number between two values.",
+
+        "Generate a random number between two values.",
 
         `
-        ${field(
+
+        ${inputField(
             "randomMin",
             "Minimum",
-            "1"
+            "Example: 1"
         )}
 
-        ${field(
+        ${inputField(
             "randomMax",
             "Maximum",
-            "100"
+            "Example: 100"
         )}
 
         <button
@@ -3378,152 +4785,318 @@ registerTool(
             Generate
 
         </button>
+
         `
-    ),
 
-    ()=>{
+    );
 
-        $("#generateRandom")
-            ?.addEventListener(
-                "click",
-                ()=>{
+}
 
-                    try{
 
-                        clearError();
+function initRandom() {
 
-                        const a=
-                            n(
-                                $("#randomMin").value,
-                                "Minimum"
-                            );
+    $("#generateRandom")
+        ?.addEventListener(
+            "click",
+            () => {
 
-                        const b=
-                            n(
-                                $("#randomMax").value,
-                                "Maximum"
-                            );
+                try {
 
-                        if(a>b){
+                    clearError();
 
-                            throw Error(
-                                "Minimum cannot be greater than maximum."
-                            );
+                    const min =
+                        num(
+                            $("#randomMin").value,
+                            "Minimum"
+                        );
 
-                        }
+                    const max =
+                        num(
+                            $("#randomMax").value,
+                            "Maximum"
+                        );
 
-                        const v=
-                            Number.isInteger(a) &&
-                            Number.isInteger(b)
 
-                            ? Math.floor(
-                                Math.random() *
-                                (b-a+1)
-                            ) + a
+                    if (
+                        min > max
+                    ) {
 
-                            : Math.random() *
-                                (b-a) + a;
-
-                        $("#toolResult").innerHTML=`
-
-                            <div class="result-header">
-
-                                <span>
-                                    RANDOM NUMBER
-                                </span>
-
-                                <strong>
-                                    ${money(v)}
-                                </strong>
-
-                            </div>
-
-                        `;
-
-                    }catch(e){
-
-                        error(e.message);
+                        throw new Error(
+                            "Minimum cannot be greater than maximum."
+                        );
 
                     }
 
-                }
-            );
 
-    }
-);
+                    const value =
+                        Number.isInteger(min) &&
+                        Number.isInteger(max)
+
+                            ? Math.floor(
+                                Math.random() *
+                                (
+                                    max -
+                                    min +
+                                    1
+                                )
+                            ) + min
+
+                            : Math.random() *
+                              (
+                                  max -
+                                  min
+                              ) +
+                              min;
+
+
+                    $("#toolResult")
+                        .innerHTML = `
+
+                        <div
+                            class="result-header">
+
+                            <span>
+                                RANDOM NUMBER
+                            </span>
+
+                            <strong>
+                                ${money(value)}
+                            </strong>
+
+                        </div>
+
+                    `;
+
+                } catch (error) {
+
+                    showError(
+                        error.message
+                    );
+
+                }
+
+            }
+        );
+
+}
+
 
 /* =========================================================
    STUDY HUB
+   CLASS → FACULTY → SUBJECT → RESOURCE
    ========================================================= */
 
-let studyClass=null;
-let studyFaculty=null;
-let studySubject=null;
+const STUDY_FACULTIES = {
 
-const STUDY=FACULTIES;
+    science: {
 
-function show(id){
-    $(id)?.classList.remove("hidden");
+        name: "Science",
+
+        icon: "SC",
+
+        subjects: [
+
+            "English",
+            "Nepali",
+            "Physics",
+            "Chemistry",
+            "Biology",
+            "Mathematics",
+            "Computer Science"
+
+        ]
+
+    },
+
+    management: {
+
+        name: "Management",
+
+        icon: "MG",
+
+        subjects: [
+
+            "English",
+            "Nepali",
+            "Accounting",
+            "Economics",
+            "Business Studies",
+            "Computer Science",
+            "Mathematics"
+
+        ]
+
+    },
+
+    humanities: {
+
+        name: "Humanities",
+
+        icon: "HU",
+
+        subjects: [
+
+            "English",
+            "Nepali",
+            "Sociology",
+            "Rural Development",
+            "Mass Communication",
+            "Psychology",
+            "Economics"
+
+        ]
+
+    },
+
+    education: {
+
+        name: "Education",
+
+        icon: "ED",
+
+        subjects: [
+
+            "English",
+            "Nepali",
+            "Education",
+            "Economics",
+            "Computer Science"
+
+        ]
+
+    },
+
+    law: {
+
+        name: "Law",
+
+        icon: "LW",
+
+        subjects: [
+
+            "English",
+            "Nepali",
+            "Legal Studies",
+            "Social Studies",
+            "Economics"
+
+        ]
+
+    }
+
+};
+
+
+let selectedStudyClass = null;
+
+let selectedStudyFaculty = null;
+
+let selectedStudySubject = null;
+
+
+function studyShow(id) {
+
+    $(id)
+        ?.classList
+        .remove("hidden");
+
 }
 
-function hide(id){
-    $(id)?.classList.add("hidden");
-}
 
-function studyClasses(){
+function studyHide(id) {
 
-    studyClass=null;
-    studyFaculty=null;
-    studySubject=null;
-
-    show("#studyStepClass");
-
-    hide("#studyStepFaculty");
-    hide("#studyStepSubject");
-    hide("#studyStepResource");
+    $(id)
+        ?.classList
+        .add("hidden");
 
 }
 
-function studyToFaculty(c){
 
-    studyClass=
-        String(c);
+function studyReset() {
 
-    studyFaculty=null;
-    studySubject=null;
+    selectedStudyClass =
+        null;
+
+    selectedStudyFaculty =
+        null;
+
+    selectedStudySubject =
+        null;
+
+
+    studyShow(
+        "#studyStepClass"
+    );
+
+    studyHide(
+        "#studyStepFaculty"
+    );
+
+    studyHide(
+        "#studyStepSubject"
+    );
+
+    studyHide(
+        "#studyStepResource"
+    );
+
+}
+
+
+function studyOpenFaculty(
+    classNumber
+) {
+
+    selectedStudyClass =
+        String(classNumber);
+
+    selectedStudyFaculty =
+        null;
+
+    selectedStudySubject =
+        null;
+
 
     $("#studyFacultyClassLabel")
-        .textContent=
-            studyClass;
+        .textContent =
+            selectedStudyClass;
+
 
     $("#studyFacultyGrid")
-        .innerHTML=
+        .innerHTML =
 
-        Object.entries(STUDY)
-
-        .map(
-            ([k,f])=>`
+            Object.entries(
+                STUDY_FACULTIES
+            )
+            .map(
+                ([key, faculty]) => `
 
                 <button
                     type="button"
                     class="study-choice-card"
-                    data-faculty="${k}">
+                    data-faculty="${key}">
 
                     <span
                         class="study-choice-icon">
 
-                        ${f.icon}
+                        ${faculty.icon}
 
                     </span>
 
                     <span>
 
                         <strong>
-                            ${f.name}
+                            ${esc(
+                                faculty.name
+                            )}
                         </strong>
 
                         <small>
-                            ${f.subjects.length}
+                            ${
+                                faculty
+                                    .subjects
+                                    .length
+                            }
                             subjects available
                         </small>
 
@@ -3535,167 +5108,264 @@ function studyToFaculty(c){
 
                 </button>
 
-            `
-        )
-        .join("");
+                `
+            )
+            .join("");
 
-    hide("#studyStepClass");
-    show("#studyStepFaculty");
 
-    hide("#studyStepSubject");
-    hide("#studyStepResource");
+    studyHide(
+        "#studyStepClass"
+    );
 
-    scroll("study");
+    studyShow(
+        "#studyStepFaculty"
+    );
+
+    studyHide(
+        "#studyStepSubject"
+    );
+
+    studyHide(
+        "#studyStepResource"
+    );
+
+
+    scrollToId(
+        "study"
+    );
 
 }
 
-function studyToSubject(k){
 
-    const f=
-        STUDY[k];
+function studyOpenSubjects(
+    facultyKey
+) {
 
-    if(!f)return;
+    const faculty =
+        STUDY_FACULTIES[
+            facultyKey
+        ];
 
-    studyFaculty=k;
+    if (!faculty) return;
+
+
+    selectedStudyFaculty =
+        facultyKey;
+
+    selectedStudySubject =
+        null;
+
 
     $("#studySubjectPath")
-        .textContent=
-            `CLASS ${studyClass} • ${f.name.toUpperCase()}`;
+        .textContent =
+
+            `CLASS ${
+                selectedStudyClass
+            } • ${
+                faculty.name
+                    .toUpperCase()
+            }`;
+
 
     $("#studySubjectGrid")
-        .innerHTML=
+        .innerHTML =
 
-        f.subjects
+            faculty.subjects
+                .map(
+                    (
+                        subject,
+                        index
+                    ) => `
 
-        .map(
-            (s,i)=>`
+                    <button
+                        type="button"
+                        class="study-choice-card"
+                        data-subject-index="${index}">
 
-                <button
-                    type="button"
-                    class="study-choice-card"
-                    data-subject-index="${i}">
+                        <span
+                            class="study-choice-icon">
 
-                    <span
-                        class="study-choice-icon">
+                            ${
+                                String(
+                                    index + 1
+                                ).padStart(
+                                    2,
+                                    "0"
+                                )
+                            }
 
-                        ${String(i+1).padStart(2,"0")}
+                        </span>
 
-                    </span>
+                        <span>
 
-                    <span>
+                            <strong>
+                                ${esc(subject)}
+                            </strong>
 
-                        <strong>
-                            ${esc(s)}
-                        </strong>
+                            <small>
+                                Open
+                                ${esc(subject)}
+                                resources
+                            </small>
 
-                        <small>
-                            Open
-                            ${esc(s)}
-                            resources
-                        </small>
+                        </span>
 
-                    </span>
+                        <span class="arrow">
+                            →
+                        </span>
 
-                    <span class="arrow">
-                        →
-                    </span>
+                    </button>
 
-                </button>
+                    `
+                )
+                .join("");
 
-            `
-        )
-        .join("");
 
-    hide("#studyStepFaculty");
-    show("#studyStepSubject");
+    studyHide(
+        "#studyStepFaculty"
+    );
 
-    hide("#studyStepResource");
+    studyShow(
+        "#studyStepSubject"
+    );
 
-    scroll("study");
+    studyHide(
+        "#studyStepResource"
+    );
+
+
+    scrollToId(
+        "study"
+    );
 
 }
 
-function studyToResource(s){
 
-    studySubject=s;
+function studyOpenResources(
+    subject
+) {
 
-    const f=
-        STUDY[studyFaculty];
+    selectedStudySubject =
+        subject;
+
+
+    const faculty =
+        STUDY_FACULTIES[
+            selectedStudyFaculty
+        ];
+
 
     $("#studyResourcePathClass")
-        .textContent=
-            `Class ${studyClass}`;
+        .textContent =
+            `Class ${selectedStudyClass}`;
+
 
     $("#studyResourcePathFaculty")
-        .textContent=
-            f?.name ||
+        .textContent =
+            faculty?.name ||
             "Faculty";
 
+
     $("#studyResourcePathSubject")
-        .textContent=
-            s;
+        .textContent =
+            subject;
+
 
     $("#studyResourceTitle")
-        .textContent=
-            s;
+        .textContent =
+            subject;
+
 
     $("#studyResourceDescription")
-        .textContent=
-            `Choose a resource for ${s}.`;
+        .textContent =
+            `Choose a resource for ${subject}.`;
+
 
     $("#studyResourceOutput")
         ?.classList
         .add("hidden");
 
-    hide("#studyStepSubject");
-    show("#studyStepResource");
 
-    scroll("study");
+    studyHide(
+        "#studyStepSubject"
+    );
+
+    studyShow(
+        "#studyStepResource"
+    );
+
+
+    scrollToId(
+        "study"
+    );
 
 }
 
-const RESOURCE={
 
-    notes:[
+const RESOURCE_TEXT = {
+
+    notes: [
+
         "Notes",
-        "Chapter notes, key concepts and revision material."
+
+        "Chapter notes, concepts, key definitions and revision material."
+
     ],
 
-    questions:[
+    questions: [
+
         "Questions",
-        "Practice and model questions for the selected subject."
+
+        "Practice questions, short-answer questions and model questions."
+
     ],
 
-    exam:[
+    exam: [
+
         "Exam Preparation",
-        "Revision and exam-focused practice."
+
+        "Use revision, topic practice and past-question review."
+
     ],
 
-    neb:[
+    neb: [
+
         "NEB Resources",
+
         "Board-focused resources for the selected class and subject."
+
     ]
 
 };
 
-function openResource(k){
 
-    const x=
-        RESOURCE[k];
+function studyOpenResource(
+    type
+) {
 
-    const o=
+    const data =
+        RESOURCE_TEXT[type] ||
+        [
+            "Resource",
+            "Selected study resource."
+        ];
+
+
+    const output =
         $("#studyResourceOutput");
 
-    if(!x||!o)return;
 
-    o.innerHTML=`
+    if (!output) return;
+
+
+    output.innerHTML = `
 
         <h4>
-            ${x[0]}
+            ${esc(data[0])}
         </h4>
 
         <p>
-            ${x[1]}
+            ${esc(data[1])}
         </p>
 
         <p>
@@ -3704,154 +5374,225 @@ function openResource(k){
                 Path:
             </strong>
 
-            Class ${studyClass}
+            Class
+            ${esc(
+                selectedStudyClass
+            )}
+
             →
-            ${STUDY[studyFaculty]?.name||"Faculty"}
+
+            ${esc(
+                STUDY_FACULTIES[
+                    selectedStudyFaculty
+                ]?.name ||
+                "Faculty"
+            )}
+
             →
-            ${studySubject}
+
+            ${esc(
+                selectedStudySubject
+            )}
 
         </p>
 
     `;
 
-    o.classList.remove("hidden");
 
-    o.scrollIntoView({
-        behavior:"smooth",
-        block:"nearest"
+    output.classList.remove(
+        "hidden"
+    );
+
+
+    output.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
     });
 
 }
 
-$$(".class-choice").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>studyToFaculty(
-                b.dataset.class
-            )
-        )
-);
+
+/* ---------- Study class buttons ---------- */
+
+$$(".class-choice")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    studyOpenFaculty(
+                        button.dataset.class
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* ---------- Faculty buttons ---------- */
 
 $("#studyFacultyGrid")
-?.addEventListener(
-    "click",
-    e=>{
+    ?.addEventListener(
+        "click",
+        event => {
 
-        const b=
-            e.target.closest(
-                "[data-faculty]"
-            );
+            const button =
+                event.target.closest(
+                    "[data-faculty]"
+                );
 
-        if(b){
+            if (!button) return;
 
-            studyToSubject(
-                b.dataset.faculty
+            studyOpenSubjects(
+                button.dataset.faculty
             );
 
         }
+    );
 
-    }
-);
+
+/* ---------- Subject buttons ---------- */
 
 $("#studySubjectGrid")
-?.addEventListener(
-    "click",
-    e=>{
+    ?.addEventListener(
+        "click",
+        event => {
 
-        const b=
-            e.target.closest(
-                "[data-subject-index]"
-            );
+            const button =
+                event.target.closest(
+                    "[data-subject-index]"
+                );
 
-        const f=
-            STUDY[studyFaculty];
+            const faculty =
+                STUDY_FACULTIES[
+                    selectedStudyFaculty
+                ];
 
-        if(
-            b&&
-            f
-        ){
+            if (
+                !button ||
+                !faculty
+            ) {
+                return;
+            }
 
-            studyToResource(
-                f.subjects[
-                    Number(
-                        b.dataset.subjectIndex
-                    )
-                ]
+
+            const index =
+                Number(
+                    button.dataset
+                        .subjectIndex
+                );
+
+
+            studyOpenResources(
+                faculty.subjects[index]
             );
 
         }
+    );
 
-    }
-);
 
-$$("[data-resource]").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>openResource(
-                b.dataset.resource
-            )
-        )
-);
+/* ---------- Resource buttons ---------- */
 
-$$("[data-study-back]").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>{
+$$("[data-resource]")
+    .forEach(
+        button => {
 
-                if(
-                    b.dataset.studyBack==="class"
-                ){
+            button.addEventListener(
+                "click",
+                () => {
 
-                    studyClasses();
-
-                }
-
-                if(
-                    b.dataset.studyBack==="faculty"
-                ){
-
-                    studyToFaculty(
-                        studyClass
+                    studyOpenResource(
+                        button.dataset.resource
                     );
 
                 }
+            );
 
-                if(
-                    b.dataset.studyBack==="subject"
-                ){
+        }
+    );
 
-                    studyToSubject(
-                        studyFaculty
-                    );
+
+/* ---------- Back buttons ---------- */
+
+$$("[data-study-back]")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const target =
+                        button.dataset
+                            .studyBack;
+
+
+                    if (
+                        target ===
+                        "class"
+                    ) {
+
+                        studyReset();
+
+                    }
+
+
+                    if (
+                        target ===
+                        "faculty"
+                    ) {
+
+                        studyOpenFaculty(
+                            selectedStudyClass
+                        );
+
+                    }
+
+
+                    if (
+                        target ===
+                        "subject"
+                    ) {
+
+                        studyOpenSubjects(
+                            selectedStudyFaculty
+                        );
+
+                    }
 
                 }
+            );
 
-            }
-        )
-);
+        }
+    );
+
 
 /* =========================================================
    CODING HUB
    ========================================================= */
 
-let codingId="c";
+const CODING_CONTENT = {
 
-const CODING={
+    c: {
 
-    c:{
-        title:"C Programming",
+        title:
+            "C Programming",
 
-        html:`
+        html: `
 
             <p>
-                Learn C fundamentals with
-                beginner-friendly topics.
+                Learn C from the basics:
+                syntax, variables, input/output,
+                conditions, loops, arrays,
+                strings and functions.
             </p>
 
-            <div class="coding-topic-list">
+            <div
+                class="coding-topic-list">
 
                 <button
                     type="button"
@@ -3912,208 +5653,312 @@ const CODING={
             </div>
 
         `
+
     },
 
-    algorithms:{
-        title:"Algorithms",
 
-        html:`
+    algorithms: {
+
+        title:
+            "Algorithms",
+
+        html: `
 
             <p>
                 Learn problem analysis,
-                pseudocode, flowcharts and
-                step-by-step solutions.
+                flowcharts, pseudocode
+                and step-by-step solutions.
             </p>
 
         `
+
     },
 
-    concepts:{
-        title:"Programming Concepts",
 
-        html:`
+    concepts: {
+
+        title:
+            "Programming Concepts",
+
+        html: `
 
             <p>
-                Understand variables, operators,
-                conditions, loops, arrays,
-                strings and functions.
+                Understand variables,
+                operators, conditions,
+                loops, arrays, strings
+                and functions.
             </p>
 
         `
+
     },
 
-    examples:{
-        title:"C Examples",
 
-        html:`
+    examples: {
+
+        title:
+            "C Examples",
+
+        html: `
 
             <p>
-                Practice factorial, Fibonacci,
-                largest-number, palindrome and
-                menu-driven programs.
+                Practice beginner C programs
+                such as largest number,
+                factorial, Fibonacci,
+                palindrome and menu programs.
             </p>
 
         `
+
     },
 
-    practice:{
-        title:"Practice Problems",
 
-        html:`
+    practice: {
+
+        title:
+            "Practice Problems",
+
+        html: `
 
             <p>
-                Start with easy problems and
-                gradually combine multiple
-                programming concepts.
+                Start with easy problems
+                and gradually combine
+                several programming concepts.
             </p>
 
         `
+
     },
 
-    guides:{
-        title:"Beginner Guides",
 
-        html:`
+    guides: {
+
+        title:
+            "Beginner Guides",
+
+        html: `
 
             <p>
-                Understand the problem,
+                Understand the problem first,
                 write an algorithm, code it,
                 test it and improve it.
             </p>
 
         `
+
     }
 
 };
 
-const TOPICS={
 
-    variables:[
-        "Variables & Data Types",
-        "Variables store values. Common types include int, float, double and char."
-    ],
+const CODING_TOPICS = {
 
-    input:[
-        "Input & Output",
-        "printf() displays output and scanf() receives input."
-    ],
+    variables: {
 
-    conditions:[
-        "Conditions",
-        "if, else if and else let a program make decisions."
-    ],
+        title:
+            "Variables & Data Types",
 
-    loops:[
-        "Loops",
-        "for, while and do-while repeat code based on a condition."
-    ],
+        text:
+            "Variables store values. Common C data types include int, float, double and char."
 
-    arrays:[
-        "Arrays",
-        "Arrays store multiple values of the same data type; C indexing starts at 0."
-    ],
+    },
 
-    strings:[
-        "Strings",
-        "A C string is a character sequence ending with the null character."
-    ],
 
-    functions:[
-        "Functions",
-        "Functions divide a program into reusable parts and may accept parameters and return values."
-    ]
+    input: {
+
+        title:
+            "Input & Output",
+
+        text:
+            "printf() displays information while scanf() receives input from the user."
+
+    },
+
+
+    conditions: {
+
+        title:
+            "Conditions",
+
+        text:
+            "if, else if and else help a program make decisions based on conditions."
+
+    },
+
+
+    loops: {
+
+        title:
+            "Loops",
+
+        text:
+            "for, while and do-while loops repeat code while a condition remains valid."
+
+    },
+
+
+    arrays: {
+
+        title:
+            "Arrays",
+
+        text:
+            "Arrays store multiple values of the same type. C array indexing starts at 0."
+
+    },
+
+
+    strings: {
+
+        title:
+            "Strings",
+
+        text:
+            "A C string is a sequence of characters ending with the null character."
+
+    },
+
+
+    functions: {
+
+        title:
+            "Functions",
+
+        text:
+            "Functions divide a program into reusable sections and may accept parameters or return values."
+
+    }
 
 };
 
-function openCoding(id){
 
-    const c=
-        CODING[id];
+let selectedCodingId =
+    "c";
 
-    const o=
+
+function openCoding(id) {
+
+    const item =
+        CODING_CONTENT[id];
+
+    const content =
         $("#codingContent");
 
-    if(!c||!o)return;
 
-    codingId=id;
+    if (
+        !item ||
+        !content
+    ) {
+        return;
+    }
 
-    o.innerHTML=`
 
-        <div class="coding-content-header">
+    selectedCodingId =
+        id;
+
+
+    content.innerHTML = `
+
+        <div
+            class="coding-content-header">
 
             <span class="section-label">
                 CODING
             </span>
 
             <h3>
-                ${esc(c.title)}
+                ${esc(item.title)}
             </h3>
 
         </div>
 
-        <div class="coding-content-body">
+        <div
+            class="coding-content-body">
 
-            ${c.html}
+            ${item.html}
 
         </div>
 
     `;
 
-    o.classList.remove("hidden");
 
-    o.scrollIntoView({
-        behavior:"smooth",
-        block:"nearest"
+    content.classList.remove(
+        "hidden"
+    );
+
+
+    content.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
     });
 
 }
 
-$$(".coding-option").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>openCoding(
-                b.dataset.coding
-            )
-        )
-);
 
-$("#codingContent")
-?.addEventListener(
-    "click",
-    e=>{
+$$(".coding-option")
+    .forEach(
+        button => {
 
-        const back=
-            e.target.closest(
-                "[data-coding-back]"
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openCoding(
+                        button.dataset.coding
+                    );
+
+                }
             );
-
-        const b=
-            e.target.closest(
-                "[data-topic]"
-            );
-
-        if(back){
-
-            openCoding(
-                codingId
-            );
-
-            return;
 
         }
+    );
 
-        if(!b)return;
 
-        const t=
-            TOPICS[
-                b.dataset.topic
-            ];
+$("#codingContent")
+    ?.addEventListener(
+        "click",
+        event => {
 
-        if(!t)return;
+            const topicButton =
+                event.target.closest(
+                    "[data-topic]"
+                );
 
-        $("#codingContent")
-            .innerHTML=`
+            const backButton =
+                event.target.closest(
+                    "[data-coding-back]"
+                );
+
+
+            if (backButton) {
+
+                openCoding(
+                    selectedCodingId
+                );
+
+                return;
+
+            }
+
+
+            if (!topicButton) {
+                return;
+            }
+
+
+            const topic =
+                CODING_TOPICS[
+                    topicButton.dataset.topic
+                ];
+
+
+            if (!topic) {
+                return;
+            }
+
+
+            $("#codingContent")
+                .innerHTML = `
 
                 <div
                     class="coding-content-header">
@@ -4126,17 +5971,19 @@ $("#codingContent")
                     </span>
 
                     <h3>
-                        ${esc(t[0])}
+                        ${esc(topic.title)}
                     </h3>
 
                 </div>
+
 
                 <div
                     class="coding-content-body">
 
                     <p>
-                        ${esc(t[1])}
+                        ${esc(topic.text)}
                     </p>
+
 
                     <button
                         type="button"
@@ -4151,107 +5998,252 @@ $("#codingContent")
 
             `;
 
-    }
-);
+        }
+    );
+
 
 /* =========================================================
    ARTICLES
    ========================================================= */
 
-const ARTICLES={
+const ARTICLES = {
 
-    "neb-gpa":[
-        "ACADEMICS",
-        "How NEB GPA Calculation Works",
-        "GPA summarizes grade-point performance across subjects. Weighted calculations use grade points and credit values."
-    ],
+    "neb-gpa": {
 
-    "gpa-cgpa":[
-        "ACADEMICS",
-        "GPA vs CGPA",
-        "GPA usually represents one set or period of study; CGPA combines multiple grade-point entries."
-    ],
+        category:
+            "ACADEMICS",
 
-    "c-programming":[
-        "PROGRAMMING",
-        "Starting C Programming",
-        "Start with variables, input/output, conditions and loops before moving to arrays, strings and functions."
-    ],
+        title:
+            "How NEB GPA Calculation Works",
 
-    "study-routine":[
-        "STUDY",
-        "Building a Better Study Routine",
-        "Break subjects into smaller topics and combine active recall with practice and revision."
-    ],
+        html: `
 
-    "computer-science":[
-        "COMPUTER SCIENCE",
-        "Why Computer Science Matters",
-        "Computer science covers algorithms, data, systems, programming and problem solving."
-    ],
+            <p>
+                GPA summarizes grade-point
+                performance across subjects.
+            </p>
 
-    website:[
-        "TECHNOLOGY",
-        "What Happens When You Open a Website?",
-        "Your browser requests website resources such as HTML, CSS and JavaScript and then builds the page."
-    ],
+            <p>
+                In a credit-weighted calculation,
+                grade points are multiplied by
+                credit values before dividing by
+                total credits.
+            </p>
 
-    "stupivot-tools":[
-        "TOOLS",
-        "Using StuPivot Effectively",
-        "Use calculators for quick calculations, Study Hub for academic resources and Coding Hub for programming."
-    ],
+        `
 
-    "bs-ad":[
-        "CALENDAR",
-        "BS and AD Calendar Conversion",
-        "BS and AD use different calendars. Accurate conversion uses calendar data rather than a fixed year offset."
-    ]
+    },
+
+
+    "gpa-cgpa": {
+
+        category:
+            "ACADEMICS",
+
+        title:
+            "GPA vs CGPA",
+
+        html: `
+
+            <p>
+                GPA generally represents a specific
+                group or period of study while CGPA
+                combines multiple grade-point entries.
+            </p>
+
+        `
+
+    },
+
+
+    "c-programming": {
+
+        category:
+            "PROGRAMMING",
+
+        title:
+            "Starting C Programming",
+
+        html: `
+
+            <p>
+                Start with variables, input/output,
+                conditions and loops before moving
+                to arrays, strings and functions.
+            </p>
+
+        `
+
+    },
+
+
+    "study-routine": {
+
+        category:
+            "STUDY",
+
+        title:
+            "Building a Better Study Routine",
+
+        html: `
+
+            <p>
+                Break large subjects into smaller
+                topics and combine active recall,
+                practice and revision.
+            </p>
+
+        `
+
+    },
+
+
+    "computer-science": {
+
+        category:
+            "COMPUTER SCIENCE",
+
+        title:
+            "Why Computer Science Matters",
+
+        html: `
+
+            <p>
+                Computer science covers algorithms,
+                data, computer systems, programming
+                and problem solving.
+            </p>
+
+        `
+
+    },
+
+
+    website: {
+
+        category:
+            "TECHNOLOGY",
+
+        title:
+            "What Happens When You Open a Website?",
+
+        html: `
+
+            <p>
+                A browser requests website resources
+                such as HTML, CSS and JavaScript and
+                then builds the page.
+            </p>
+
+        `
+
+    },
+
+
+    "stupivot-tools": {
+
+        category:
+            "TOOLS",
+
+        title:
+            "Using StuPivot Effectively",
+
+        html: `
+
+            <p>
+                Use the calculators for quick academic
+                calculations, Study Hub for resources
+                and Coding Hub for programming.
+            </p>
+
+        `
+
+    },
+
+
+    "bs-ad": {
+
+        category:
+            "CALENDAR",
+
+        title:
+            "BS and AD Calendar Conversion",
+
+        html: `
+
+            <p>
+                BS and AD use different calendar systems.
+                Accurate conversion requires calendar data
+                rather than simply subtracting a fixed number
+                of years.
+            </p>
+
+        `
+
+    }
 
 };
 
-$$(".read-article").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>{
 
-                const a=
-                    ARTICLES[
-                        b.dataset.article
-                    ];
+$$(".read-article")
+    .forEach(
+        button => {
 
-                if(!a)return;
+            button.addEventListener(
+                "click",
+                () => {
 
-                articleContent.innerHTML=`
+                    const article =
+                        ARTICLES[
+                            button.dataset.article
+                        ];
 
-                    <span class="section-label">
-                        ${a[0]}
-                    </span>
 
-                    <h2>
-                        ${esc(a[1])}
-                    </h2>
+                    if (
+                        !article ||
+                        !articleContent
+                    ) {
+                        return;
+                    }
 
-                    <p>
-                        ${esc(a[2])}
-                    </p>
 
-                `;
+                    articleContent
+                        .innerHTML = `
 
-                openModal(
-                    articleModal
-                );
+                        <span
+                            class="section-label">
 
-            }
-        )
-);
+                            ${article.category}
+
+                        </span>
+
+                        <h2>
+                            ${esc(
+                                article.title
+                            )}
+                        </h2>
+
+                        ${article.html}
+
+                    `;
+
+
+                    openModal(
+                        articleModal
+                    );
+
+                }
+            );
+
+        }
+    );
+
 
 /* =========================================================
    SEARCH
    ========================================================= */
 
-const SEARCH=[
+const SEARCH_ITEMS = [
 
     [
         "GPA Calculator",
@@ -4311,7 +6303,7 @@ const SEARCH=[
 
     [
         "BS AD Converter",
-        "Convert BS and AD",
+        "Convert Nepali and Gregorian dates",
         "tool",
         "bs-ad"
     ],
@@ -4331,64 +6323,64 @@ const SEARCH=[
     ],
 
     [
-        "Discount",
-        "Discount",
+        "Discount Calculator",
+        "Calculate discounts",
         "tool",
         "discount"
     ],
 
     [
         "Profit & Loss",
-        "Profit and loss",
+        "Calculate profit and loss",
         "tool",
         "profit"
     ],
 
     [
         "Word Counter",
-        "Count words",
+        "Count words and characters",
         "tool",
         "word-counter"
     ],
 
     [
         "Case Converter",
-        "Text case",
+        "Change text case",
         "tool",
         "case-converter"
     ],
 
     [
         "Text Cleaner",
-        "Clean text",
+        "Clean spaces and formatting",
         "tool",
         "text-cleaner"
     ],
 
     [
         "QR Code Generator",
-        "Generate a QR code",
+        "Generate QR codes",
         "tool",
         "qr"
     ],
 
     [
         "Password Generator",
-        "Generate a password",
+        "Generate passwords",
         "tool",
         "password"
     ],
 
     [
         "Random Number",
-        "Generate a random number",
+        "Generate random numbers",
         "tool",
         "random"
     ],
 
     [
         "Study Hub",
-        "Class 11 and 12 resources",
+        "Class 11 and 12 study resources",
         "section",
         "study"
     ],
@@ -4402,46 +6394,59 @@ const SEARCH=[
 
     [
         "Articles",
-        "Learning articles",
+        "Student learning articles",
         "section",
         "articles"
     ]
 
 ];
 
-function search(){
 
-    const q=
+function performSearch() {
+
+    const searchInput =
         $("#siteSearch");
 
-    const r=
+    const results =
         $("#searchResults");
 
-    if(!q||!r)return;
 
-    const s=
-        q.value
-        .trim()
-        .toLowerCase();
+    if (
+        !searchInput ||
+        !results
+    ) {
+        return;
+    }
 
-    if(!s){
 
-        r.innerHTML="";
+    const query =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    if (!query) {
+
+        results.innerHTML =
+            "";
+
         return;
 
     }
 
-    const m=
-        SEARCH.filter(
-            x=>
-                `${x[0]} ${x[1]}`
-                .toLowerCase()
-                .includes(s)
+
+    const matches =
+        SEARCH_ITEMS.filter(
+            item =>
+                `${item[0]} ${item[1]}`
+                    .toLowerCase()
+                    .includes(query)
         );
 
-    if(!m.length){
 
-        r.innerHTML=`
+    if (!matches.length) {
+
+        results.innerHTML = `
 
             <div class="search-empty">
 
@@ -4456,223 +6461,331 @@ function search(){
 
     }
 
-    r.innerHTML=
 
-        m.map(
-            (x,i)=>`
+    results.innerHTML =
 
-                <button
-                    type="button"
-                    class="search-result-item"
-                    data-i="${i}">
+        matches
+            .map(
+                (item, index) =>
+                    `
 
-                    <strong>
-                        ${esc(x[0])}
-                    </strong>
+                    <button
+                        type="button"
+                        class="search-result-item"
+                        data-search-index="${index}">
 
-                    <small>
-                        ${esc(x[1])}
-                    </small>
+                        <strong>
+                            ${esc(item[0])}
+                        </strong>
 
-                </button>
+                        <small>
+                            ${esc(item[1])}
+                        </small>
 
-            `
-        )
-        .join("");
+                    </button>
 
-    $$(".search-result-item",r)
-    .forEach(
-        (b,i)=>
-            b.addEventListener(
-                "click",
-                ()=>{
+                    `
+            )
+            .join("");
 
-                    if(
-                        m[i][2]==="tool"
-                    ){
 
-                        openTool(
-                            m[i][3]
-                        );
+    $$(".search-result-item", results)
+        .forEach(
+            button => {
 
-                    }else{
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                        scroll(
-                            m[i][3]
-                        );
+                        const item =
+                            matches[
+                                Number(
+                                    button.dataset
+                                        .searchIndex
+                                )
+                            ];
+
+
+                        if (!item) {
+                            return;
+                        }
+
+
+                        if (
+                            item[2] ===
+                            "tool"
+                        ) {
+
+                            openTool(
+                                item[3]
+                            );
+
+                        } else {
+
+                            scrollToId(
+                                item[3]
+                            );
+
+                        }
 
                     }
+                );
 
-                }
-            )
-    );
+            }
+        );
 
 }
+
 
 $("#searchButton")
     ?.addEventListener(
         "click",
-        search
+        performSearch
     );
+
 
 $("#siteSearch")
     ?.addEventListener(
         "input",
-        search
+        performSearch
     );
+
 
 $("#siteSearch")
     ?.addEventListener(
         "keydown",
-        e=>{
+        event => {
 
-            if(
-                e.key==="Enter"
-            ){
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
-                e.preventDefault();
+                event.preventDefault();
 
-                search();
+                performSearch();
 
             }
 
         }
     );
+
 
 /* =========================================================
    LEGAL
    ========================================================= */
 
-const LEGAL={
+const LEGAL = {
 
-    privacy:[
-        "Privacy Policy",
-        "Information submitted through the contact and feedback forms is sent through the configured form service. Do not submit passwords or other sensitive information."
-    ],
+    privacy: {
 
-    terms:[
-        "Terms of Use",
-        "StuPivot provides calculators, tools and educational information for general student use. Important academic results should be checked against official school or board records."
-    ]
+        title:
+            "Privacy Policy",
+
+        html: `
+
+            <p>
+                StuPivot is designed as a student
+                utility website. Information submitted
+                through contact and feedback forms is
+                sent through the configured form service.
+            </p>
+
+            <p>
+                Do not submit passwords, financial
+                information or other sensitive information
+                through the forms.
+            </p>
+
+        `
+
+    },
+
+
+    terms: {
+
+        title:
+            "Terms of Use",
+
+        html: `
+
+            <p>
+                StuPivot provides calculators,
+                tools and educational information
+                for general student use.
+            </p>
+
+            <p>
+                Important academic results should
+                be checked against official school
+                or board records.
+            </p>
+
+        `
+
+    }
 
 };
 
-$$(".legal-card").forEach(
-    b=>
-        b.addEventListener(
-            "click",
-            ()=>{
 
-                const x=
-                    LEGAL[
-                        b.dataset.legal
-                    ];
+$$(".legal-card")
+    .forEach(
+        button => {
 
-                if(!x)return;
+            button.addEventListener(
+                "click",
+                () => {
 
-                legalContent.innerHTML=`
+                    const item =
+                        LEGAL[
+                            button.dataset.legal
+                        ];
 
-                    <span class="section-label">
-                        INFORMATION
-                    </span>
 
-                    <h2>
-                        ${esc(x[0])}
-                    </h2>
+                    if (
+                        !item ||
+                        !legalContent
+                    ) {
+                        return;
+                    }
 
-                    <p>
-                        ${esc(x[1])}
-                    </p>
 
-                `;
+                    legalContent
+                        .innerHTML = `
 
-                openModal(
-                    legalModal
-                );
+                        <span
+                            class="section-label">
 
-            }
-        )
-);
+                            INFORMATION
+
+                        </span>
+
+                        <h2>
+                            ${esc(
+                                item.title
+                            )}
+                        </h2>
+
+                        ${item.html}
+
+                    `;
+
+
+                    openModal(
+                        legalModal
+                    );
+
+                }
+            );
+
+        }
+    );
+
 
 /* =========================================================
    FORMSPREE
    ========================================================= */
 
-function setupForm(id){
+function setupForm(id) {
 
-    const f=
+    const form =
         document.getElementById(id);
 
-    if(!f)return;
+    if (!form) {
+        return;
+    }
 
-    f.addEventListener(
+
+    form.addEventListener(
         "submit",
-        async e=>{
+        async event => {
 
-            e.preventDefault();
+            event.preventDefault();
 
-            const b=
-                f.querySelector(
+
+            const button =
+                form.querySelector(
                     '[type="submit"]'
                 );
 
-            const old=
-                b?.textContent ||
+
+            const original =
+                button?.textContent ||
                 "Send";
 
-            if(b){
 
-                b.disabled=true;
-                b.textContent="Sending...";
+            if (button) {
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "Sending...";
 
             }
 
-            try{
 
-                const res=
+            try {
+
+                const response =
                     await fetch(
-                        f.action,
+                        form.action,
                         {
-                            method:"POST",
+
+                            method:
+                                "POST",
 
                             body:
-                                new FormData(f),
+                                new FormData(
+                                    form
+                                ),
 
-                            headers:{
+                            headers: {
+
                                 Accept:
                                     "application/json"
+
                             }
+
                         }
                     );
 
-                if(!res.ok){
 
-                    throw Error(
+                if (!response.ok) {
+
+                    throw new Error(
                         "Message could not be sent."
                     );
 
                 }
 
-                f.reset();
 
-                toast(
+                form.reset();
+
+
+                showToast(
                     "Your message was sent successfully."
                 );
 
-            }catch(err){
 
-                toast(
-                    err.message ||
-                    "Message could not be sent.",
+            } catch (error) {
+
+                showToast(
+                    error.message ||
+                    "Something went wrong while sending.",
                     "error"
                 );
 
-            }finally{
 
-                if(b){
+            } finally {
 
-                    b.disabled=false;
-                    b.textContent=old;
+                if (button) {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        original;
 
                 }
 
@@ -4683,8 +6796,15 @@ function setupForm(id){
 
 }
 
-setupForm("feedbackForm");
-setupForm("contactForm");
+
+setupForm(
+    "feedbackForm"
+);
+
+setupForm(
+    "contactForm"
+);
+
 
 /* =========================================================
    NUMERIC INPUT CLEANUP
@@ -4692,33 +6812,51 @@ setupForm("contactForm");
 
 document.addEventListener(
     "input",
-    e=>{
+    event => {
 
-        const x=
-            e.target;
+        const input =
+            event.target;
 
-        if(
-            x.tagName==="INPUT" &&
-            x.getAttribute(
-                "inputmode"
-            )==="decimal"
-        ){
 
-            x.value=
-                x.value.replace(
-                    /[^0-9.\-]/g,
-                    ""
-                );
-
+        if (
+            input.tagName !==
+            "INPUT"
+        ) {
+            return;
         }
+
+
+        if (
+            input.getAttribute(
+                "inputmode"
+            ) !==
+            "decimal"
+        ) {
+            return;
+        }
+
+
+        input.value =
+            input.value.replace(
+                /[^0-9.\-]/g,
+                ""
+            );
 
     }
 );
+
 
 /* =========================================================
    READY
    ========================================================= */
 
-console.log(
-    "StuPivot initialized successfully."
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        console.log(
+            "StuPivot initialized successfully."
+        );
+
+    }
 );
