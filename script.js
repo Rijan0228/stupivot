@@ -6509,135 +6509,105 @@ $$(".legal-card")
 
 
 /* =========================================================
-   FORMSPREE
+   FORMSPREE — client-side validation + thank-you redirect
+   Note: real server-side validation/rate limiting must be enabled
+   at the form provider or implemented on a backend.
    ========================================================= */
+function setupForm(id) {
+    const form = document.getElementById(id);
+    if (!form) return;
 
-function setupForm(
-    id
-) {
+    form.querySelectorAll('input[name="name"]').forEach(input => {
+        input.addEventListener('input', () => input.setCustomValidity(''));
+        input.addEventListener('invalid', () => input.setCustomValidity('Please enter a name between 2 and 80 characters.'));
+    });
+    const email = form.querySelector('input[type="email"]');
+    email?.addEventListener('input', () => email.setCustomValidity(''));
+    const message = form.querySelector('textarea[name="message"]');
+    message?.addEventListener('input', () => message.setCustomValidity(''));
 
-    const form =
-        document.getElementById(
-            id
-        );
-
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const button =
-                form.querySelector(
-                    '[type="submit"]'
-                );
-
-
-            const oldText =
-                button?.textContent ||
-                "Send";
-
-
-            if (button) {
-
-                button.disabled =
-                    true;
-
-                button.textContent =
-                    "Sending...";
-
-            }
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        form.action,
-                        {
-
-                            method:
-                                "POST",
-
-                            body:
-                                new FormData(
-                                    form
-                                ),
-
-                            headers: {
-
-                                Accept:
-                                    "application/json"
-
-                            }
-
-                        }
-                    );
-
-
-                if (
-                    !response.ok
-                ) {
-
-                    throw Error(
-                        "Message could not be sent."
-                    );
-
-                }
-
-
-                form.reset();
-
-
-                toast(
-                    "Your message was sent successfully."
-                );
-
-
-            } catch (error) {
-
-                toast(
-                    error.message ||
-                    "Something went wrong.",
-                    "error"
-                );
-
-
-            } finally {
-
-                if (button) {
-
-                    button.disabled =
-                        false;
-
-                    button.textContent =
-                        oldText;
-
-                }
-
-            }
-
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
         }
-    );
-
+        const trap = form.querySelector('input[name="_gotcha"]');
+        if (trap && trap.value.trim()) {
+            // Quietly stop obvious bots; this is only a basic honeypot.
+            toast('Thanks! Your submission is being checked.');
+            return;
+        }
+        const button = form.querySelector('[type="submit"]');
+        const oldText = button?.textContent || 'Send';
+        if (button) { button.disabled = true; button.textContent = 'Sending...'; }
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { Accept: 'application/json' }
+            });
+            let payload = {};
+            try { payload = await response.json(); } catch (_) {}
+            if (!response.ok || payload.errors) throw new Error('Message could not be sent. Please check your details and try again.');
+            window.location.assign(new URL('thank-you.html', window.location.href).href);
+        } catch (error) {
+            toast(error.message || 'Something went wrong. Please try again.', 'error');
+            if (button) { button.disabled = false; button.textContent = oldText; }
+        }
+    });
 }
+setupForm('feedbackForm');
+setupForm('contactForm');
 
+/* =========================================================
+   COOKIE CONSENT + OPTIONAL GOOGLE ANALYTICS
+   Replace G-XXXXXXXXXX with your own GA4 measurement ID.
+   Analytics stays disabled until the visitor accepts.
+   ========================================================= */
+const GA4_MEASUREMENT_ID = ''; // Example format: G-ABC1234567
+const CONSENT_KEY = 'stupivot-privacy-choice-v1';
+function enableAnalytics() {
+    if (!/^G-[A-Z0-9]+$/i.test(GA4_MEASUREMENT_ID)) return;
+    if (window.__stupivotAnalyticsLoaded) return;
+    window.__stupivotAnalyticsLoaded = true;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA4_MEASUREMENT_ID)}`;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){ window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', GA4_MEASUREMENT_ID, { anonymize_ip: true });
+}
+(function setupCookieConsent() {
+    const banner = document.getElementById('cookieBanner');
+    const accept = document.getElementById('cookieAccept');
+    const reject = document.getElementById('cookieReject');
+    if (!banner || !accept || !reject) return;
+    let choice = null;
+    try { choice = localStorage.getItem(CONSENT_KEY); } catch (_) {}
+    if (!choice) banner.hidden = false;
+    if (choice === 'analytics') enableAnalytics();
+    function saveChoice(value) {
+        try { localStorage.setItem(CONSENT_KEY, value); } catch (_) {}
+        banner.hidden = true;
+        if (value === 'analytics') enableAnalytics();
+    }
+    accept.addEventListener('click', () => saveChoice('analytics'));
+    reject.addEventListener('click', () => saveChoice('essential-only'));
+})();
 
-setupForm(
-    "feedbackForm"
-);
-
-setupForm(
-    "contactForm"
-);
-
+/* =========================================================
+   BASIC INTERNAL LINK CHECK (console diagnostic)
+   ========================================================= */
+window.addEventListener('load', () => {
+    const ids = new Set([...document.querySelectorAll('[id]')].map(el => el.id));
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        const id = decodeURIComponent(link.getAttribute('href').slice(1));
+        if (id && !ids.has(id)) console.warn('StuPivot: broken in-page link:', link.getAttribute('href'));
+    });
+});
 
 /* =========================================================
    INPUT GUARD
